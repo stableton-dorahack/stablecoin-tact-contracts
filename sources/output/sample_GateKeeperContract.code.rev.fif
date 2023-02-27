@@ -74,6 +74,40 @@ SETCP0
         -1 PUSHINT
       }> PUSHCONT
       IFJMP
+      s1 PUSH
+      3786506481 PUSHINT
+      EQUAL
+      <{
+        s1 POP
+        <{
+          32 LDU
+          s0 s1 XCHG
+          3786506481 PUSHINT
+          EQUAL
+          129 THROWIFNOT
+          32 LDU
+          32 LDU
+          32 LDU
+          32 LDU
+          32 LDU
+          32 LDU
+          6 1 BLKSWAP
+        }> CALLREF
+        1 6 BLKDROP2
+        <{
+          6 6 BLKDROP2
+          1 GETGLOBVAR
+          4 UNTUPLE
+          2DROP
+          4429 PUSHINT
+          s2 POP
+          s8 PUSH
+          SDEQ
+          THROWANYIFNOT
+        }> CALLREF
+        -1 PUSHINT
+      }> PUSHCONT
+      IFJMP
       s0 s1 XCHG
       2490013878 PUSHINT
       EQUAL

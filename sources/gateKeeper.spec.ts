@@ -30,14 +30,14 @@ describe("contract", () => {
                       },
                       "bounce": true,
                       "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-                      "to": "kQBNATmthTJkyzRWAWg7M-bwwXZsgasQKAJHjuNTtcGJMHkG",
+                      "to": "kQAiUPB96fKUtxbLPZ7E4OpT5AIceODUX5rgQLaLpQEKM4j_",
                       "type": "internal",
                       "value": 1000000000n,
                     },
                   },
                   {
                     "$type": "processed",
-                    "gasUsed": 6669n,
+                    "gasUsed": 6772n,
                   },
                   {
                     "$type": "sent",
@@ -48,10 +48,10 @@ describe("contract", () => {
                           "type": "cell",
                         },
                         "bounce": true,
-                        "from": "kQBNATmthTJkyzRWAWg7M-bwwXZsgasQKAJHjuNTtcGJMHkG",
+                        "from": "kQAiUPB96fKUtxbLPZ7E4OpT5AIceODUX5rgQLaLpQEKM4j_",
                         "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
                         "type": "internal",
-                        "value": 992135000n,
+                        "value": 992032000n,
                       },
                     ],
                   },
@@ -73,84 +73,116 @@ describe("contract", () => {
             treasutyFeeBps: 0n,
         });
 
-        // Increment counter
-        // await contract.send(owner, { value: toNano(1) }, "increment");
-        // await system.run();
-        // expect(track.collect()).toMatchInlineSnapshot(`
-        //     [
-        //       {
-        //         "$seq": 1,
-        //         "events": [
-        //           {
-        //             "$type": "received",
-        //             "message": {
-        //               "body": {
-        //                 "text": "increment",
-        //                 "type": "text",
-        //               },
-        //               "bounce": true,
-        //               "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-        //               "to": "kQDkoLLa3W2BbNqXWLNcC_fXrudIYpOVQHijNxDB3i-plKNh",
-        //               "type": "internal",
-        //               "value": 1000000000n,
-        //             },
-        //           },
-        //           {
-        //             "$type": "processed",
-        //             "gasUsed": 3861n,
-        //           },
-        //         ],
-        //       },
-        //     ]
-        // `);
+        // Set pool settings by owner
+        await contract.send(
+            owner,
+            { value: toNano(1) },
+            {
+                $$type: "PoolSettingsMsg",
+                liquidationRatio: 2n,
+                stabilityFeeRate: 2n,
+                lastAccumulationTime: 2n,
+                closeFactorBps: 2n,
+                liquidatorIncentiveBps: 2n,
+                treasutyFeeBps: 2n,
+            }
+        );
+        await system.run();
+        expect(track.collect()).toMatchInlineSnapshot(`
+            [
+              {
+                "$seq": 1,
+                "events": [
+                  {
+                    "$type": "received",
+                    "message": {
+                      "body": {
+                        "cell": "x{E1B180F1000000020000000200000002000000020000000200000002}",
+                        "type": "cell",
+                      },
+                      "bounce": true,
+                      "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+                      "to": "kQAiUPB96fKUtxbLPZ7E4OpT5AIceODUX5rgQLaLpQEKM4j_",
+                      "type": "internal",
+                      "value": 1000000000n,
+                    },
+                  },
+                  {
+                    "$type": "processed",
+                    "gasUsed": 4138n,
+                  },
+                ],
+              },
+            ]
+        `);
 
-        // // Check counter
-        // console.log("contract.getPoolSettings()", await contract.getPoolSettings());
-        // expect(await contract.getPoolSettings()).toEqual(1n);
+        // Check counter
+        console.log("contract.getPoolSettings()", await contract.getPoolSettings());
+        expect(await contract.getPoolSettings()).toEqual({
+            $$type: "PoolSettings",
+            closeFactorBps: 2n,
+            lastAccumulationTime: 2n,
+            liquidationRatio: 2n,
+            liquidatorIncentiveBps: 2n,
+            stabilityFeeRate: 2n,
+            treasutyFeeBps: 2n,
+        });
 
-        // Non-owner
-        // await contract.send(nonOwner, { value: toNano(1) }, "increment");
-        // await system.run();
-        // expect(track.collect()).toMatchInlineSnapshot(`
-        //     [
-        //       {
-        //         "$seq": 2,
-        //         "events": [
-        //           {
-        //             "$type": "received",
-        //             "message": {
-        //               "body": {
-        //                 "text": "increment",
-        //                 "type": "text",
-        //               },
-        //               "bounce": true,
-        //               "from": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
-        //               "to": "kQDkoLLa3W2BbNqXWLNcC_fXrudIYpOVQHijNxDB3i-plKNh",
-        //               "type": "internal",
-        //               "value": 1000000000n,
-        //             },
-        //           },
-        //           {
-        //             "$type": "failed",
-        //             "errorCode": 4429,
-        //             "errorMessage": "Invalid sender",
-        //           },
-        //           {
-        //             "$type": "sent-bounced",
-        //             "message": {
-        //               "body": {
-        //                 "type": "empty",
-        //               },
-        //               "bounce": false,
-        //               "from": "kQDkoLLa3W2BbNqXWLNcC_fXrudIYpOVQHijNxDB3i-plKNh",
-        //               "to": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
-        //               "type": "internal",
-        //               "value": 995953000n,
-        //             },
-        //           },
-        //         ],
-        //       },
-        //     ]
-        // `);
+        // set pool settings by Non - owner;
+        await contract.send(
+            nonOwner,
+            { value: toNano(1) },
+            {
+                $$type: "PoolSettingsMsg",
+                liquidationRatio: 2n,
+                stabilityFeeRate: 2n,
+                lastAccumulationTime: 2n,
+                closeFactorBps: 2n,
+                liquidatorIncentiveBps: 2n,
+                treasutyFeeBps: 2n,
+            }
+        );
+        await system.run();
+        expect(track.collect()).toMatchInlineSnapshot(`
+            [
+              {
+                "$seq": 2,
+                "events": [
+                  {
+                    "$type": "received",
+                    "message": {
+                      "body": {
+                        "cell": "x{E1B180F1000000020000000200000002000000020000000200000002}",
+                        "type": "cell",
+                      },
+                      "bounce": true,
+                      "from": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
+                      "to": "kQAiUPB96fKUtxbLPZ7E4OpT5AIceODUX5rgQLaLpQEKM4j_",
+                      "type": "internal",
+                      "value": 1000000000n,
+                    },
+                  },
+                  {
+                    "$type": "failed",
+                    "errorCode": 4429,
+                    "errorMessage": "Invalid sender",
+                  },
+                  {
+                    "$type": "sent-bounced",
+                    "message": {
+                      "body": {
+                        "type": "empty",
+                      },
+                      "bounce": false,
+                      "from": "kQAiUPB96fKUtxbLPZ7E4OpT5AIceODUX5rgQLaLpQEKM4j_",
+                      "to": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
+                      "type": "internal",
+                      "value": 996112000n,
+                    },
+                  },
+                ],
+              },
+            ]
+        `);
     });
 });

@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: GateKeeperContract
-BOC Size: 517 bytes
+BOC Size: 585 bytes
 
 # Types
 Total Types: 8

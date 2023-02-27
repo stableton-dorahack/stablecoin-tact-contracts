@@ -30,6 +30,10 @@ builder __tact_store_address(builder b, slice address) inline {
     return b;
 }
 
+int __tact_address_eq(slice a, slice b) inline {
+    return equal_slice_bits(a, b);
+}
+
 (slice, ((int))) __gen_read_Deploy(slice sc_0) inline {
     throw_unless(129, sc_0~load_uint(32) == 2490013878);
     var v'queryId = sc_0~load_uint(64);
@@ -68,6 +72,17 @@ builder __gen_write_PoolSettings(builder build_0, (int, int, int, int, int, int)
     return (sc_0, (v'liquidationRatio, v'stabilityFeeRate, v'lastAccumulationTime, v'closeFactorBps, v'liquidatorIncentiveBps, v'treasutyFeeBps));
 }
 
+(slice, ((int, int, int, int, int, int))) __gen_read_PoolSettingsMsg(slice sc_0) inline_ref {
+    throw_unless(129, sc_0~load_uint(32) == 3786506481);
+    var v'liquidationRatio = sc_0~load_uint(32);
+    var v'stabilityFeeRate = sc_0~load_uint(32);
+    var v'lastAccumulationTime = sc_0~load_uint(32);
+    var v'closeFactorBps = sc_0~load_uint(32);
+    var v'liquidatorIncentiveBps = sc_0~load_uint(32);
+    var v'treasutyFeeBps = sc_0~load_uint(32);
+    return (sc_0, (v'liquidationRatio, v'stabilityFeeRate, v'lastAccumulationTime, v'closeFactorBps, v'liquidatorIncentiveBps, v'treasutyFeeBps));
+}
+
 builder __gen_write_GateKeeperContract(builder build_0, (slice, (int, int, int, int, int, int)) v) inline {
     var (v'owner, (v'poolSettings'liquidationRatio, v'poolSettings'stabilityFeeRate, v'poolSettings'lastAccumulationTime, v'poolSettings'closeFactorBps, v'poolSettings'liquidatorIncentiveBps, v'poolSettings'treasutyFeeBps)) = v;
     build_0 = __tact_store_address(build_0, v'owner);
@@ -80,6 +95,8 @@ builder __gen_write_GateKeeperContract(builder build_0, (slice, (int, int, int, 
     var v'poolSettings = sc_0~__gen_read_PoolSettings();
     return (sc_0, (v'owner, v'poolSettings));
 }
+
+((int, int, int, int, int, int)) __gen_PoolSettings_unpack((int, int, int, int, int, int) v) asm "NOP";
 
 (int, int, int, int, int, int) __gen_PoolSettings_to_external(((int, int, int, int, int, int)) v) inline {
     var (v'liquidationRatio, v'stabilityFeeRate, v'lastAccumulationTime, v'closeFactorBps, v'liquidatorIncentiveBps, v'treasutyFeeBps) = v; 
@@ -175,6 +192,15 @@ builder __gen_write_GateKeeperContract(builder build_0, (slice, (int, int, int, 
     $send(__gen_constructor_SendParameters$bounce_to_value_mode_body(true, $ctx'sender, 0, (64 + 2), $body));
 }
 
+((slice, (int, int, int, int, int, int)), ()) $__gen_GateKeeperContract_setPoolSettings((slice, (int, int, int, int, int, int)) $self, (int, int, int, int, int, int) $settings) impure inline_ref {
+    var (($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps))) = $self;
+    var (($settings'liquidationRatio, $settings'stabilityFeeRate, $settings'lastAccumulationTime, $settings'closeFactorBps, $settings'liquidatorIncentiveBps, $settings'treasutyFeeBps)) = $settings;
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    throw_unless(4429, __tact_address_eq($ctx'sender, $self'owner));
+    ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps) = ($settings'liquidationRatio, $settings'stabilityFeeRate, $settings'lastAccumulationTime, $settings'closeFactorBps, $settings'liquidatorIncentiveBps, $settings'treasutyFeeBps);
+    return (($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps)), ());
+}
+
 (int, int, int, int, int, int) $__gen_GateKeeperContract_poolSettings((slice, (int, int, int, int, int, int)) $self) impure inline_ref {
     var (($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps))) = $self;
     return ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps);
@@ -184,6 +210,13 @@ _ $__gen_get_poolSettings() method_id(88360) {
     var self = __gen_load_GateKeeperContract();
     var res = $__gen_GateKeeperContract_poolSettings(self);
     return __gen_PoolSettings_to_external(res);
+}
+
+(((slice, (int, int, int, int, int, int))), ()) $__gen_GateKeeperContract_receive_PoolSettingsMsg((slice, (int, int, int, int, int, int)) $self, (int, int, int, int, int, int) $msg) impure inline {
+    var ($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps)) = $self;
+    var ($msg'liquidationRatio, $msg'stabilityFeeRate, $msg'lastAccumulationTime, $msg'closeFactorBps, $msg'liquidatorIncentiveBps, $msg'treasutyFeeBps) = $msg;
+    ($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps))~$__gen_GateKeeperContract_setPoolSettings(__gen_PoolSettings_unpack(__gen_constructor_PoolSettings$liquidationRatio_stabilityFeeRate_lastAccumulationTime_closeFactorBps_liquidatorIncentiveBps_treasutyFeeBps($msg'liquidationRatio, $msg'stabilityFeeRate, $msg'lastAccumulationTime, $msg'closeFactorBps, $msg'liquidatorIncentiveBps, $msg'treasutyFeeBps)));
+    return (($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps)), ());
 }
 
 ((int)) __gen_constructor_DeployOk$queryId(int queryId) inline {
@@ -207,6 +240,13 @@ _ $__gen_get_poolSettings() method_id(88360) {
     
     ;; Handle bounced messages
     if (msg_bounced) {
+        return (self, true);
+    }
+    
+    ;; Receive PoolSettingsMsg message
+    if (op == 3786506481) {
+        var msg = in_msg~__gen_read_PoolSettingsMsg();
+        self~$__gen_GateKeeperContract_receive_PoolSettingsMsg(msg);
         return (self, true);
     }
     
@@ -251,7 +291,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmPj3XL5TnGhT9qenmFUTNzhK8yXon14F9Mzzf9wFNR3uQ";
+    return "ipfs://QmeicMa8eYL6pE1eT97yPN6WWL9bfYupEgttQzq7kdxTVx";
 }
 
 _ lazy_deployment_completed() {

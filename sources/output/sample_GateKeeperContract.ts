@@ -458,8 +458,8 @@ function initGateKeeperContract_init_args(src: GateKeeperContract_init_args) {
 }
 
 async function GateKeeperContract_init(owner: Address) {
-    const __code = Cell.fromBase64('te6ccgECDwEAAfkAART/APSkE/S88sgLAQIBYgIDBHzQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOJVFts8MAwNBAUCASAKCwGCcCHXScIflTAg1wsf3gKSW3/gAYIQlGqYtrqOotMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8nbPH/gMHAGAS7I+EIBzH8BygBVYFB2zxYGVQTbPMntVAkBJvhBbyQQI18Df3BQA4BCAW1t2zwHAfbIcQHKAVAHAcoAcAHKAlAFzxZQA/oCcAHKaCNusyVus7GOTH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMyXMzMBcAHKAOIhbrMIADCcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAAHlBWyx8Tyx/LH8sfyx/LHwNJvslHaiaGoA/DFpAADHRX0gAIDtnggztgvHQ/0gAIDo7Z5xbZ5AwNDgBxvd6ME4LnYerpZXPY9CdhzrJUKNs0E4TusalpWyPlmRadeW/vixHME4ECrgDcAzscpnLB1XI5LZYcABzTH9Mf0x/TH9Mf0x9VUAAMcFRwAFMAAARsFg==');
-    const __system = Cell.fromBase64('te6cckECEQEAAgMAAQHAAQEFoAajAgEU/wD0pBP0vPLICwMCAWIIBAIBIAYFAHG93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwDSb7JR2omhqAPwxaQAAx0V9IACA7Z4IM7YLx0P9IACA6O2ecW2eQQDwcABGwWBHzQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOJVFts8MBAPCwkBLsj4QgHMfwHKAFVgUHbPFgZVBNs8ye1UCgAeUFbLHxPLH8sfyx/LH8sfAYJwIddJwh+VMCDXCx/eApJbf+ABghCUapi2uo6i0x8BghCUapi2uvLggdM/ATHIAYIQr/kPV1jLH8s/yds8f+AwcAwBJvhBbyQQI18Df3BQA4BCAW1t2zwNAfbIcQHKAVAHAcoAcAHKAlAFzxZQA/oCcAHKaCNusyVus7GOTH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMyXMzMBcAHKAOIhbrMOADCcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAADHBUcABTAAAc0x/TH9Mf0x/TH9MfVVAIYn2/');
+    const __code = Cell.fromBase64('te6ccgECEQEAAj0AART/APSkE/S88sgLAQIBYgIDBHzQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOJVFts8MA4PBAUCASAMDQOocCHXScIflTAg1wsf3gKSW3/gIYIQ4bGA8bqPCDHbPGwW2zx/4AGCEJRqmLa6jqLTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/4DBwBgcIAS7I+EIBzH8BygBVYFB2zxYGVQTbPMntVAsANtMfAYIQ4bGA8bry4IHTH9Mf0x/TH9Mf0x9VUAAgbGb4QW8kW4ERTTIoxwXy9AEm+EFvJBAjXwN/cFADgEIBbW3bPAkB9shxAcoBUAcBygBwAcoCUAXPFlAD+gJwAcpoI26zJW6zsY5MfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzJczMwFwAcoA4iFuswoAMJx/AcoAASBu8tCAAcyVMXABygDiyQH7AAAeUFbLHxPLH8sfyx/LH8sfA0m+yUdqJoagD8MWkAAMdFfSAAgO2eCDO2C8dD/SAAgOjtnnFtnkDg8QAHG93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwAHNMf0x/TH9Mf0x/TH1VQAAxwVHAAUwAABGwW');
+    const __system = Cell.fromBase64('te6cckECEwEAAkcAAQHAAQEFoAajAgEU/wD0pBP0vPLICwMCAWIIBAIBIAYFAHG93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwDSb7JR2omhqAPwxaQAAx0V9IACA7Z4IM7YLx0P9IACA6O2ecW2eQSEQcABGwWBHzQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOJVFts8MBIRCwkBLsj4QgHMfwHKAFVgUHbPFgZVBNs8ye1UCgAeUFbLHxPLH8sfyx/LH8sfA6hwIddJwh+VMCDXCx/eApJbf+AhghDhsYDxuo8IMds8bBbbPH/gAYIQlGqYtrqOotMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8nbPH/gMHAQDwwBJvhBbyQQI18Df3BQA4BCAW1t2zwNAfbIcQHKAVAHAcoAcAHKAlAFzxZQA/oCcAHKaCNusyVus7GOTH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMyXMzMBcAHKAOIhbrMOADCcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAAIGxm+EFvJFuBEU0yKMcF8vQANtMfAYIQ4bGA8bry4IHTH9Mf0x/TH9Mf0x9VUAAMcFRwAFMAABzTH9Mf0x/TH9Mf0x9VUDf9FdI=');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -522,9 +522,12 @@ export class GateKeeperContract implements Contract {
         this.init = init;
     }
     
-    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: Deploy) {
+    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: PoolSettingsMsg | Deploy) {
         
         let body: Cell | null = null;
+        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'PoolSettingsMsg') {
+            body = beginCell().store(storePoolSettingsMsg(message)).endCell();
+        }
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'Deploy') {
             body = beginCell().store(storeDeploy(message)).endCell();
         }

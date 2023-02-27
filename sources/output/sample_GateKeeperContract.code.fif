@@ -5,11 +5,13 @@ PROGRAM{
   DECLPROC __tact_store_bool
   DECLPROC __tact_load_address
   DECLPROC __tact_store_address
+  DECLPROC __tact_address_eq
   DECLPROC __gen_read_Deploy
   DECLPROC __gen_write_DeployOk
   DECLPROC __gen_writecell_DeployOk
   DECLPROC __gen_write_PoolSettings
   DECLPROC __gen_read_PoolSettings
+  DECLPROC __gen_read_PoolSettingsMsg
   DECLPROC __gen_write_GateKeeperContract
   DECLPROC __gen_read_GateKeeperContract
   DECLPROC __gen_PoolSettings_to_external
@@ -21,8 +23,10 @@ PROGRAM{
   DECLPROC $send
   DECLPROC __gen_constructor_SendParameters$bounce_to_value_mode_body
   DECLPROC $reply
+  DECLPROC $__gen_GateKeeperContract_setPoolSettings
   DECLPROC $__gen_GateKeeperContract_poolSettings
   88360 DECLMETHOD $__gen_get_poolSettings
+  DECLPROC $__gen_GateKeeperContract_receive_PoolSettingsMsg
   DECLPROC __gen_constructor_DeployOk$queryId
   DECLPROC $__gen_GateKeeperContract_receive_Deploy
   DECLPROC __gen_router_GateKeeperContract
@@ -58,6 +62,9 @@ PROGRAM{
   __tact_store_address PROCINLINE:<{
     STSLICER
   }>
+  __tact_address_eq PROCINLINE:<{
+    SDEQ
+  }>
   __gen_read_Deploy PROCINLINE:<{
     32 LDU
     SWAP
@@ -90,6 +97,20 @@ PROGRAM{
     32 STU
   }>
   __gen_read_PoolSettings PROCREF:<{
+    32 LDU
+    32 LDU
+    32 LDU
+    32 LDU
+    32 LDU
+    32 LDU
+    6 -ROLL
+  }>
+  __gen_read_PoolSettingsMsg PROCREF:<{
+    32 LDU
+    SWAP
+    3786506481 PUSHINT
+    EQUAL
+    129 THROWIFNOT
     32 LDU
     32 LDU
     32 LDU
@@ -270,6 +291,16 @@ PROGRAM{
     __gen_constructor_SendParameters$bounce_to_value_mode_body INLINECALLDICT
     $send INLINECALLDICT
   }>
+  $__gen_GateKeeperContract_setPoolSettings PROCREF:<{
+    6 6 BLKDROP2
+    __tact_context_get INLINECALLDICT
+    2DROP
+    4429 PUSHINT
+    s2 POP
+    s8 PUSH
+    __tact_address_eq INLINECALLDICT
+    THROWANYIFNOT
+  }>
   $__gen_GateKeeperContract_poolSettings PROCREF:<{
     1 6 BLKDROP2
   }>
@@ -277,6 +308,10 @@ PROGRAM{
     __gen_load_GateKeeperContract INLINECALLDICT
     $__gen_GateKeeperContract_poolSettings INLINECALLDICT
     __gen_PoolSettings_to_external INLINECALLDICT
+  }>
+  $__gen_GateKeeperContract_receive_PoolSettingsMsg PROCINLINE:<{
+    __gen_constructor_PoolSettings$liquidationRatio_stabilityFeeRate_lastAccumulationTime_closeFactorBps_liquidatorIncentiveBps_treasutyFeeBps INLINECALLDICT
+    $__gen_GateKeeperContract_setPoolSettings INLINECALLDICT
   }>
   __gen_constructor_DeployOk$queryId PROCINLINE:<{
   }>
@@ -298,6 +333,16 @@ PROGRAM{
     s0 s2 XCHG
     IFJMP:<{
       2DROP
+      TRUE
+    }>
+    OVER
+    3786506481 PUSHINT
+    EQUAL
+    IFJMP:<{
+      NIP
+      __gen_read_PoolSettingsMsg INLINECALLDICT
+      1 6 BLKDROP2
+      $__gen_GateKeeperContract_receive_PoolSettingsMsg INLINECALLDICT
       TRUE
     }>
     SWAP
@@ -343,7 +388,7 @@ PROGRAM{
     42980537499636128163026532310500881091 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d506a33584c35546e4768543971656e6d4655544e7a684b3879586f6e313446394d7a7a663977464e52337551} PUSHSLICE
+    x{697066733a2f2f516d6569634d613865594c367045316554393779504e3657574c39626659757045677474517a71376b6478545678} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

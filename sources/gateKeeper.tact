@@ -48,6 +48,16 @@ contract GateKeeperContract with Deployable {
         self.poolSettings = settings;
     }
 
+    receive(msg: PoolSettingsMsg) {
+        self.setPoolSettings(PoolSettings{
+            liquidationRatio: msg.liquidationRatio,
+            stabilityFeeRate: msg.stabilityFeeRate,
+            lastAccumulationTime: msg.lastAccumulationTime,
+            closeFactorBps: msg.closeFactorBps,
+            liquidatorIncentiveBps: msg.liquidatorIncentiveBps,
+            treasutyFeeBps: msg.treasutyFeeBps
+        });
+    }
    
 
     get fun poolSettings(): PoolSettings {
