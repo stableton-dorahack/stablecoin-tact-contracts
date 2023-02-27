@@ -271,48 +271,6 @@ function dictValueParserDeployOk(): DictionaryValue<DeployOk> {
     }
 }
 
-export type Add = {
-    $$type: 'Add';
-    amount: bigint;
-}
-
-export function storeAdd(src: Add) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(2278832834, 32);
-        b_0.storeUint(src.amount, 32);
-    };
-}
-
-export function loadAdd(slice: Slice) {
-    let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 2278832834) { throw Error('Invalid prefix'); }
-    let _amount = sc_0.loadUintBig(32);
-    return { $$type: 'Add' as const, amount: _amount };
-}
-
-function loadTupleAdd(source: TupleReader) {
-    let _amount = source.readBigNumber();
-    return { $$type: 'Add' as const, amount: _amount };
-}
-
-function storeTupleAdd(source: Add) {
-    let builder = new TupleBuilder();
-    builder.writeNumber(source.amount);
-    return builder.build();
-}
-
-function dictValueParserAdd(): DictionaryValue<Add> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeAdd(src)).endCell());
-        },
-        parse: (src) => {
-            return loadAdd(src.loadRef().beginParse());
-        }
-    }
-}
-
 export type PoolSettings = {
     $$type: 'PoolSettings';
     liquidationRatio: bigint;
@@ -445,6 +403,48 @@ function dictValueParserPoolSettingsMsg(): DictionaryValue<PoolSettingsMsg> {
     }
 }
 
+export type UpdateTonPriceMsg = {
+    $$type: 'UpdateTonPriceMsg';
+    price: bigint;
+}
+
+export function storeUpdateTonPriceMsg(src: UpdateTonPriceMsg) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(219265725, 32);
+        b_0.storeUint(src.price, 32);
+    };
+}
+
+export function loadUpdateTonPriceMsg(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 219265725) { throw Error('Invalid prefix'); }
+    let _price = sc_0.loadUintBig(32);
+    return { $$type: 'UpdateTonPriceMsg' as const, price: _price };
+}
+
+function loadTupleUpdateTonPriceMsg(source: TupleReader) {
+    let _price = source.readBigNumber();
+    return { $$type: 'UpdateTonPriceMsg' as const, price: _price };
+}
+
+function storeTupleUpdateTonPriceMsg(source: UpdateTonPriceMsg) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.price);
+    return builder.build();
+}
+
+function dictValueParserUpdateTonPriceMsg(): DictionaryValue<UpdateTonPriceMsg> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeUpdateTonPriceMsg(src)).endCell());
+        },
+        parse: (src) => {
+            return loadUpdateTonPriceMsg(src.loadRef().beginParse());
+        }
+    }
+}
+
  type GateKeeperContract_init_args = {
     $$type: 'GateKeeperContract_init_args';
     owner: Address;
@@ -458,8 +458,8 @@ function initGateKeeperContract_init_args(src: GateKeeperContract_init_args) {
 }
 
 async function GateKeeperContract_init(owner: Address) {
-    const __code = Cell.fromBase64('te6ccgECEQEAAj0AART/APSkE/S88sgLAQIBYgIDBHzQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOJVFts8MA4PBAUCASAMDQOocCHXScIflTAg1wsf3gKSW3/gIYIQ4bGA8bqPCDHbPGwW2zx/4AGCEJRqmLa6jqLTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/4DBwBgcIAS7I+EIBzH8BygBVYFB2zxYGVQTbPMntVAsANtMfAYIQ4bGA8bry4IHTH9Mf0x/TH9Mf0x9VUAAgbGb4QW8kW4ERTTIoxwXy9AEm+EFvJBAjXwN/cFADgEIBbW3bPAkB9shxAcoBUAcBygBwAcoCUAXPFlAD+gJwAcpoI26zJW6zsY5MfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzJczMwFwAcoA4iFuswoAMJx/AcoAASBu8tCAAcyVMXABygDiyQH7AAAeUFbLHxPLH8sfyx/LH8sfA0m+yUdqJoagD8MWkAAMdFfSAAgO2eCDO2C8dD/SAAgOjtnnFtnkDg8QAHG93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwAHNMf0x/TH9Mf0x/TH1VQAAxwVHAAUwAABGwW');
-    const __system = Cell.fromBase64('te6cckECEwEAAkcAAQHAAQEFoAajAgEU/wD0pBP0vPLICwMCAWIIBAIBIAYFAHG93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwDSb7JR2omhqAPwxaQAAx0V9IACA7Z4IM7YLx0P9IACA6O2ecW2eQSEQcABGwWBHzQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOJVFts8MBIRCwkBLsj4QgHMfwHKAFVgUHbPFgZVBNs8ye1UCgAeUFbLHxPLH8sfyx/LH8sfA6hwIddJwh+VMCDXCx/eApJbf+AhghDhsYDxuo8IMds8bBbbPH/gAYIQlGqYtrqOotMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8nbPH/gMHAQDwwBJvhBbyQQI18Df3BQA4BCAW1t2zwNAfbIcQHKAVAHAcoAcAHKAlAFzxZQA/oCcAHKaCNusyVus7GOTH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMyXMzMBcAHKAOIhbrMOADCcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAAIGxm+EFvJFuBEU0yKMcF8vQANtMfAYIQ4bGA8bry4IHTH9Mf0x/TH9Mf0x9VUAAMcFRwAFMAABzTH9Mf0x/TH9Mf0x9VUDf9FdI=');
+    const __code = Cell.fromBase64('te6ccgECFgEAArgAART/APSkE/S88sgLAQIBYgIDBITQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6O+kABAds8BtMfCFB3bBiOh/pAAQHR2zziVRfbPDATFAQFAgEgDg8EmnAh10nCH5UwINcLH94Cklt/4CGCEOGxgPG6jwgx2zxsFts8f+AhghANEbq9uo6VMdMfAYIQDRG6vbry4IHTHwEx2zx/4AGCEJRqmLa6BgcICQEwyPhCAcx/AcoAVXBQh88WBgfbPMsfye1UDQA20x8BghDhsYDxuvLggdMf0x/TH9Mf0x/TH1VQACg3Nzc3Nzf4QW8kW4ERTTIpxwXy9AAeMfhBbyRbgRFNMinHBfL0AU6OotMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8nbPH/gMHAKASb4QW8kECNfA39wUAOAQgFtbds8CwH2yHEBygFQBwHKAHABygJQBc8WUAP6AnABymgjbrMlbrOxjkx/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMlzMzAXABygDiIW6zDAAwnH8BygABIG7y0IABzJUxcAHKAOLJAfsAAB5QVssfE8sfyx/LH8sfyx8DUb7JR2omhqAPwxaQAAx0d9IACA7Z4DaY+EKDu2DEdD/SAAgOjtnnFtnkExQQAgFIERIABjBsFgNRtJDdqJoagD8MWkAAMdHfSAAgO2eA2mPhCg7tgxHQ/0gAIDo7Z5xbZ5ATFBUAcbd6ME4LnYerpZXPY9CdhzrJUKNs0E4TusalpWyPlmRadeW/vixHME4ECrgDcAzscpnLB1XI5LZYcAAc0x/TH9Mf0x/TH9MfVVAADnBUcABTAHAABGxx');
+    const __system = Cell.fromBase64('te6cckECGAEAAsIAAQHAAQEFoAajAgEU/wD0pBP0vPLICwMCAWILBAIBIAkFAgFIBwYAcbd6ME4LnYerpZXPY9CdhzrJUKNs0E4TusalpWyPlmRadeW/vixHME4ECrgDcAzscpnLB1XI5LZYcANRtJDdqJoagD8MWkAAMdHfSAAgO2eA2mPhCg7tgxHQ/0gAIDo7Z5xbZ5AXFggABGxxA1G+yUdqJoagD8MWkAAMdHfSAAgO2eA2mPhCg7tgxHQ/0gAIDo7Z5xbZ5BcWCgAGMGwWBITQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6O+kABAds8BtMfCFB3bBiOh/pAAQHR2zziVRfbPDAXFg4MATDI+EIBzH8BygBVcFCHzxYGB9s8yx/J7VQNAB5QVssfE8sfyx/LH8sfyx8EmnAh10nCH5UwINcLH94Cklt/4CGCEOGxgPG6jwgx2zxsFts8f+AhghANEbq9uo6VMdMfAYIQDRG6vbry4IHTHwEx2zx/4AGCEJRqmLa6FRQTDwFOjqLTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/4DBwEAEm+EFvJBAjXwN/cFADgEIBbW3bPBEB9shxAcoBUAcBygBwAcoCUAXPFlAD+gJwAcpoI26zJW6zsY5MfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzJczMwFwAcoA4iFusxIAMJx/AcoAASBu8tCAAcyVMXABygDiyQH7AAAeMfhBbyRbgRFNMinHBfL0ACg3Nzc3Nzf4QW8kW4ERTTIpxwXy9AA20x8BghDhsYDxuvLggdMf0x/TH9Mf0x/TH1VQAA5wVHAAUwBwABzTH9Mf0x/TH9Mf0x9VUO6r3CU=');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -522,11 +522,14 @@ export class GateKeeperContract implements Contract {
         this.init = init;
     }
     
-    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: PoolSettingsMsg | Deploy) {
+    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: PoolSettingsMsg | UpdateTonPriceMsg | Deploy) {
         
         let body: Cell | null = null;
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'PoolSettingsMsg') {
             body = beginCell().store(storePoolSettingsMsg(message)).endCell();
+        }
+        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'UpdateTonPriceMsg') {
+            body = beginCell().store(storeUpdateTonPriceMsg(message)).endCell();
         }
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'Deploy') {
             body = beginCell().store(storeDeploy(message)).endCell();
@@ -541,6 +544,13 @@ export class GateKeeperContract implements Contract {
         let builder = new TupleBuilder();
         let source = (await provider.get('poolSettings', builder.build())).stack;
         const result = loadTuplePoolSettings(source);
+        return result;
+    }
+    
+    async getTonPrice(provider: ContractProvider) {
+        let builder = new TupleBuilder();
+        let source = (await provider.get('tonPrice', builder.build())).stack;
+        let result = source.readBigNumber();
         return result;
     }
     

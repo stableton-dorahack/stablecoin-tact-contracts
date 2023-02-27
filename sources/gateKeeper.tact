@@ -1,10 +1,6 @@
 import "@stdlib/deploy";
 
 
-message Add {
-    amount: Int as uint32;
-}
-
 struct PoolSettings {
     liquidationRatio: Int as uint32;
     stabilityFeeRate: Int as uint32;
@@ -23,11 +19,15 @@ message PoolSettingsMsg {
     treasutyFeeBps: Int as uint32;
 }
 
+message UpdateTonPriceMsg {
+    price: Int as uint32;
+}
 
 contract GateKeeperContract with Deployable {
 
     owner: Address;
     poolSettings: PoolSettings;
+    tonPrice: Int as uint32;
 
     init(owner: Address) {
         self.owner = owner;
@@ -39,6 +39,7 @@ contract GateKeeperContract with Deployable {
             liquidatorIncentiveBps: 0,
             treasutyFeeBps: 0
         };
+        self.tonPrice = 0;
     }
 
 
@@ -46,6 +47,12 @@ contract GateKeeperContract with Deployable {
         let ctx: Context = context();
         require(ctx.sender == self.owner, "Invalid sender");
         self.poolSettings = settings;
+    }
+
+    fun setTonPrice(price: Int) {
+        let ctx: Context = context();
+        require(ctx.sender == self.owner, "Invalid sender");
+        self.tonPrice = price;
     }
 
     receive(msg: PoolSettingsMsg) {
@@ -58,9 +65,17 @@ contract GateKeeperContract with Deployable {
             treasutyFeeBps: msg.treasutyFeeBps
         });
     }
+
+    receive(msg: UpdateTonPriceMsg) {
+        self.setTonPrice(msg.price);
+    }
    
 
     get fun poolSettings(): PoolSettings {
         return self.poolSettings;
+    }
+
+    get fun tonPrice(): Int {
+        return self.tonPrice;
     }
 }

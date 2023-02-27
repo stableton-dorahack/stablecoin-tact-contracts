@@ -30,14 +30,14 @@ describe("contract", () => {
                       },
                       "bounce": true,
                       "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-                      "to": "kQAiUPB96fKUtxbLPZ7E4OpT5AIceODUX5rgQLaLpQEKM4j_",
+                      "to": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
                       "type": "internal",
                       "value": 1000000000n,
                     },
                   },
                   {
                     "$type": "processed",
-                    "gasUsed": 6772n,
+                    "gasUsed": 7021n,
                   },
                   {
                     "$type": "sent",
@@ -48,10 +48,10 @@ describe("contract", () => {
                           "type": "cell",
                         },
                         "bounce": true,
-                        "from": "kQAiUPB96fKUtxbLPZ7E4OpT5AIceODUX5rgQLaLpQEKM4j_",
+                        "from": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
                         "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
                         "type": "internal",
-                        "value": 992032000n,
+                        "value": 991783000n,
                       },
                     ],
                   },
@@ -102,14 +102,14 @@ describe("contract", () => {
                       },
                       "bounce": true,
                       "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-                      "to": "kQAiUPB96fKUtxbLPZ7E4OpT5AIceODUX5rgQLaLpQEKM4j_",
+                      "to": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
                       "type": "internal",
                       "value": 1000000000n,
                     },
                   },
                   {
                     "$type": "processed",
-                    "gasUsed": 4138n,
+                    "gasUsed": 4300n,
                   },
                 ],
               },
@@ -157,7 +157,7 @@ describe("contract", () => {
                       },
                       "bounce": true,
                       "from": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
-                      "to": "kQAiUPB96fKUtxbLPZ7E4OpT5AIceODUX5rgQLaLpQEKM4j_",
+                      "to": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
                       "type": "internal",
                       "value": 1000000000n,
                     },
@@ -174,10 +174,120 @@ describe("contract", () => {
                         "type": "empty",
                       },
                       "bounce": false,
-                      "from": "kQAiUPB96fKUtxbLPZ7E4OpT5AIceODUX5rgQLaLpQEKM4j_",
+                      "from": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
                       "to": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
                       "type": "internal",
-                      "value": 996112000n,
+                      "value": 995968000n,
+                    },
+                  },
+                ],
+              },
+            ]
+        `);
+    });
+
+    it("should set ton price", async () => {
+        // Create ContractSystem and deploy contract
+        let system = await ContractSystem.create();
+        let owner = system.treasure("owner");
+        let nonOwner = system.treasure("non-owner");
+        let contract = system.open(await GateKeeperContract.fromInit(owner.address));
+        let track = system.track(contract.address);
+        await contract.send(owner, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
+        await system.run();
+
+        // Check initial ton price
+        console.log("contract.getTonPrice()", await contract.getTonPrice());
+
+        expect(await contract.getTonPrice()).toEqual(0n);
+
+        // Set pool settings by owner
+        await contract.send(
+            owner,
+            { value: toNano(1) },
+            {
+                $$type: "UpdateTonPriceMsg",
+                price: 2n,
+            }
+        );
+        await system.run();
+        expect(track.collect()[1]).toMatchInlineSnapshot(`
+              {
+                "$seq": 1,
+                "events": [
+                  {
+                    "$type": "received",
+                    "message": {
+                      "body": {
+                        "cell": "x{0D11BABD00000002}",
+                        "type": "cell",
+                      },
+                      "bounce": true,
+                      "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+                      "to": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
+                      "type": "internal",
+                      "value": 1000000000n,
+                    },
+                  },
+                  {
+                    "$type": "processed",
+                    "gasUsed": 4036n,
+                  },
+                ],
+              }
+        `);
+
+        // Check updated ton price
+        console.log("contract.getTonPrice()", await contract.getTonPrice());
+
+        expect(await contract.getTonPrice()).toEqual(2n);
+
+        // set price by Non - owner;
+        await contract.send(
+            nonOwner,
+            { value: toNano(1) },
+            {
+                $$type: "UpdateTonPriceMsg",
+                price: 2n,
+            }
+        );
+
+        await system.run();
+        expect(track.collect()).toMatchInlineSnapshot(`
+            [
+              {
+                "$seq": 2,
+                "events": [
+                  {
+                    "$type": "received",
+                    "message": {
+                      "body": {
+                        "cell": "x{0D11BABD00000002}",
+                        "type": "cell",
+                      },
+                      "bounce": true,
+                      "from": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
+                      "to": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
+                      "type": "internal",
+                      "value": 1000000000n,
+                    },
+                  },
+                  {
+                    "$type": "failed",
+                    "errorCode": 4429,
+                    "errorMessage": "Invalid sender",
+                  },
+                  {
+                    "$type": "sent-bounced",
+                    "message": {
+                      "body": {
+                        "type": "empty",
+                      },
+                      "bounce": false,
+                      "from": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
+                      "to": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
+                      "type": "internal",
+                      "value": 996232000n,
                     },
                   },
                 ],

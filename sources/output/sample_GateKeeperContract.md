@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: GateKeeperContract
-BOC Size: 585 bytes
+BOC Size: 708 bytes
 
 # Types
 Total Types: 8
@@ -25,10 +25,6 @@ Signature: `Deploy{queryId:uint64}`
 TLB: `deploy_ok#aff90f57 queryId:uint64 = DeployOk`
 Signature: `DeployOk{queryId:uint64}`
 
-## Add
-TLB: `add#87d43ac2 amount:uint32 = Add`
-Signature: `Add{amount:uint32}`
-
 ## PoolSettings
 TLB: `_ liquidationRatio:uint32 stabilityFeeRate:uint32 lastAccumulationTime:uint32 closeFactorBps:uint32 liquidatorIncentiveBps:uint32 treasutyFeeBps:uint32 = PoolSettings`
 Signature: `PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,lastAccumulationTime:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32,treasutyFeeBps:uint32}`
@@ -37,10 +33,16 @@ Signature: `PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,lastAcc
 TLB: `pool_settings_msg#e1b180f1 liquidationRatio:uint32 stabilityFeeRate:uint32 lastAccumulationTime:uint32 closeFactorBps:uint32 liquidatorIncentiveBps:uint32 treasutyFeeBps:uint32 = PoolSettingsMsg`
 Signature: `PoolSettingsMsg{liquidationRatio:uint32,stabilityFeeRate:uint32,lastAccumulationTime:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32,treasutyFeeBps:uint32}`
 
+## UpdateTonPriceMsg
+TLB: `update_ton_price_msg#0d11babd price:uint32 = UpdateTonPriceMsg`
+Signature: `UpdateTonPriceMsg{price:uint32}`
+
 # Get Methods
-Total Get Methods: 1
+Total Get Methods: 2
 
 ## poolSettings
+
+## tonPrice
 
 # Error Codes
 2: Stack undeflow
