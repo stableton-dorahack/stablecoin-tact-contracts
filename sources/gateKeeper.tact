@@ -1,5 +1,5 @@
 import "@stdlib/deploy";
-import "@stdlib/ownable";
+
 
 message Add {
     amount: Int as uint32;
@@ -31,6 +31,14 @@ contract GateKeeperContract with Deployable {
 
     init(owner: Address) {
         self.owner = owner;
+        self.poolSettings = PoolSettings{
+            liquidationRatio: 0,
+            stabilityFeeRate: 0,
+            lastAccumulationTime: 0,
+            closeFactorBps: 0,
+            liquidatorIncentiveBps: 0,
+            treasutyFeeBps: 0
+        };
     }
 
 

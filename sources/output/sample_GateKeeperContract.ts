@@ -271,48 +271,6 @@ function dictValueParserDeployOk(): DictionaryValue<DeployOk> {
     }
 }
 
-export type ChangeOwner = {
-    $$type: 'ChangeOwner';
-    newOwner: Address;
-}
-
-export function storeChangeOwner(src: ChangeOwner) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(256331011, 32);
-        b_0.storeAddress(src.newOwner);
-    };
-}
-
-export function loadChangeOwner(slice: Slice) {
-    let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 256331011) { throw Error('Invalid prefix'); }
-    let _newOwner = sc_0.loadAddress();
-    return { $$type: 'ChangeOwner' as const, newOwner: _newOwner };
-}
-
-function loadTupleChangeOwner(source: TupleReader) {
-    let _newOwner = source.readAddress();
-    return { $$type: 'ChangeOwner' as const, newOwner: _newOwner };
-}
-
-function storeTupleChangeOwner(source: ChangeOwner) {
-    let builder = new TupleBuilder();
-    builder.writeAddress(source.newOwner);
-    return builder.build();
-}
-
-function dictValueParserChangeOwner(): DictionaryValue<ChangeOwner> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeChangeOwner(src)).endCell());
-        },
-        parse: (src) => {
-            return loadChangeOwner(src.loadRef().beginParse());
-        }
-    }
-}
-
 export type Add = {
     $$type: 'Add';
     amount: bigint;
@@ -500,8 +458,8 @@ function initGateKeeperContract_init_args(src: GateKeeperContract_init_args) {
 }
 
 async function GateKeeperContract_init(owner: Address) {
-    const __code = Cell.fromBase64('te6ccgECEAEAAaMAART/APSkE/S88sgLAQIBYgIDBHzQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOJVFts8MA0OBAUCASAICQFucCHXScIflTAg1wsf3gKSW3/gAYIQD0dNA7qOmNMfAYIQD0dNA7ry4IH6QAExVWDbPGwWf+AwcAYBLsj4QgHMfwHKAFVgUHbPFgZVBNs8ye1UBwAc+EFvJBAjXwMnxwXy4IQAHlBWyx8Tyx/LH8sfyx/LHwIBagoLALm93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwThQCx7oTKJc2tVUhWFLABYDQTggZzq084r86ShYDrC3EyPZQDSbFHe1E0NQB+GLSAAGOivpAAQHbPBBnbBeOh/pAAQHR2zzi2zyANDgwDSbJKO1E0NQB+GLSAAGOivpAAQHbPBBnbBeOh/pAAQHR2zzi2zyANDg8ABF8GABzTH9Mf0x/TH9Mf0x9VUAACbQAEbBY=');
-    const __system = Cell.fromBase64('te6cckECEgEAAa0AAQHAAQEFoAajAgEU/wD0pBP0vPLICwMCAWILBAIBIAYFALm93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwThQCx7oTKJc2tVUhWFLABYDQTggZzq084r86ShYDrC3EyPZQCAWoJBwNJsko7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOLbPIBEQCAAEbBYDSbFHe1E0NQB+GLSAAGOivpAAQHbPBBnbBeOh/pAAQHR2zzi2zyAREAoABF8GBHzQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOJVFts8MBEQDgwBLsj4QgHMfwHKAFVgUHbPFgZVBNs8ye1UDQAeUFbLHxPLH8sfyx/LH8sfAW5wIddJwh+VMCDXCx/eApJbf+ABghAPR00Duo6Y0x8BghAPR00DuvLggfpAATFVYNs8bBZ/4DBwDwAc+EFvJBAjXwMnxwXy4IQAAm0AHNMf0x/TH9Mf0x/TH1VQ+9wKMg==');
+    const __code = Cell.fromBase64('te6ccgECDwEAAfkAART/APSkE/S88sgLAQIBYgIDBHzQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOJVFts8MAwNBAUCASAKCwGCcCHXScIflTAg1wsf3gKSW3/gAYIQlGqYtrqOotMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8nbPH/gMHAGAS7I+EIBzH8BygBVYFB2zxYGVQTbPMntVAkBJvhBbyQQI18Df3BQA4BCAW1t2zwHAfbIcQHKAVAHAcoAcAHKAlAFzxZQA/oCcAHKaCNusyVus7GOTH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMyXMzMBcAHKAOIhbrMIADCcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAAHlBWyx8Tyx/LH8sfyx/LHwNJvslHaiaGoA/DFpAADHRX0gAIDtnggztgvHQ/0gAIDo7Z5xbZ5AwNDgBxvd6ME4LnYerpZXPY9CdhzrJUKNs0E4TusalpWyPlmRadeW/vixHME4ECrgDcAzscpnLB1XI5LZYcABzTH9Mf0x/TH9Mf0x9VUAAMcFRwAFMAAARsFg==');
+    const __system = Cell.fromBase64('te6cckECEQEAAgMAAQHAAQEFoAajAgEU/wD0pBP0vPLICwMCAWIIBAIBIAYFAHG93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwDSb7JR2omhqAPwxaQAAx0V9IACA7Z4IM7YLx0P9IACA6O2ecW2eQQDwcABGwWBHzQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOJVFts8MBAPCwkBLsj4QgHMfwHKAFVgUHbPFgZVBNs8ye1UCgAeUFbLHxPLH8sfyx/LH8sfAYJwIddJwh+VMCDXCx/eApJbf+ABghCUapi2uo6i0x8BghCUapi2uvLggdM/ATHIAYIQr/kPV1jLH8s/yds8f+AwcAwBJvhBbyQQI18Df3BQA4BCAW1t2zwNAfbIcQHKAVAHAcoAcAHKAlAFzxZQA/oCcAHKaCNusyVus7GOTH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMyXMzMBcAHKAOIhbrMOADCcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAADHBUcABTAAAc0x/TH9Mf0x/TH9MfVVAIYn2/');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -564,11 +522,11 @@ export class GateKeeperContract implements Contract {
         this.init = init;
     }
     
-    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: ChangeOwner) {
+    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: Deploy) {
         
         let body: Cell | null = null;
-        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ChangeOwner') {
-            body = beginCell().store(storeChangeOwner(message)).endCell();
+        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'Deploy') {
+            body = beginCell().store(storeDeploy(message)).endCell();
         }
         if (body === null) { throw new Error('Invalid message type'); }
         
@@ -580,13 +538,6 @@ export class GateKeeperContract implements Contract {
         let builder = new TupleBuilder();
         let source = (await provider.get('poolSettings', builder.build())).stack;
         const result = loadTuplePoolSettings(source);
-        return result;
-    }
-    
-    async getOwner(provider: ContractProvider) {
-        let builder = new TupleBuilder();
-        let source = (await provider.get('owner', builder.build())).stack;
-        let result = source.readAddress();
         return result;
     }
     

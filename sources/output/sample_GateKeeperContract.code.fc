@@ -2,6 +2,8 @@
 #pragma allow-post-modification;
 #pragma compute-asm-ltr;
 
+forall X -> X __tact_not_null(X x) inline { throw_if(128, null?(x)); return x; }
+
 global (int, slice, int, slice) __tact_context;
 global cell __tact_context_sys;
 
@@ -9,6 +11,11 @@ global cell __tact_context_sys;
 
 () __tact_verify_address(slice address) inline {
     throw_unless(136, address.slice_bits() != 267);
+}
+
+builder __tact_store_bool(builder b, int v) inline {
+    b = b.store_int(v, 1);
+    return b;
 }
 
 (slice, slice) __tact_load_address(slice cs) inline {
@@ -23,14 +30,21 @@ builder __tact_store_address(builder b, slice address) inline {
     return b;
 }
 
-int __tact_address_eq(slice a, slice b) inline {
-    return equal_slice_bits(a, b);
+(slice, ((int))) __gen_read_Deploy(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2490013878);
+    var v'queryId = sc_0~load_uint(64);
+    return (sc_0, (v'queryId));
 }
 
-(slice, ((slice))) __gen_read_ChangeOwner(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 256331011);
-    var v'newOwner = sc_0~__tact_load_address();
-    return (sc_0, (v'newOwner));
+builder __gen_write_DeployOk(builder build_0, (int) v) inline {
+    var (v'queryId) = v;
+    build_0 = store_uint(build_0, 2952335191, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    return build_0;
+}
+
+cell __gen_writecell_DeployOk((int) v) inline {
+    return __gen_write_DeployOk(begin_cell(), v).end_cell();
 }
 
 builder __gen_write_PoolSettings(builder build_0, (int, int, int, int, int, int) v) inline_ref {
@@ -67,11 +81,6 @@ builder __gen_write_GateKeeperContract(builder build_0, (slice, (int, int, int, 
     return (sc_0, (v'owner, v'poolSettings));
 }
 
-_ __gen_Context_get_sender((int, slice, int, slice) v) inline {
-    var (v'bounced, v'sender, v'value, v'raw) = v;
-    return v'sender;
-}
-
 (int, int, int, int, int, int) __gen_PoolSettings_to_external(((int, int, int, int, int, int)) v) inline {
     var (v'liquidationRatio, v'stabilityFeeRate, v'lastAccumulationTime, v'closeFactorBps, v'liquidatorIncentiveBps, v'treasutyFeeBps) = v; 
     return (v'liquidationRatio, v'stabilityFeeRate, v'lastAccumulationTime, v'closeFactorBps, v'liquidatorIncentiveBps, v'treasutyFeeBps);
@@ -82,9 +91,14 @@ _ __gen_Context_get_sender((int, slice, int, slice) v) inline {
     return (sc_0, (v'owner));
 }
 
+((int, int, int, int, int, int)) __gen_constructor_PoolSettings$liquidationRatio_stabilityFeeRate_lastAccumulationTime_closeFactorBps_liquidatorIncentiveBps_treasutyFeeBps(int liquidationRatio, int stabilityFeeRate, int lastAccumulationTime, int closeFactorBps, int liquidatorIncentiveBps, int treasutyFeeBps) inline {
+    return (liquidationRatio, stabilityFeeRate, lastAccumulationTime, closeFactorBps, liquidatorIncentiveBps, treasutyFeeBps);
+}
+
 (slice, (int, int, int, int, int, int)) $__gen_GateKeeperContract_init(slice $owner) impure inline_ref {
     var (($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps))) = (null(), null());
     $self'owner = $owner;
+    ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps) = __gen_constructor_PoolSettings$liquidationRatio_stabilityFeeRate_lastAccumulationTime_closeFactorBps_liquidatorIncentiveBps_treasutyFeeBps(0, 0, 0, 0, 0, 0);
     return ($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps));
 }
 
@@ -109,6 +123,58 @@ _ __gen_Context_get_sender((int, slice, int, slice) v) inline {
     set_data(b.end_cell());
 }
 
+() $send((int, slice, int, int, cell, cell, cell) $params) impure inline_ref {
+    var (($params'bounce, $params'to, $params'value, $params'mode, $params'body, $params'code, $params'data)) = $params;
+    builder $b = begin_cell();
+    $b = store_int($b, 1, 2);
+    $b = __tact_store_bool($b, $params'bounce);
+    $b = store_int($b, 0, 3);
+    $b = __tact_store_address($b, $params'to);
+    $b = store_coins($b, $params'value);
+    $b = store_int($b, 0, ((((1 + 4) + 4) + 64) + 32));
+    if (((~ null?($params'code)) | (~ null?($params'data)))) {
+        $b = __tact_store_bool($b, true);
+        builder $bc = begin_cell();
+        $bc = __tact_store_bool($bc, false);
+        $bc = __tact_store_bool($bc, false);
+        if ((~ null?($params'code))) {
+            $bc = __tact_store_bool($bc, true);
+            $bc = store_ref($bc, __tact_not_null($params'code));
+        } else {
+            $bc = __tact_store_bool($bc, false);
+        }
+        if ((~ null?($params'data))) {
+            $bc = __tact_store_bool($bc, true);
+            $bc = store_ref($bc, __tact_not_null($params'data));
+        } else {
+            $bc = __tact_store_bool($bc, false);
+        }
+        $bc = __tact_store_bool($bc, false);
+        $b = __tact_store_bool($b, true);
+        $b = store_ref($b, end_cell($bc));
+    } else {
+        $b = __tact_store_bool($b, false);
+    }
+    cell $body = $params'body;
+    if ((~ null?($body))) {
+        $b = __tact_store_bool($b, true);
+        $b = store_ref($b, __tact_not_null($body));
+    } else {
+        $b = __tact_store_bool($b, false);
+    }
+    cell $c = end_cell($b);
+    send_raw_message($c, $params'mode);
+}
+
+((int, slice, int, int, cell, cell, cell)) __gen_constructor_SendParameters$bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline {
+    return (bounce, to, value, mode, body, null(), null());
+}
+
+() $reply(cell $body) impure inline_ref {
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    $send(__gen_constructor_SendParameters$bounce_to_value_mode_body(true, $ctx'sender, 0, (64 + 2), $body));
+}
+
 (int, int, int, int, int, int) $__gen_GateKeeperContract_poolSettings((slice, (int, int, int, int, int, int)) $self) impure inline_ref {
     var (($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps))) = $self;
     return ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps);
@@ -120,28 +186,14 @@ _ $__gen_get_poolSettings() method_id(88360) {
     return __gen_PoolSettings_to_external(res);
 }
 
-((slice, (int, int, int, int, int, int)), ()) $__gen_GateKeeperContract_requireOwner((slice, (int, int, int, int, int, int)) $self) impure inline_ref {
-    var (($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps))) = $self;
-    throw_unless(132, __tact_address_eq(__gen_Context_get_sender(__tact_context_get()), $self'owner));
-    return (($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps)), ());
+((int)) __gen_constructor_DeployOk$queryId(int queryId) inline {
+    return (queryId);
 }
 
-slice $__gen_GateKeeperContract_owner((slice, (int, int, int, int, int, int)) $self) impure inline_ref {
-    var (($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps))) = $self;
-    return $self'owner;
-}
-
-_ $__gen_get_owner() method_id(83229) {
-    var self = __gen_load_GateKeeperContract();
-    var res = $__gen_GateKeeperContract_owner(self);
-    return res;
-}
-
-(((slice, (int, int, int, int, int, int))), ()) $__gen_GateKeeperContract_receive_ChangeOwner((slice, (int, int, int, int, int, int)) $self, (slice) $msg) impure inline {
+(((slice, (int, int, int, int, int, int))), ()) $__gen_GateKeeperContract_receive_Deploy((slice, (int, int, int, int, int, int)) $self, (int) $deploy) impure inline {
     var ($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps)) = $self;
-    var ($msg'newOwner) = $msg;
-    ($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps))~$__gen_GateKeeperContract_requireOwner();
-    $self'owner = $msg'newOwner;
+    var ($deploy'queryId) = $deploy;
+    $reply(__gen_writecell_DeployOk(__gen_constructor_DeployOk$queryId($deploy'queryId)));
     return (($self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'lastAccumulationTime, $self'poolSettings'closeFactorBps, $self'poolSettings'liquidatorIncentiveBps, $self'poolSettings'treasutyFeeBps)), ());
 }
 
@@ -158,10 +210,10 @@ _ $__gen_get_owner() method_id(83229) {
         return (self, true);
     }
     
-    ;; Receive ChangeOwner message
-    if (op == 256331011) {
-        var msg = in_msg~__gen_read_ChangeOwner();
-        self~$__gen_GateKeeperContract_receive_ChangeOwner(msg);
+    ;; Receive Deploy message
+    if (op == 2490013878) {
+        var msg = in_msg~__gen_read_Deploy();
+        self~$__gen_GateKeeperContract_receive_Deploy(msg);
         return (self, true);
     }
     
@@ -194,14 +246,12 @@ _ supported_interfaces() method_id {
     return (
         "org.ton.introspection.v0"H >> 128,
         "org.ton.abi.ipfs.v0"H >> 128,
-        "org.ton.deploy.lazy.v0"H >> 128,
-        "org.ton.ownable.transferable"H >> 128,
-        "org.ton.ownable"H >> 128
+        "org.ton.deploy.lazy.v0"H >> 128
     );
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmWmK97kNPvAbk9PMSVoNv4reNnwqDKaSC4HE5QwTpjkJp";
+    return "ipfs://QmPj3XL5TnGhT9qenmFUTNzhK8yXon14F9Mzzf9wFNR3uQ";
 }
 
 _ lazy_deployment_completed() {
