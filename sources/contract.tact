@@ -1,38 +1,48 @@
 import "@stdlib/deploy";
+import "@stdlib/ownable";
 
 message Add {
     amount: Int as uint32;
 }
 
-contract SampleTactContract with Deployable {
+struct PoolSettings {
+    liquidationRatio: Int as uint32;
+    stabilityFeeRate: Int as uint32;
+    lastAccumulationTime: Int as uint32;
+    closeFactorBps: Int as uint32;
+    liquidatorIncentiveBps: Int as uint32;
+    treasutyFeeBps: Int as uint32;
+}
+
+message PoolSettingsMsg {
+    liquidationRatio: Int as uint32;
+    stabilityFeeRate: Int as uint32;
+    lastAccumulationTime: Int as uint32;
+    closeFactorBps: Int as uint32;
+    liquidatorIncentiveBps: Int as uint32;
+    treasutyFeeBps: Int as uint32;
+}
+
+
+contract GateKeeperContract with Deployable {
 
     owner: Address;
-    counter: Int as uint32;
+    poolSettings: PoolSettings;
 
     init(owner: Address) {
         self.owner = owner;
-        self.counter = 0;
     }
 
-    fun add(v: Int) {
-        
-        // Check sender
+
+    fun setPoolSettings(settings: PoolSettings) {
         let ctx: Context = context();
         require(ctx.sender == self.owner, "Invalid sender");
-        
-        // Update counter
-        self.counter = (self.counter + v);
+        self.poolSettings = settings;
     }
 
-    receive(msg: Add) {
-        self.add(msg.amount);
-    }
+   
 
-    receive("increment") {
-        self.add(1);
-    }
-
-    get fun counter(): Int {
-        return self.counter;
+    get fun poolSettings(): PoolSettings {
+        return self.poolSettings;
     }
 }

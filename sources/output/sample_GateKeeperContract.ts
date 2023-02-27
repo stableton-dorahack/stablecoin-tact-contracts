@@ -16,7 +16,6 @@ import {
     TupleBuilder,
     DictionaryValue
 } from 'ton-core';
-import { ExecutorEngine, getDefaultExecutorEngine } from '@tact-lang/runtime';
 
 export type StateInit = {
     $$type: 'StateInit';
@@ -62,6 +61,7 @@ function dictValueParserStateInit(): DictionaryValue<StateInit> {
         }
     }
 }
+
 export type Context = {
     $$type: 'Context';
     bounced: boolean;
@@ -116,6 +116,7 @@ function dictValueParserContext(): DictionaryValue<Context> {
         }
     }
 }
+
 export type SendParameters = {
     $$type: 'SendParameters';
     bounce: boolean;
@@ -185,6 +186,7 @@ function dictValueParserSendParameters(): DictionaryValue<SendParameters> {
         }
     }
 }
+
 export type Deploy = {
     $$type: 'Deploy';
     queryId: bigint;
@@ -226,6 +228,7 @@ function dictValueParserDeploy(): DictionaryValue<Deploy> {
         }
     }
 }
+
 export type DeployOk = {
     $$type: 'DeployOk';
     queryId: bigint;
@@ -267,6 +270,49 @@ function dictValueParserDeployOk(): DictionaryValue<DeployOk> {
         }
     }
 }
+
+export type ChangeOwner = {
+    $$type: 'ChangeOwner';
+    newOwner: Address;
+}
+
+export function storeChangeOwner(src: ChangeOwner) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(256331011, 32);
+        b_0.storeAddress(src.newOwner);
+    };
+}
+
+export function loadChangeOwner(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 256331011) { throw Error('Invalid prefix'); }
+    let _newOwner = sc_0.loadAddress();
+    return { $$type: 'ChangeOwner' as const, newOwner: _newOwner };
+}
+
+function loadTupleChangeOwner(source: TupleReader) {
+    let _newOwner = source.readAddress();
+    return { $$type: 'ChangeOwner' as const, newOwner: _newOwner };
+}
+
+function storeTupleChangeOwner(source: ChangeOwner) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.newOwner);
+    return builder.build();
+}
+
+function dictValueParserChangeOwner(): DictionaryValue<ChangeOwner> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeChangeOwner(src)).endCell());
+        },
+        parse: (src) => {
+            return loadChangeOwner(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type Add = {
     $$type: 'Add';
     amount: bigint;
@@ -308,32 +354,163 @@ function dictValueParserAdd(): DictionaryValue<Add> {
         }
     }
 }
-async function SampleTactContract_init(owner: Address, opts?: { engine?: ExecutorEngine }) {
-    const __init = 'te6ccgEBBgEALwABFP8A9KQT9LzyyAsBAgFiAgMCAs0EBQAJoUrd4AkAAdQAF9OAFkZgEs54tlj+TA==';
-    const __code = 'te6ccgECDgEAAjcAART/APSkE/S88sgLAQIBYgIDA/LQ7aLt+3Ah10nCH5UwINcLH94C0NMDAXGwwAGRf5Fw4gH6QCJQZm8E+GECkVvgIIIQh9Q6wrqOtDDtRNDUAfhi+kABAdMfWWwSAtMfAYIQh9Q6wrry4IHTHwExEts8yPhCAcxZWc8Wyx/J7VTgIIIQlGqYtrrjAsAACgQFAgFqCwwCbDDtRNDUAfhi+kABAdMfWWwSAtMfAYIQlGqYtrry4IHTPwExEts82zzI+EIBzFlZzxbLH8ntVAYHAaaOy/kBgvDE+NcjEu3971t77HgzvbsWLRURvXipEq7Q8mN69lVyrrqOo+1E0NQB+GL6QAEB0x9ZbBJx2zzI+EIBzFlZzxbLH8ntVNsx4JEw4vLAggoAHMgBghCv+Q9XWMsfyz/JAST4QW8kECNfA38CcIBCWG1t2zwIAfbIcQHKAVAHAcoAcAHKAlAFzxZQA/oCcAHKaCNusyVus7GOTH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMyXMzMBcAHKAOIhbrMJADCcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAAHvhBbyRbgRFNMiTHBfL0oAEpt0MdqJoagD8MX0gAIDpj6y2CW2eQDQBNt3owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwAAIx';
-    const __system = 'te6cckECEAEAAkEAAQHAAQEFoebTAgEU/wD0pBP0vPLICwMCAWIIBAIBagYFAE23ejBOC52Hq6WVz2PQnYc6yVCjbNBOE7rGpaVsj5ZkWnXlv74sRzABKbdDHaiaGoA/DF9IACA6Y+stgltnkAcAAjED8tDtou37cCHXScIflTAg1wsf3gLQ0wMBcbDAAZF/kXDiAfpAIlBmbwT4YQKRW+AgghCH1DrCuo60MO1E0NQB+GL6QAEB0x9ZbBIC0x8BghCH1DrCuvLggdMfATES2zzI+EIBzFlZzxbLH8ntVOAgghCUapi2uuMCwAAPCgkBpo7L+QGC8MT41yMS7f3vW3vseDO9uxYtFRG9eKkSrtDyY3r2VXKuuo6j7UTQ1AH4YvpAAQHTH1lsEnHbPMj4QgHMWVnPFssfye1U2zHgkTDi8sCCDwJsMO1E0NQB+GL6QAEB0x9ZbBIC0x8BghCUapi2uvLggdM/ATES2zzbPMj4QgHMWVnPFssfye1UDgsBJPhBbyQQI18DfwJwgEJYbW3bPAwB9shxAcoBUAcBygBwAcoCUAXPFlAD+gJwAcpoI26zJW6zsY5MfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzJczMwFwAcoA4iFusw0AMJx/AcoAASBu8tCAAcyVMXABygDiyQH7AAAcyAGCEK/5D1dYyx/LP8kAHvhBbyRbgRFNMiTHBfL0oDDG3Pk=';
-    let systemCell = Cell.fromBase64(__system);
-    let builder = new TupleBuilder();
-    builder.writeCell(systemCell);
-    builder.writeAddress(owner);
-    let __stack = builder.build();
-    let codeCell = Cell.fromBoc(Buffer.from(__code, 'base64'))[0];
-    let initCell = Cell.fromBoc(Buffer.from(__init, 'base64'))[0];
-    let executor = opts && opts.engine ? opts.engine : getDefaultExecutorEngine();
-    let res = await executor.get({ method: 'init', stack: __stack, code: initCell, data: new Cell() });
-    if (!res.success) { throw Error(res.error); }
-    if (res.exitCode !== 0 && res.exitCode !== 1) {
-        if (SampleTactContract_errors[res.exitCode]) {
-            throw new ComputeError(SampleTactContract_errors[res.exitCode].message, res.exitCode, { logs: res.logs });
-        } else {
-            throw new ComputeError('Exit code: ' + res.exitCode, res.exitCode, { logs: res.logs });
-        }
-    }
-    let data = new TupleReader(res.stack).readCell();
-    return { code: codeCell, data };
+
+export type PoolSettings = {
+    $$type: 'PoolSettings';
+    liquidationRatio: bigint;
+    stabilityFeeRate: bigint;
+    lastAccumulationTime: bigint;
+    closeFactorBps: bigint;
+    liquidatorIncentiveBps: bigint;
+    treasutyFeeBps: bigint;
 }
 
-const SampleTactContract_errors: { [key: number]: { message: string } } = {
+export function storePoolSettings(src: PoolSettings) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(src.liquidationRatio, 32);
+        b_0.storeUint(src.stabilityFeeRate, 32);
+        b_0.storeUint(src.lastAccumulationTime, 32);
+        b_0.storeUint(src.closeFactorBps, 32);
+        b_0.storeUint(src.liquidatorIncentiveBps, 32);
+        b_0.storeUint(src.treasutyFeeBps, 32);
+    };
+}
+
+export function loadPoolSettings(slice: Slice) {
+    let sc_0 = slice;
+    let _liquidationRatio = sc_0.loadUintBig(32);
+    let _stabilityFeeRate = sc_0.loadUintBig(32);
+    let _lastAccumulationTime = sc_0.loadUintBig(32);
+    let _closeFactorBps = sc_0.loadUintBig(32);
+    let _liquidatorIncentiveBps = sc_0.loadUintBig(32);
+    let _treasutyFeeBps = sc_0.loadUintBig(32);
+    return { $$type: 'PoolSettings' as const, liquidationRatio: _liquidationRatio, stabilityFeeRate: _stabilityFeeRate, lastAccumulationTime: _lastAccumulationTime, closeFactorBps: _closeFactorBps, liquidatorIncentiveBps: _liquidatorIncentiveBps, treasutyFeeBps: _treasutyFeeBps };
+}
+
+function loadTuplePoolSettings(source: TupleReader) {
+    let _liquidationRatio = source.readBigNumber();
+    let _stabilityFeeRate = source.readBigNumber();
+    let _lastAccumulationTime = source.readBigNumber();
+    let _closeFactorBps = source.readBigNumber();
+    let _liquidatorIncentiveBps = source.readBigNumber();
+    let _treasutyFeeBps = source.readBigNumber();
+    return { $$type: 'PoolSettings' as const, liquidationRatio: _liquidationRatio, stabilityFeeRate: _stabilityFeeRate, lastAccumulationTime: _lastAccumulationTime, closeFactorBps: _closeFactorBps, liquidatorIncentiveBps: _liquidatorIncentiveBps, treasutyFeeBps: _treasutyFeeBps };
+}
+
+function storeTuplePoolSettings(source: PoolSettings) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.liquidationRatio);
+    builder.writeNumber(source.stabilityFeeRate);
+    builder.writeNumber(source.lastAccumulationTime);
+    builder.writeNumber(source.closeFactorBps);
+    builder.writeNumber(source.liquidatorIncentiveBps);
+    builder.writeNumber(source.treasutyFeeBps);
+    return builder.build();
+}
+
+function dictValueParserPoolSettings(): DictionaryValue<PoolSettings> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storePoolSettings(src)).endCell());
+        },
+        parse: (src) => {
+            return loadPoolSettings(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type PoolSettingsMsg = {
+    $$type: 'PoolSettingsMsg';
+    liquidationRatio: bigint;
+    stabilityFeeRate: bigint;
+    lastAccumulationTime: bigint;
+    closeFactorBps: bigint;
+    liquidatorIncentiveBps: bigint;
+    treasutyFeeBps: bigint;
+}
+
+export function storePoolSettingsMsg(src: PoolSettingsMsg) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(3786506481, 32);
+        b_0.storeUint(src.liquidationRatio, 32);
+        b_0.storeUint(src.stabilityFeeRate, 32);
+        b_0.storeUint(src.lastAccumulationTime, 32);
+        b_0.storeUint(src.closeFactorBps, 32);
+        b_0.storeUint(src.liquidatorIncentiveBps, 32);
+        b_0.storeUint(src.treasutyFeeBps, 32);
+    };
+}
+
+export function loadPoolSettingsMsg(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 3786506481) { throw Error('Invalid prefix'); }
+    let _liquidationRatio = sc_0.loadUintBig(32);
+    let _stabilityFeeRate = sc_0.loadUintBig(32);
+    let _lastAccumulationTime = sc_0.loadUintBig(32);
+    let _closeFactorBps = sc_0.loadUintBig(32);
+    let _liquidatorIncentiveBps = sc_0.loadUintBig(32);
+    let _treasutyFeeBps = sc_0.loadUintBig(32);
+    return { $$type: 'PoolSettingsMsg' as const, liquidationRatio: _liquidationRatio, stabilityFeeRate: _stabilityFeeRate, lastAccumulationTime: _lastAccumulationTime, closeFactorBps: _closeFactorBps, liquidatorIncentiveBps: _liquidatorIncentiveBps, treasutyFeeBps: _treasutyFeeBps };
+}
+
+function loadTuplePoolSettingsMsg(source: TupleReader) {
+    let _liquidationRatio = source.readBigNumber();
+    let _stabilityFeeRate = source.readBigNumber();
+    let _lastAccumulationTime = source.readBigNumber();
+    let _closeFactorBps = source.readBigNumber();
+    let _liquidatorIncentiveBps = source.readBigNumber();
+    let _treasutyFeeBps = source.readBigNumber();
+    return { $$type: 'PoolSettingsMsg' as const, liquidationRatio: _liquidationRatio, stabilityFeeRate: _stabilityFeeRate, lastAccumulationTime: _lastAccumulationTime, closeFactorBps: _closeFactorBps, liquidatorIncentiveBps: _liquidatorIncentiveBps, treasutyFeeBps: _treasutyFeeBps };
+}
+
+function storeTuplePoolSettingsMsg(source: PoolSettingsMsg) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.liquidationRatio);
+    builder.writeNumber(source.stabilityFeeRate);
+    builder.writeNumber(source.lastAccumulationTime);
+    builder.writeNumber(source.closeFactorBps);
+    builder.writeNumber(source.liquidatorIncentiveBps);
+    builder.writeNumber(source.treasutyFeeBps);
+    return builder.build();
+}
+
+function dictValueParserPoolSettingsMsg(): DictionaryValue<PoolSettingsMsg> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storePoolSettingsMsg(src)).endCell());
+        },
+        parse: (src) => {
+            return loadPoolSettingsMsg(src.loadRef().beginParse());
+        }
+    }
+}
+
+ type GateKeeperContract_init_args = {
+    $$type: 'GateKeeperContract_init_args';
+    owner: Address;
+}
+
+function initGateKeeperContract_init_args(src: GateKeeperContract_init_args) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeAddress(src.owner);
+    };
+}
+
+async function GateKeeperContract_init(owner: Address) {
+    const __code = Cell.fromBase64('te6ccgECEAEAAaMAART/APSkE/S88sgLAQIBYgIDBHzQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOJVFts8MA0OBAUCASAICQFucCHXScIflTAg1wsf3gKSW3/gAYIQD0dNA7qOmNMfAYIQD0dNA7ry4IH6QAExVWDbPGwWf+AwcAYBLsj4QgHMfwHKAFVgUHbPFgZVBNs8ye1UBwAc+EFvJBAjXwMnxwXy4IQAHlBWyx8Tyx/LH8sfyx/LHwIBagoLALm93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwThQCx7oTKJc2tVUhWFLABYDQTggZzq084r86ShYDrC3EyPZQDSbFHe1E0NQB+GLSAAGOivpAAQHbPBBnbBeOh/pAAQHR2zzi2zyANDgwDSbJKO1E0NQB+GLSAAGOivpAAQHbPBBnbBeOh/pAAQHR2zzi2zyANDg8ABF8GABzTH9Mf0x/TH9Mf0x9VUAACbQAEbBY=');
+    const __system = Cell.fromBase64('te6cckECEgEAAa0AAQHAAQEFoAajAgEU/wD0pBP0vPLICwMCAWILBAIBIAYFALm93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwThQCx7oTKJc2tVUhWFLABYDQTggZzq084r86ShYDrC3EyPZQCAWoJBwNJsko7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOLbPIBEQCAAEbBYDSbFHe1E0NQB+GLSAAGOivpAAQHbPBBnbBeOh/pAAQHR2zzi2zyAREAoABF8GBHzQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6K+kABAds8EGdsF46H+kABAdHbPOJVFts8MBEQDgwBLsj4QgHMfwHKAFVgUHbPFgZVBNs8ye1UDQAeUFbLHxPLH8sfyx/LH8sfAW5wIddJwh+VMCDXCx/eApJbf+ABghAPR00Duo6Y0x8BghAPR00DuvLggfpAATFVYNs8bBZ/4DBwDwAc+EFvJBAjXwMnxwXy4IQAAm0AHNMf0x/TH9Mf0x/TH1VQ+9wKMg==');
+    let builder = beginCell();
+    builder.storeRef(__system);
+    builder.storeUint(0, 1);
+    initGateKeeperContract_init_args({ $$type: 'GateKeeperContract_init_args', owner })(builder);
+    const __data = builder.endCell();
+    return { code: __code, data: __data };
+}
+
+const GateKeeperContract_errors: { [key: number]: { message: string } } = {
     2: { message: `Stack undeflow` },
     3: { message: `Stack overflow` },
     4: { message: `Integer overflow` },
@@ -360,26 +537,26 @@ const SampleTactContract_errors: { [key: number]: { message: string } } = {
     4429: { message: `Invalid sender` },
 }
 
-export class SampleTactContract implements Contract {
+export class GateKeeperContract implements Contract {
     
-    static async init(owner: Address, opts?: { engine?: ExecutorEngine }) {
-        return await SampleTactContract_init(owner, opts);
+    static async init(owner: Address) {
+        return await GateKeeperContract_init(owner);
     }
     
-    static async fromInit(owner: Address, opts?: { engine?: ExecutorEngine }) {
-        const init = await SampleTactContract_init(owner, opts);
+    static async fromInit(owner: Address) {
+        const init = await GateKeeperContract_init(owner);
         const address = contractAddress(0, init);
-        return new SampleTactContract(address, init);
+        return new GateKeeperContract(address, init);
     }
     
     static fromAddress(address: Address) {
-        return new SampleTactContract(address);
+        return new GateKeeperContract(address);
     }
     
     readonly address: Address; 
     readonly init?: { code: Cell, data: Cell };
     readonly abi: ContractABI = {
-        errors: SampleTactContract_errors
+        errors: GateKeeperContract_errors
     };
     
     private constructor(address: Address, init?: { code: Cell, data: Cell }) {
@@ -387,17 +564,11 @@ export class SampleTactContract implements Contract {
         this.init = init;
     }
     
-    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: Add | 'increment' | Deploy) {
+    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: ChangeOwner) {
         
         let body: Cell | null = null;
-        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'Add') {
-            body = beginCell().store(storeAdd(message)).endCell();
-        }
-        if (message === 'increment') {
-            body = beginCell().storeUint(0, 32).storeStringTail(message).endCell();
-        }
-        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'Deploy') {
-            body = beginCell().store(storeDeploy(message)).endCell();
+        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ChangeOwner') {
+            body = beginCell().store(storeChangeOwner(message)).endCell();
         }
         if (body === null) { throw new Error('Invalid message type'); }
         
@@ -405,10 +576,17 @@ export class SampleTactContract implements Contract {
         
     }
     
-    async getCounter(provider: ContractProvider) {
+    async getPoolSettings(provider: ContractProvider) {
         let builder = new TupleBuilder();
-        let source = (await provider.get('counter', builder.build())).stack;
-        let result = source.readBigNumber();
+        let source = (await provider.get('poolSettings', builder.build())).stack;
+        const result = loadTuplePoolSettings(source);
+        return result;
+    }
+    
+    async getOwner(provider: ContractProvider) {
+        let builder = new TupleBuilder();
+        let source = (await provider.get('owner', builder.build())).stack;
+        let result = source.readAddress();
         return result;
     }
     
