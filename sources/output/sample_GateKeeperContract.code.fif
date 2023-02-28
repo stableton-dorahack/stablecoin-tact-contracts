@@ -12,12 +12,15 @@ PROGRAM{
   DECLPROC __gen_write_PoolSettings
   DECLPROC __gen_read_PoolSettings
   DECLPROC __gen_read_PoolSettingsMsg
+  DECLPROC __gen_write_DebtRate
+  DECLPROC __gen_read_DebtRate
   DECLPROC __gen_read_UpdateTonPriceMsg
   DECLPROC __gen_write_GateKeeperContract
   DECLPROC __gen_read_GateKeeperContract
   DECLPROC __gen_PoolSettings_to_external
   DECLPROC __gen_read_$init$GateKeeperContract
   DECLPROC __gen_constructor_PoolSettings$liquidationRatio_stabilityFeeRate_lastAccumulationTime_closeFactorBps_liquidatorIncentiveBps_treasutyFeeBps
+  DECLPROC __gen_constructor_DebtRate$debtAccumulatedRate_lastAccumulationTime
   DECLPROC $__gen_GateKeeperContract_init
   DECLPROC __gen_load_GateKeeperContract
   DECLPROC __gen_store_GateKeeperContract
@@ -26,12 +29,14 @@ PROGRAM{
   DECLPROC $reply
   DECLPROC $__gen_GateKeeperContract_setPoolSettings
   DECLPROC $__gen_GateKeeperContract_setTonPrice
+  DECLPROC $__gen_GateKeeperContract_updateDebtAccumulatedRate
   DECLPROC $__gen_GateKeeperContract_poolSettings
   88360 DECLMETHOD $__gen_get_poolSettings
   DECLPROC $__gen_GateKeeperContract_tonPrice
   99462 DECLMETHOD $__gen_get_tonPrice
   DECLPROC $__gen_GateKeeperContract_receive_PoolSettingsMsg
   DECLPROC $__gen_GateKeeperContract_receive_UpdateTonPriceMsg
+  DECLPROC $__gen_GateKeeperContract_receive_comment_098326c3bf83cbcd5017033fa0bf3d9c6d461897bba0345c5c7278c6313ad94b
   DECLPROC __gen_constructor_DeployOk$queryId
   DECLPROC $__gen_GateKeeperContract_receive_Deploy
   DECLPROC __gen_router_GateKeeperContract
@@ -124,6 +129,16 @@ PROGRAM{
     32 LDU
     6 -ROLL
   }>
+  __gen_write_DebtRate PROCINLINE:<{
+    s0 s2 XCHG
+    32 STU
+    32 STU
+  }>
+  __gen_read_DebtRate PROCINLINE:<{
+    32 LDU
+    32 LDU
+    -ROT
+  }>
   __gen_read_UpdateTonPriceMsg PROCINLINE:<{
     32 LDU
     SWAP
@@ -134,12 +149,13 @@ PROGRAM{
     SWAP
   }>
   __gen_write_GateKeeperContract PROCINLINE:<{
-    s8 s7 XCHG2
+    s10 s9 XCHG2
     __tact_store_address INLINECALLDICT
-    s0 s6 XCHG
-    s0 s7 XCHG
+    6 2 BLKSWAP
     __gen_write_PoolSettings INLINECALLDICT
     32 STU
+    -ROT
+    __gen_write_DebtRate INLINECALLDICT
   }>
   __gen_read_GateKeeperContract PROCINLINE:<{
     __tact_load_address INLINECALLDICT
@@ -147,8 +163,10 @@ PROGRAM{
     __gen_read_PoolSettings INLINECALLDICT
     s0 s6 XCHG
     32 LDU
-    s0 s8 XCHG
-    s7 s7 XCHG2
+    __gen_read_DebtRate INLINECALLDICT
+    s2 s10 XCHG
+    s2 s9 XCHG
+    s2 s3 XCHG
   }>
   __gen_PoolSettings_to_external PROCINLINE:<{
   }>
@@ -157,12 +175,17 @@ PROGRAM{
   }>
   __gen_constructor_PoolSettings$liquidationRatio_stabilityFeeRate_lastAccumulationTime_closeFactorBps_liquidatorIncentiveBps_treasutyFeeBps PROCINLINE:<{
   }>
+  __gen_constructor_DebtRate$debtAccumulatedRate_lastAccumulationTime PROCINLINE:<{
+  }>
   $__gen_GateKeeperContract_init PROCREF:<{
     0 PUSHINT
     s0 s0 s0 PUSH3
     s0 s0 PUSH2
     __gen_constructor_PoolSettings$liquidationRatio_stabilityFeeRate_lastAccumulationTime_closeFactorBps_liquidatorIncentiveBps_treasutyFeeBps INLINECALLDICT
     0 PUSHINT
+    1000000000 PUSHINT
+    NOW
+    __gen_constructor_DebtRate$debtAccumulatedRate_lastAccumulationTime INLINECALLDICT
   }>
   __gen_load_GateKeeperContract PROCINLINE:<{
     c4 PUSH
@@ -174,7 +197,7 @@ PROGRAM{
     SWAP
     IF:<{
       __gen_read_GateKeeperContract INLINECALLDICT
-      1 8 BLKDROP2
+      1 10 BLKDROP2
     }>ELSE<{
       __gen_read_$init$GateKeeperContract INLINECALLDICT
       SWAP
@@ -190,7 +213,7 @@ PROGRAM{
     TRUE
     SWAP
     1 STI
-    8 -ROLL
+    10 -ROLL
     __gen_write_GateKeeperContract INLINECALLDICT
     ENDC
     c4 POP
@@ -311,32 +334,41 @@ PROGRAM{
     $send INLINECALLDICT
   }>
   $__gen_GateKeeperContract_setPoolSettings PROCREF:<{
-    s7 POP
-    s7 POP
-    s7 POP
-    s7 POP
-    s7 POP
-    s7 POP
+    s9 POP
+    s9 POP
+    s9 POP
+    s9 POP
+    s9 POP
+    s9 POP
     __tact_context_get INLINECALLDICT
     2DROP
     4429 PUSHINT
     s2 POP
-    s9 PUSH
+    s11 PUSH
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
   }>
   $__gen_GateKeeperContract_setTonPrice PROCREF:<{
-    NIP
+    s3 POP
     __tact_context_get INLINECALLDICT
     2DROP
     4429 PUSHINT
     s2 POP
-    s9 PUSH
+    s11 PUSH
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
   }>
+  $__gen_GateKeeperContract_updateDebtAccumulatedRate PROCREF:<{
+    57414 PUSHINT
+    NOW
+    1000 PUSHINT
+    ADD
+    s2 PUSH
+    GREATER
+    THROWANYIFNOT
+  }>
   $__gen_GateKeeperContract_poolSettings PROCREF:<{
-    DROP
+    3 BLKDROP
     1 6 BLKDROP2
   }>
   $__gen_get_poolSettings PROC:<{
@@ -345,7 +377,8 @@ PROGRAM{
     __gen_PoolSettings_to_external INLINECALLDICT
   }>
   $__gen_GateKeeperContract_tonPrice PROCREF:<{
-    7 1 BLKDROP2
+    s2 s9 XCHG
+    9 BLKDROP
   }>
   $__gen_get_tonPrice PROC:<{
     __gen_load_GateKeeperContract INLINECALLDICT
@@ -358,6 +391,9 @@ PROGRAM{
   $__gen_GateKeeperContract_receive_UpdateTonPriceMsg PROCINLINE:<{
     $__gen_GateKeeperContract_setTonPrice INLINECALLDICT
   }>
+  $__gen_GateKeeperContract_receive_comment_098326c3bf83cbcd5017033fa0bf3d9c6d461897bba0345c5c7278c6313ad94b PROCINLINE:<{
+    $__gen_GateKeeperContract_updateDebtAccumulatedRate INLINECALLDICT
+  }>
   __gen_constructor_DeployOk$queryId PROCINLINE:<{
   }>
   $__gen_GateKeeperContract_receive_Deploy PROCINLINE:<{
@@ -366,6 +402,8 @@ PROGRAM{
     $reply INLINECALLDICT
   }>
   __gen_router_GateKeeperContract PROCREF:<{
+    c2 SAVE
+    SAMEALTSAVE
     0 PUSHINT
     OVER
     SBITS
@@ -400,16 +438,30 @@ PROGRAM{
       $__gen_GateKeeperContract_receive_UpdateTonPriceMsg INLINECALLDICT
       TRUE
     }>
-    SWAP
+    OVER
     2490013878 PUSHINT
     EQUAL
     IFJMP:<{
+      NIP
       __gen_read_Deploy INLINECALLDICT
       NIP
       $__gen_GateKeeperContract_receive_Deploy INLINECALLDICT
       TRUE
     }>
-    DROP
+    SWAP
+    0 EQINT
+    IF:<{
+      HASHSU
+      4302540146455009458473342851652021623442854512728118228727579797373207632203 PUSHINT
+      EQUAL
+      IFJMP:<{
+        $__gen_GateKeeperContract_receive_comment_098326c3bf83cbcd5017033fa0bf3d9c6d461897bba0345c5c7278c6313ad94b INLINECALLDICT
+        TRUE
+        RETALT
+      }>
+    }>ELSE<{
+      DROP
+    }>
     FALSE
   }>
   recv_internal PROC:<{
@@ -432,7 +484,7 @@ PROGRAM{
     4 TUPLE
     __tact_context SETGLOB
     __gen_load_GateKeeperContract INLINECALLDICT
-    2 8 BLKSWAP
+    2 10 BLKSWAP
     __gen_router_GateKeeperContract INLINECALLDICT
     DROP
     __gen_store_GateKeeperContract INLINECALLDICT
@@ -443,7 +495,7 @@ PROGRAM{
     42980537499636128163026532310500881091 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d6573345968616548437877456d6d7857384d50434e775057503554387956446461764c59707663575a5a3465} PUSHSLICE
+    x{697066733a2f2f516d5874754b736b75747234594e656a775350446a4c3741734d7659364c6962535632775265594333724c704e36} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

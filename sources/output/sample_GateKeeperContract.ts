@@ -403,6 +403,51 @@ function dictValueParserPoolSettingsMsg(): DictionaryValue<PoolSettingsMsg> {
     }
 }
 
+export type DebtRate = {
+    $$type: 'DebtRate';
+    debtAccumulatedRate: bigint;
+    lastAccumulationTime: bigint;
+}
+
+export function storeDebtRate(src: DebtRate) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(src.debtAccumulatedRate, 32);
+        b_0.storeUint(src.lastAccumulationTime, 32);
+    };
+}
+
+export function loadDebtRate(slice: Slice) {
+    let sc_0 = slice;
+    let _debtAccumulatedRate = sc_0.loadUintBig(32);
+    let _lastAccumulationTime = sc_0.loadUintBig(32);
+    return { $$type: 'DebtRate' as const, debtAccumulatedRate: _debtAccumulatedRate, lastAccumulationTime: _lastAccumulationTime };
+}
+
+function loadTupleDebtRate(source: TupleReader) {
+    let _debtAccumulatedRate = source.readBigNumber();
+    let _lastAccumulationTime = source.readBigNumber();
+    return { $$type: 'DebtRate' as const, debtAccumulatedRate: _debtAccumulatedRate, lastAccumulationTime: _lastAccumulationTime };
+}
+
+function storeTupleDebtRate(source: DebtRate) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.debtAccumulatedRate);
+    builder.writeNumber(source.lastAccumulationTime);
+    return builder.build();
+}
+
+function dictValueParserDebtRate(): DictionaryValue<DebtRate> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeDebtRate(src)).endCell());
+        },
+        parse: (src) => {
+            return loadDebtRate(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type UpdateTonPriceMsg = {
     $$type: 'UpdateTonPriceMsg';
     price: bigint;
@@ -458,8 +503,8 @@ function initGateKeeperContract_init_args(src: GateKeeperContract_init_args) {
 }
 
 async function GateKeeperContract_init(owner: Address) {
-    const __code = Cell.fromBase64('te6ccgECFgEAArgAART/APSkE/S88sgLAQIBYgIDBITQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6O+kABAds8BtMfCFB3bBiOh/pAAQHR2zziVRfbPDATFAQFAgEgDg8EmnAh10nCH5UwINcLH94Cklt/4CGCEOGxgPG6jwgx2zxsFts8f+AhghANEbq9uo6VMdMfAYIQDRG6vbry4IHTHwEx2zx/4AGCEJRqmLa6BgcICQEwyPhCAcx/AcoAVXBQh88WBgfbPMsfye1UDQA20x8BghDhsYDxuvLggdMf0x/TH9Mf0x/TH1VQACg3Nzc3Nzf4QW8kW4ERTTIpxwXy9AAeMfhBbyRbgRFNMinHBfL0AU6OotMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8nbPH/gMHAKASb4QW8kECNfA39wUAOAQgFtbds8CwH2yHEBygFQBwHKAHABygJQBc8WUAP6AnABymgjbrMlbrOxjkx/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMlzMzAXABygDiIW6zDAAwnH8BygABIG7y0IABzJUxcAHKAOLJAfsAAB5QVssfE8sfyx/LH8sfyx8DUb7JR2omhqAPwxaQAAx0d9IACA7Z4DaY+EKDu2DEdD/SAAgOjtnnFtnkExQQAgFIERIABjBsFgNRtJDdqJoagD8MWkAAMdHfSAAgO2eA2mPhCg7tgxHQ/0gAIDo7Z5xbZ5ATFBUAcbd6ME4LnYerpZXPY9CdhzrJUKNs0E4TusalpWyPlmRadeW/vixHME4ECrgDcAzscpnLB1XI5LZYcAAc0x/TH9Mf0x/TH9MfVVAADnBUcABTAHAABGxx');
-    const __system = Cell.fromBase64('te6cckECGAEAAsIAAQHAAQEFoAajAgEU/wD0pBP0vPLICwMCAWILBAIBIAkFAgFIBwYAcbd6ME4LnYerpZXPY9CdhzrJUKNs0E4TusalpWyPlmRadeW/vixHME4ECrgDcAzscpnLB1XI5LZYcANRtJDdqJoagD8MWkAAMdHfSAAgO2eA2mPhCg7tgxHQ/0gAIDo7Z5xbZ5AXFggABGxxA1G+yUdqJoagD8MWkAAMdHfSAAgO2eA2mPhCg7tgxHQ/0gAIDo7Z5xbZ5BcWCgAGMGwWBITQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6O+kABAds8BtMfCFB3bBiOh/pAAQHR2zziVRfbPDAXFg4MATDI+EIBzH8BygBVcFCHzxYGB9s8yx/J7VQNAB5QVssfE8sfyx/LH8sfyx8EmnAh10nCH5UwINcLH94Cklt/4CGCEOGxgPG6jwgx2zxsFts8f+AhghANEbq9uo6VMdMfAYIQDRG6vbry4IHTHwEx2zx/4AGCEJRqmLa6FRQTDwFOjqLTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/4DBwEAEm+EFvJBAjXwN/cFADgEIBbW3bPBEB9shxAcoBUAcBygBwAcoCUAXPFlAD+gJwAcpoI26zJW6zsY5MfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzJczMwFwAcoA4iFusxIAMJx/AcoAASBu8tCAAcyVMXABygDiyQH7AAAeMfhBbyRbgRFNMinHBfL0ACg3Nzc3Nzf4QW8kW4ERTTIpxwXy9AA20x8BghDhsYDxuvLggdMf0x/TH9Mf0x/TH1VQAA5wVHAAUwBwABzTH9Mf0x/TH9Mf0x9VUO6r3CU=');
+    const __code = Cell.fromBase64('te6ccgECFwEAAysAART/APSkE/S88sgLAQIBYgIDBJTQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY6W+kABAds8BtMf0x/TH1kQKhApECNsGo6H+kABAdHbPOJVGds8MBQVBAUCASAPEASi7aLt+3Ah10nCH5UwINcLH94Cklt/4CGCEOGxgPG6jwgx2zxsFts8f+AhghANEbq9uo6VMdMfAYIQDRG6vbry4IHTHwEx2zx/4CGCEJRqmLa6BgcICQE8yPhCAcx/AcoAVZBQqc8WVVHbPMsfWQLLH8sfye1UDgA20x8BghDhsYDxuvLggdMf0x/TH9Mf0x/TH1VQACg5OTk5OTn4QW8kW4ERTTIrxwXy9AAeM/hBbyRbgRFNMivHBfL0AriOozHTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/4AHAAI6t+QGC8AmDJsO/g8vNUBcDP6C/PZxtRhiXu6A0XFxyeMYxOtlLuo6F2zx/2zHgkTDicAoLASb4QW8kECNfA39wUAOAQgFtbds8DAAcggDgRvgjgQPooCK88vQB9shxAcoBUAcBygBwAcoCUAXPFlAD+gJwAcpoI26zJW6zsY5MfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzJczMwFwAcoA4iFusw0AMJx/AcoAASBu8tCAAcyVMXABygDiyQH7AAAeUFbLHxPLH8sfyx/LH8sfA2G+yUdqJoagD8MWkAAMdLfSAAgO2eA2mP6Y/pj6yIFQgUiBG2DUdD/SAAgOjtnnFtnkFBURAgFIEhMACF8DbBYDYbSQ3aiaGoA/DFpAADHS30gAIDtngNpj+mP6Y+siBUIFIgRtg1HQ/0gAIDo7Z5xbZ5AUFRYAcbd6ME4LnYerpZXPY9CdhzrJUKNs0E4TusalpWyPlmRadeW/vixHME4ECrgDcAzscpnLB1XI5LZYcAAc0x/TH9Mf0x/TH9MfVVAAHnBUcABTAHCCEDuaygD4IwAIEClfCQ==');
+    const __system = Cell.fromBase64('te6cckECGQEAAzUAAQHAAQEFoAajAgEU/wD0pBP0vPLICwMCAWILBAIBIAkFAgFIBwYAcbd6ME4LnYerpZXPY9CdhzrJUKNs0E4TusalpWyPlmRadeW/vixHME4ECrgDcAzscpnLB1XI5LZYcANhtJDdqJoagD8MWkAAMdLfSAAgO2eA2mP6Y/pj6yIFQgUiBG2DUdD/SAAgOjtnnFtnkBgXCAAIEClfCQNhvslHaiaGoA/DFpAADHS30gAIDtngNpj+mP6Y+siBUIFIgRtg1HQ/0gAIDo7Z5xbZ5BgXCgAIXwNsFgSU0AHQ0wMBcbDAAZF/kXDiAfpAIlBVbwT4Ye1E0NQB+GLSAAGOlvpAAQHbPAbTH9Mf0x9ZECoQKRAjbBqOh/pAAQHR2zziVRnbPDAYFw4MATzI+EIBzH8BygBVkFCpzxZVUds8yx9ZAssfyx/J7VQNAB5QVssfE8sfyx/LH8sfyx8Eou2i7ftwIddJwh+VMCDXCx/eApJbf+AhghDhsYDxuo8IMds8bBbbPH/gIYIQDRG6vbqOlTHTHwGCEA0Rur268uCB0x8BMds8f+AhghCUapi2uhYVFA8CuI6jMdMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8nbPH/gAcAAjq35AYLwCYMmw7+Dy81QFwM/oL89nG1GGJe7oDRcXHJ4xjE62Uu6joXbPH/bMeCRMOJwERAAHIIA4Eb4I4ED6KAivPL0ASb4QW8kECNfA39wUAOAQgFtbds8EgH2yHEBygFQBwHKAHABygJQBc8WUAP6AnABymgjbrMlbrOxjkx/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMlzMzAXABygDiIW6zEwAwnH8BygABIG7y0IABzJUxcAHKAOLJAfsAAB4z+EFvJFuBEU0yK8cF8vQAKDk5OTk5OfhBbyRbgRFNMivHBfL0ADbTHwGCEOGxgPG68uCB0x/TH9Mf0x/TH9MfVVAAHnBUcABTAHCCEDuaygD4IwAc0x/TH9Mf0x/TH9MfVVAcZlWK');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -493,6 +538,7 @@ const GateKeeperContract_errors: { [key: number]: { message: string } } = {
     135: { message: `Code of a contract was not found` },
     136: { message: `Invalid address` },
     4429: { message: `Invalid sender` },
+    57414: { message: `StabilityFeeCollector/invalid-block.timestamp` },
 }
 
 export class GateKeeperContract implements Contract {
@@ -522,7 +568,7 @@ export class GateKeeperContract implements Contract {
         this.init = init;
     }
     
-    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: PoolSettingsMsg | UpdateTonPriceMsg | Deploy) {
+    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: PoolSettingsMsg | UpdateTonPriceMsg | 'updateDebtRate' | Deploy) {
         
         let body: Cell | null = null;
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'PoolSettingsMsg') {
@@ -530,6 +576,9 @@ export class GateKeeperContract implements Contract {
         }
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'UpdateTonPriceMsg') {
             body = beginCell().store(storeUpdateTonPriceMsg(message)).endCell();
+        }
+        if (message === 'updateDebtRate') {
+            body = beginCell().storeUint(0, 32).storeStringTail(message).endCell();
         }
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'Deploy') {
             body = beginCell().store(storeDeploy(message)).endCell();

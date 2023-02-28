@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: GateKeeperContract
-BOC Size: 708 bytes
+BOC Size: 823 bytes
 
 # Types
-Total Types: 8
+Total Types: 9
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -32,6 +32,10 @@ Signature: `PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,lastAcc
 ## PoolSettingsMsg
 TLB: `pool_settings_msg#e1b180f1 liquidationRatio:uint32 stabilityFeeRate:uint32 lastAccumulationTime:uint32 closeFactorBps:uint32 liquidatorIncentiveBps:uint32 treasutyFeeBps:uint32 = PoolSettingsMsg`
 Signature: `PoolSettingsMsg{liquidationRatio:uint32,stabilityFeeRate:uint32,lastAccumulationTime:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32,treasutyFeeBps:uint32}`
+
+## DebtRate
+TLB: `_ debtAccumulatedRate:uint32 lastAccumulationTime:uint32 = DebtRate`
+Signature: `DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}`
 
 ## UpdateTonPriceMsg
 TLB: `update_ton_price_msg#0d11babd price:uint32 = UpdateTonPriceMsg`
@@ -69,3 +73,4 @@ Total Get Methods: 2
 135: Code of a contract was not found
 136: Invalid address
 4429: Invalid sender
+57414: StabilityFeeCollector/invalid-block.timestamp
