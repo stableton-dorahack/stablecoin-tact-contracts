@@ -271,99 +271,44 @@ function dictValueParserDeployOk(): DictionaryValue<DeployOk> {
     }
 }
 
-export type PositionState = {
-    $$type: 'PositionState';
-    collateral: bigint;
-    debt: bigint;
+export type ChangeOwner = {
+    $$type: 'ChangeOwner';
+    newOwner: Address;
 }
 
-export function storePositionState(src: PositionState) {
+export function storeChangeOwner(src: ChangeOwner) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeCoins(src.collateral);
-        b_0.storeUint(src.debt, 64);
+        b_0.storeUint(256331011, 32);
+        b_0.storeAddress(src.newOwner);
     };
 }
 
-export function loadPositionState(slice: Slice) {
+export function loadChangeOwner(slice: Slice) {
     let sc_0 = slice;
-    let _collateral = sc_0.loadCoins();
-    let _debt = sc_0.loadUintBig(64);
-    return { $$type: 'PositionState' as const, collateral: _collateral, debt: _debt };
+    if (sc_0.loadUint(32) !== 256331011) { throw Error('Invalid prefix'); }
+    let _newOwner = sc_0.loadAddress();
+    return { $$type: 'ChangeOwner' as const, newOwner: _newOwner };
 }
 
-function loadTuplePositionState(source: TupleReader) {
-    let _collateral = source.readBigNumber();
-    let _debt = source.readBigNumber();
-    return { $$type: 'PositionState' as const, collateral: _collateral, debt: _debt };
+function loadTupleChangeOwner(source: TupleReader) {
+    let _newOwner = source.readAddress();
+    return { $$type: 'ChangeOwner' as const, newOwner: _newOwner };
 }
 
-function storeTuplePositionState(source: PositionState) {
+function storeTupleChangeOwner(source: ChangeOwner) {
     let builder = new TupleBuilder();
-    builder.writeNumber(source.collateral);
-    builder.writeNumber(source.debt);
+    builder.writeAddress(source.newOwner);
     return builder.build();
 }
 
-function dictValueParserPositionState(): DictionaryValue<PositionState> {
+function dictValueParserChangeOwner(): DictionaryValue<ChangeOwner> {
     return {
         serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storePositionState(src)).endCell());
+            buidler.storeRef(beginCell().store(storeChangeOwner(src)).endCell());
         },
         parse: (src) => {
-            return loadPositionState(src.loadRef().beginParse());
-        }
-    }
-}
-
-export type StablecoinBurnedMessage = {
-    $$type: 'StablecoinBurnedMessage';
-    user: Address;
-    amount: bigint;
-    fees: bigint;
-}
-
-export function storeStablecoinBurnedMessage(src: StablecoinBurnedMessage) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(3535686764, 32);
-        b_0.storeAddress(src.user);
-        b_0.storeUint(src.amount, 64);
-        b_0.storeUint(src.fees, 64);
-    };
-}
-
-export function loadStablecoinBurnedMessage(slice: Slice) {
-    let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 3535686764) { throw Error('Invalid prefix'); }
-    let _user = sc_0.loadAddress();
-    let _amount = sc_0.loadUintBig(64);
-    let _fees = sc_0.loadUintBig(64);
-    return { $$type: 'StablecoinBurnedMessage' as const, user: _user, amount: _amount, fees: _fees };
-}
-
-function loadTupleStablecoinBurnedMessage(source: TupleReader) {
-    let _user = source.readAddress();
-    let _amount = source.readBigNumber();
-    let _fees = source.readBigNumber();
-    return { $$type: 'StablecoinBurnedMessage' as const, user: _user, amount: _amount, fees: _fees };
-}
-
-function storeTupleStablecoinBurnedMessage(source: StablecoinBurnedMessage) {
-    let builder = new TupleBuilder();
-    builder.writeAddress(source.user);
-    builder.writeNumber(source.amount);
-    builder.writeNumber(source.fees);
-    return builder.build();
-}
-
-function dictValueParserStablecoinBurnedMessage(): DictionaryValue<StablecoinBurnedMessage> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeStablecoinBurnedMessage(src)).endCell());
-        },
-        parse: (src) => {
-            return loadStablecoinBurnedMessage(src.loadRef().beginParse());
+            return loadChangeOwner(src.loadRef().beginParse());
         }
     }
 }
@@ -879,33 +824,85 @@ function dictValueParserJettonWalletData(): DictionaryValue<JettonWalletData> {
     }
 }
 
+export type SetUserPositionDependecyMessage = {
+    $$type: 'SetUserPositionDependecyMessage';
+    stablecoinMasterAddress: Address;
+    positionsManagerAddress: Address;
+}
+
+export function storeSetUserPositionDependecyMessage(src: SetUserPositionDependecyMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(4030201083, 32);
+        b_0.storeAddress(src.stablecoinMasterAddress);
+        b_0.storeAddress(src.positionsManagerAddress);
+    };
+}
+
+export function loadSetUserPositionDependecyMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 4030201083) { throw Error('Invalid prefix'); }
+    let _stablecoinMasterAddress = sc_0.loadAddress();
+    let _positionsManagerAddress = sc_0.loadAddress();
+    return { $$type: 'SetUserPositionDependecyMessage' as const, stablecoinMasterAddress: _stablecoinMasterAddress, positionsManagerAddress: _positionsManagerAddress };
+}
+
+function loadTupleSetUserPositionDependecyMessage(source: TupleReader) {
+    let _stablecoinMasterAddress = source.readAddress();
+    let _positionsManagerAddress = source.readAddress();
+    return { $$type: 'SetUserPositionDependecyMessage' as const, stablecoinMasterAddress: _stablecoinMasterAddress, positionsManagerAddress: _positionsManagerAddress };
+}
+
+function storeTupleSetUserPositionDependecyMessage(source: SetUserPositionDependecyMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.stablecoinMasterAddress);
+    builder.writeAddress(source.positionsManagerAddress);
+    return builder.build();
+}
+
+function dictValueParserSetUserPositionDependecyMessage(): DictionaryValue<SetUserPositionDependecyMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeSetUserPositionDependecyMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadSetUserPositionDependecyMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type SetPositionIdMessage = {
     $$type: 'SetPositionIdMessage';
+    user: Address;
     positionId: bigint;
 }
 
 export function storeSetPositionIdMessage(src: SetPositionIdMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(11782869, 32);
-        b_0.storeUint(src.positionId, 8);
+        b_0.storeUint(1245051344, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeInt(src.positionId, 257);
     };
 }
 
 export function loadSetPositionIdMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 11782869) { throw Error('Invalid prefix'); }
-    let _positionId = sc_0.loadUintBig(8);
-    return { $$type: 'SetPositionIdMessage' as const, positionId: _positionId };
+    if (sc_0.loadUint(32) !== 1245051344) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _positionId = sc_0.loadIntBig(257);
+    return { $$type: 'SetPositionIdMessage' as const, user: _user, positionId: _positionId };
 }
 
 function loadTupleSetPositionIdMessage(source: TupleReader) {
+    let _user = source.readAddress();
     let _positionId = source.readBigNumber();
-    return { $$type: 'SetPositionIdMessage' as const, positionId: _positionId };
+    return { $$type: 'SetPositionIdMessage' as const, user: _user, positionId: _positionId };
 }
 
 function storeTupleSetPositionIdMessage(source: SetPositionIdMessage) {
     let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
     builder.writeNumber(source.positionId);
     return builder.build();
 }
@@ -921,34 +918,81 @@ function dictValueParserSetPositionIdMessage(): DictionaryValue<SetPositionIdMes
     }
 }
 
+export type NewPositionIdMessage = {
+    $$type: 'NewPositionIdMessage';
+    user: Address;
+}
+
+export function storeNewPositionIdMessage(src: NewPositionIdMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(225756565, 32);
+        b_0.storeAddress(src.user);
+    };
+}
+
+export function loadNewPositionIdMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 225756565) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    return { $$type: 'NewPositionIdMessage' as const, user: _user };
+}
+
+function loadTupleNewPositionIdMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    return { $$type: 'NewPositionIdMessage' as const, user: _user };
+}
+
+function storeTupleNewPositionIdMessage(source: NewPositionIdMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    return builder.build();
+}
+
+function dictValueParserNewPositionIdMessage(): DictionaryValue<NewPositionIdMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeNewPositionIdMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadNewPositionIdMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type SetPositionAddressMessage = {
     $$type: 'SetPositionAddressMessage';
     user: Address;
+    position: Address;
 }
 
 export function storeSetPositionAddressMessage(src: SetPositionAddressMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(3481870238, 32);
+        b_0.storeUint(1571217046, 32);
         b_0.storeAddress(src.user);
+        b_0.storeAddress(src.position);
     };
 }
 
 export function loadSetPositionAddressMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 3481870238) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 1571217046) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
-    return { $$type: 'SetPositionAddressMessage' as const, user: _user };
+    let _position = sc_0.loadAddress();
+    return { $$type: 'SetPositionAddressMessage' as const, user: _user, position: _position };
 }
 
 function loadTupleSetPositionAddressMessage(source: TupleReader) {
     let _user = source.readAddress();
-    return { $$type: 'SetPositionAddressMessage' as const, user: _user };
+    let _position = source.readAddress();
+    return { $$type: 'SetPositionAddressMessage' as const, user: _user, position: _position };
 }
 
 function storeTupleSetPositionAddressMessage(source: SetPositionAddressMessage) {
     let builder = new TupleBuilder();
     builder.writeAddress(source.user);
+    builder.writeAddress(source.position);
     return builder.build();
 }
 
@@ -963,25 +1007,270 @@ function dictValueParserSetPositionAddressMessage(): DictionaryValue<SetPosition
     }
 }
 
+export type MintMessage = {
+    $$type: 'MintMessage';
+    user: Address;
+    amount: bigint;
+}
+
+export function storeMintMessage(src: MintMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(2419415474, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeCoins(src.amount);
+    };
+}
+
+export function loadMintMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 2419415474) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadCoins();
+    return { $$type: 'MintMessage' as const, user: _user, amount: _amount };
+}
+
+function loadTupleMintMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    return { $$type: 'MintMessage' as const, user: _user, amount: _amount };
+}
+
+function storeTupleMintMessage(source: MintMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    return builder.build();
+}
+
+function dictValueParserMintMessage(): DictionaryValue<MintMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeMintMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadMintMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type BurnMessage = {
+    $$type: 'BurnMessage';
+    user: Address;
+    amount: bigint;
+    fees: bigint;
+}
+
+export function storeBurnMessage(src: BurnMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(3055907227, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeCoins(src.amount);
+        b_0.storeCoins(src.fees);
+    };
+}
+
+export function loadBurnMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 3055907227) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadCoins();
+    let _fees = sc_0.loadCoins();
+    return { $$type: 'BurnMessage' as const, user: _user, amount: _amount, fees: _fees };
+}
+
+function loadTupleBurnMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    let _fees = source.readBigNumber();
+    return { $$type: 'BurnMessage' as const, user: _user, amount: _amount, fees: _fees };
+}
+
+function storeTupleBurnMessage(source: BurnMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    builder.writeNumber(source.fees);
+    return builder.build();
+}
+
+function dictValueParserBurnMessage(): DictionaryValue<BurnMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeBurnMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadBurnMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type RepayBurnNotification = {
+    $$type: 'RepayBurnNotification';
+    user: Address;
+    amount: bigint;
+}
+
+export function storeRepayBurnNotification(src: RepayBurnNotification) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(1446800788, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeCoins(src.amount);
+    };
+}
+
+export function loadRepayBurnNotification(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 1446800788) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadCoins();
+    return { $$type: 'RepayBurnNotification' as const, user: _user, amount: _amount };
+}
+
+function loadTupleRepayBurnNotification(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    return { $$type: 'RepayBurnNotification' as const, user: _user, amount: _amount };
+}
+
+function storeTupleRepayBurnNotification(source: RepayBurnNotification) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    return builder.build();
+}
+
+function dictValueParserRepayBurnNotification(): DictionaryValue<RepayBurnNotification> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeRepayBurnNotification(src)).endCell());
+        },
+        parse: (src) => {
+            return loadRepayBurnNotification(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type StablecoinBurnedMessage = {
+    $$type: 'StablecoinBurnedMessage';
+    user: Address;
+    amount: bigint;
+    fees: bigint;
+}
+
+export function storeStablecoinBurnedMessage(src: StablecoinBurnedMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(3535686764, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeUint(src.amount, 64);
+        b_0.storeUint(src.fees, 64);
+    };
+}
+
+export function loadStablecoinBurnedMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 3535686764) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadUintBig(64);
+    let _fees = sc_0.loadUintBig(64);
+    return { $$type: 'StablecoinBurnedMessage' as const, user: _user, amount: _amount, fees: _fees };
+}
+
+function loadTupleStablecoinBurnedMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    let _fees = source.readBigNumber();
+    return { $$type: 'StablecoinBurnedMessage' as const, user: _user, amount: _amount, fees: _fees };
+}
+
+function storeTupleStablecoinBurnedMessage(source: StablecoinBurnedMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    builder.writeNumber(source.fees);
+    return builder.build();
+}
+
+function dictValueParserStablecoinBurnedMessage(): DictionaryValue<StablecoinBurnedMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeStablecoinBurnedMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadStablecoinBurnedMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type PositionState = {
+    $$type: 'PositionState';
+    collateral: bigint;
+    debt: bigint;
+}
+
+export function storePositionState(src: PositionState) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeCoins(src.collateral);
+        b_0.storeUint(src.debt, 64);
+    };
+}
+
+export function loadPositionState(slice: Slice) {
+    let sc_0 = slice;
+    let _collateral = sc_0.loadCoins();
+    let _debt = sc_0.loadUintBig(64);
+    return { $$type: 'PositionState' as const, collateral: _collateral, debt: _debt };
+}
+
+function loadTuplePositionState(source: TupleReader) {
+    let _collateral = source.readBigNumber();
+    let _debt = source.readBigNumber();
+    return { $$type: 'PositionState' as const, collateral: _collateral, debt: _debt };
+}
+
+function storeTuplePositionState(source: PositionState) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.collateral);
+    builder.writeNumber(source.debt);
+    return builder.build();
+}
+
+function dictValueParserPositionState(): DictionaryValue<PositionState> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storePositionState(src)).endCell());
+        },
+        parse: (src) => {
+            return loadPositionState(src.loadRef().beginParse());
+        }
+    }
+}
+
  type PositionAddressContract_init_args = {
     $$type: 'PositionAddressContract_init_args';
     id: bigint;
+    positionsManagerAddress: Address;
 }
 
 function initPositionAddressContract_init_args(src: PositionAddressContract_init_args) {
     return (builder: Builder) => {
         let b_0 = builder;
         b_0.storeInt(src.id, 257);
+        b_0.storeAddress(src.positionsManagerAddress);
     };
 }
 
-async function PositionAddressContract_init(id: bigint) {
-    const __code = Cell.fromBase64('te6ccgECDwEAAjAAART/APSkE/S88sgLAQIBYgIDAqDQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAZjTH/pAARJsEo6KgQEB1wABAdHbPOJa2zwwyPhCAcx/AcoAWQLLHwHPFsntVA0EAgEgCAkB0HAh10nCH5UwINcLH94Cklt/4CGCEM+JH566jhwx0x8BghDPiR+euvLggfpAATFb+EFvJBAjXwN/4AGCEJRqmLa6jqLTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/4DBwBQEm+EFvJBAjXwN/cFADgEIBbW3bPAYB9shxAcoBUAcBygBwAcoCUAXPFlAD+gJwAcpoI26zJW6zsY5MfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzJczMwFwAcoA4iFuswcAMJx/AcoAASBu8tCAAcyVMXABygDiyQH7AAJJvtyvaiaGoA/DFpAADMaY/9IACJNglHRUCAgOuAAIDo7Z5xbZ5A0KAgEgCwwAAjEAcbu9GCcFzsPV0srnsehOw51kqFG2aCcJ3WNS0rZHyzItOvLf3xYjmCcCBVwBuAZ2OUzlg6rkclssOAJJuoy+1E0NQB+GLSAAGY0x/6QAESbBKOioEBAdcAAQHR2zzi2zyA0OACRwIMhyAcsBcAHLABLKB8v/ydAAAjA=');
-    const __system = Cell.fromBase64('te6cckECIgEABIAAAQHAAQIBWA4CAQW7dfgDART/APSkE/S88sgLBAIBYgsFAgEgCQYCASAXBwJJuoy+1E0NQB+GLSAAGY0x/6QAESbBKOioEBAdcAAQHR2zzi2zyA0IAAIwAkm+3K9qJoagD8MWkAAMxpj/0gAIk2CUdFQICA64AAgOjtnnFtnkDQoAAjECoNAB0NMDAXGwwAGRf5Fw4gH6QCJQVW8E+GHtRNDUAfhi0gABmNMf+kABEmwSjoqBAQHXAAEB0ds84lrbPDDI+EIBzH8BygBZAssfAc8Wye1UDQwB0HAh10nCH5UwINcLH94Cklt/4CGCEM+JH566jhwx0x8BghDPiR+euvLggfpAATFb+EFvJBAjXwN/4AGCEJRqmLa6jqLTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/4DBwGwAkcCDIcgHLAXABywASygfL/8nQAQW4Q2gPART/APSkE/S88sgLEAIBYhgRAgFYFxICAnEVEwJYqqjtRNDUAfhi0gABjhL6QAEB+kABAdMH+gDTP1VAbBWOh/pAAQHR2zzi2zwhFAAEbDICWKlQ7UTQ1AH4YtIAAY4S+kABAfpAAQHTB/oA0z9VQGwVjof6QAEB0ds84ts8IRYABF8EAHG7vRgnBc7D1dLK57HoTsOdZKhRtmgnCd1jUtK2R8syLTry398WI5gnAgVcAbgGdjlM5YOq5HJbLDgCxNAB0NMDAXGwwAGRf5Fw4gH6QCJQVW8E+GHtRNDUAfhi0gABjhL6QAEB+kABAdMH+gDTP1VAbBWOh/pAAQHR2zziVRTbPDDI+EIBzH8BygBVQFBUzxZYzxbLB1j6Ass/ye1UIRkE8nAh10nCH5UwINcLH94Cklt/4CGCEBHfsTi6jhkx0x8BghAR37E4uvLggfpAAQH6AFlsElt/4CGCCLPK1bqOGjHTHwGCCLPK1bry4IHTBwExI8MAkTORMOJ/4CGCEPNVTNe64wIhghBugfRGuuMCIYIQ0r5MbLrjAiEgHx4aAbKCEGgp1V66jiAx0x8BghBoKdVeuvLggfpAAQH6AIEBAdcAVSBsE18Df+ABghCUapi2uo6i0x8BghCUapi2uvLggdM/ATHIAYIQr/kPV1jLH8s/yds8f+AwcBsBJvhBbyQQI18Df3BQA4BCAW1t2zwcAfbIcQHKAVAHAcoAcAHKAlAFzxZQA/oCcAHKaCNusyVus7GOTH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMyXMzMBcAHKAOIhbrMdADCcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAAOjHTHwGCENK+TGy68uCB+kABAdM/0z9VIGwTXwN/ADox0x8BghBugfRGuvLggfpAAQHTP9M/VSBsE18DfwA6MdMfAYIQ81VM17ry4IH6QAEB0z/TP1UgbBNfA38ALnBUcAAgyHIBywFwAcsAEsoHy//J0FUgi9DcPg==');
+async function PositionAddressContract_init(id: bigint, positionsManagerAddress: Address) {
+    const __code = Cell.fromBase64('te6ccgECEAEAAm4AART/APSkE/S88sgLAQIBYgIDAr7QAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAZ3TH/pAAQH6QAFDMGwTjo6BAQHXAPpAARIC0QHbPOJVEts8MMj4QgHMfwHKAFUgUCPLHwHPFgHPFsntVA4EAgEgCQoBvHAh10nCH5UwINcLH94Cklt/4CGCEF2m3pa6jjUx0x8BghBdpt6WuvLggfpAAQH6QAESbBIxgVbWcCDIcgHLAXABywASygfL/8nQFMcFE/L0f+ABghCUapi2uuMCMHAFAUTTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/BgEm+EFvJBAjXwN/cFADgEIBbW3bPAcB9shxAcoBUAcBygBwAcoCUAXPFlAD+gJwAcpoI26zJW6zsY5MfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzJczMwFwAcoA4iFuswgAMJx/AcoAASBu8tCAAcyVMXABygDiyQH7AAJbvtyvaiaGoA/DFpAADO6Y/9IACA/SAAoZg2CcdHQICA64B9IACJAWiA7Z5xbZ5A4LAgEgDA0ABDAxAHG7vRgnBc7D1dLK57HoTsOdZKhRtmgnCd1jUtK2R8syLTry398WI5gnAgVcAbgGdjlM5YOq5HJbLDgCW7qMvtRNDUAfhi0gABndMf+kABAfpAAUMwbBOOjoEBAdcA+kABEgLRAds84ts8gODwAmcCDIcgHLAXABywASygfL/8nQAQACWw==');
+    const __system = Cell.fromBase64('te6cckECEgEAAngAAQHAAQEFoe6/AgEU/wD0pBP0vPLICwMCAWILBAIBIAkFAgEgCAYCW7qMvtRNDUAfhi0gABndMf+kABAfpAAUMwbBOOjoEBAdcA+kABEgLRAds84ts8gRBwACWwBxu70YJwXOw9XSyuex6E7DnWSoUbZoJwndY1LStkfLMi068t/fFiOYJwIFXAG4BnY5TOWDquRyWyw4Alu+3K9qJoagD8MWkAAM7pj/0gAID9IAChmDYJx0dAgIDrgH0gAIkBaIDtnnFtnkEQoABDAxAr7QAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAZ3TH/pAAQH6QAFDMGwTjo6BAQHXAPpAARIC0QHbPOJVEts8MMj4QgHMfwHKAFUgUCPLHwHPFgHPFsntVBEMAbxwIddJwh+VMCDXCx/eApJbf+AhghBdpt6Wuo41MdMfAYIQXabelrry4IH6QAEB+kABEmwSMYFW1nAgyHIBywFwAcsAEsoHy//J0BTHBRPy9H/gAYIQlGqYtrrjAjBwDQFE0x8BghCUapi2uvLggdM/ATHIAYIQr/kPV1jLH8s/yds8fw4BJvhBbyQQI18Df3BQA4BCAW1t2zwPAfbIcQHKAVAHAcoAcAHKAlAFzxZQA/oCcAHKaCNusyVus7GOTH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMyXMzMBcAHKAOIhbrMQADCcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAAJnAgyHIBywFwAcsAEsoHy//J0AFBtqTV');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
-    initPositionAddressContract_init_args({ $$type: 'PositionAddressContract_init_args', id })(builder);
+    initPositionAddressContract_init_args({ $$type: 'PositionAddressContract_init_args', id, positionsManagerAddress })(builder);
     const __data = builder.endCell();
     return { code: __code, data: __data };
 }
@@ -1010,17 +1299,22 @@ const PositionAddressContract_errors: { [key: number]: { message: string } } = {
     134: { message: `Invalid argument` },
     135: { message: `Code of a contract was not found` },
     136: { message: `Invalid address` },
-    4429: { message: `Invalid sender` },
+    15032: { message: `not from stablecoin master` },
+    22230: { message: `Already set` },
+    31797: { message: `debt less than repay amount` },
+    53160: { message: `not from positions manager` },
+    61910: { message: `not from positionsManager` },
+    63577: { message: `withdrawal amount more than position has` },
 }
 
 export class PositionAddressContract implements Contract {
     
-    static async init(id: bigint) {
-        return await PositionAddressContract_init(id);
+    static async init(id: bigint, positionsManagerAddress: Address) {
+        return await PositionAddressContract_init(id, positionsManagerAddress);
     }
     
-    static async fromInit(id: bigint) {
-        const init = await PositionAddressContract_init(id);
+    static async fromInit(id: bigint, positionsManagerAddress: Address) {
+        const init = await PositionAddressContract_init(id, positionsManagerAddress);
         const address = contractAddress(0, init);
         return new PositionAddressContract(address, init);
     }

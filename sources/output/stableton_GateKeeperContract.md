@@ -3,7 +3,7 @@ Contract: GateKeeperContract
 BOC Size: 1578 bytes
 
 # Types
-Total Types: 25
+Total Types: 32
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -65,9 +65,37 @@ Signature: `JettonData{totalSupply:int257,mintable:bool,owner:address,content:Ma
 TLB: `_ balance:int257 owner:address master:address walletCode:^cell = JettonWalletData`
 Signature: `JettonWalletData{balance:int257,owner:address,master:address,walletCode:^cell}`
 
+## SetUserPositionDependecyMessage
+TLB: `set_user_position_dependecy_message#f037fcfb stablecoinMasterAddress:address positionsManagerAddress:address = SetUserPositionDependecyMessage`
+Signature: `SetUserPositionDependecyMessage{stablecoinMasterAddress:address,positionsManagerAddress:address}`
+
 ## SetPositionIdMessage
-TLB: `set_position_id_message#00b3cad5 positionId:uint8 = SetPositionIdMessage`
-Signature: `SetPositionIdMessage{positionId:uint8}`
+TLB: `set_position_id_message#4a35f9d0 user:address positionId:int257 = SetPositionIdMessage`
+Signature: `SetPositionIdMessage{user:address,positionId:int257}`
+
+## NewPositionIdMessage
+TLB: `new_position_id_message#0d74c595 user:address = NewPositionIdMessage`
+Signature: `NewPositionIdMessage{user:address}`
+
+## SetPositionAddressMessage
+TLB: `set_position_address_message#5da6de96 user:address position:address = SetPositionAddressMessage`
+Signature: `SetPositionAddressMessage{user:address,position:address}`
+
+## MintMessage
+TLB: `mint_message#903559b2 user:address amount:coins = MintMessage`
+Signature: `MintMessage{user:address,amount:coins}`
+
+## BurnMessage
+TLB: `burn_message#b625719b user:address amount:coins fees:coins = BurnMessage`
+Signature: `BurnMessage{user:address,amount:coins,fees:coins}`
+
+## RepayBurnNotification
+TLB: `repay_burn_notification#563c6d94 user:address amount:coins = RepayBurnNotification`
+Signature: `RepayBurnNotification{user:address,amount:coins}`
+
+## StablecoinBurnedMessage
+TLB: `stablecoin_burned_message#d2be4c6c user:address amount:uint64 fees:uint64 = StablecoinBurnedMessage`
+Signature: `StablecoinBurnedMessage{user:address,amount:uint64,fees:uint64}`
 
 ## PoolSettings
 TLB: `_ liquidationRatio:uint32 stabilityFeeRate:uint32 lastAccumulationTime:uint32 closeFactorBps:uint32 liquidatorIncentiveBps:uint32 treasutyFeeBps:uint32 = PoolSettings`

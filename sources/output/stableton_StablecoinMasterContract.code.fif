@@ -14,11 +14,11 @@ PROGRAM{
   DECLPROC __gen_write_DeployOk
   DECLPROC __gen_writecell_DeployOk
   DECLPROC __gen_read_MintFeesMessage
-  DECLPROC __gen_write_TokenTransferInternal
-  DECLPROC __gen_writecell_TokenTransferInternal
   DECLPROC __gen_read_MintMessage
   DECLPROC __gen_read_BurnMessage
   DECLPROC __gen_read_RepayBurnNotification
+  DECLPROC __gen_write_TokenTransferInternal
+  DECLPROC __gen_writecell_TokenTransferInternal
   DECLPROC __gen_write_StablecoinMasterContract
   DECLPROC __gen_read_StablecoinMasterContract
   DECLPROC __gen_StateInit_get_code
@@ -172,6 +172,40 @@ PROGRAM{
     LDGRAMS
     -ROT
   }>
+  __gen_read_MintMessage PROCINLINE:<{
+    32 LDU
+    SWAP
+    2419415474 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    __tact_load_address INLINECALLDICT
+    SWAP
+    LDGRAMS
+    -ROT
+  }>
+  __gen_read_BurnMessage PROCINLINE:<{
+    32 LDU
+    SWAP
+    3055907227 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    __tact_load_address INLINECALLDICT
+    SWAP
+    LDGRAMS
+    LDGRAMS
+    3 -ROLL
+  }>
+  __gen_read_RepayBurnNotification PROCINLINE:<{
+    32 LDU
+    SWAP
+    1446800788 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    __tact_load_address INLINECALLDICT
+    SWAP
+    LDGRAMS
+    -ROT
+  }>
   __gen_write_TokenTransferInternal PROCREF:<{
     395134233 PUSHINT
     s0 s7 XCHG2
@@ -194,40 +228,6 @@ PROGRAM{
     6 -ROLL
     __gen_write_TokenTransferInternal INLINECALLDICT
     ENDC
-  }>
-  __gen_read_MintMessage PROCINLINE:<{
-    32 LDU
-    SWAP
-    3872727887 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    __tact_load_address INLINECALLDICT
-    SWAP
-    LDGRAMS
-    -ROT
-  }>
-  __gen_read_BurnMessage PROCINLINE:<{
-    32 LDU
-    SWAP
-    2772984165 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    __tact_load_address INLINECALLDICT
-    SWAP
-    LDGRAMS
-    LDGRAMS
-    3 -ROLL
-  }>
-  __gen_read_RepayBurnNotification PROCINLINE:<{
-    32 LDU
-    SWAP
-    1446800788 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    __tact_load_address INLINECALLDICT
-    SWAP
-    LDGRAMS
-    -ROT
   }>
   __gen_write_StablecoinMasterContract PROCINLINE:<{
     s4 s3 XCHG2
@@ -574,7 +574,7 @@ PROGRAM{
       TRUE
     }>
     OVER
-    3872727887 PUSHINT
+    2419415474 PUSHINT
     EQUAL
     IFJMP:<{
       NIP
@@ -584,7 +584,7 @@ PROGRAM{
       TRUE
     }>
     OVER
-    2772984165 PUSHINT
+    3055907227 PUSHINT
     EQUAL
     IFJMP:<{
       NIP
@@ -656,7 +656,7 @@ PROGRAM{
     42980537499636128163026532310500881091 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d64325634327a696256424b7859414267525a7a38445262396d616a44416b4a6d3154383153596f3474783452} PUSHSLICE
+    x{697066733a2f2f516d574d44786e4d6d33354d5251634b3259716a516d7a6b4a354559736542464c4b38366d6357526a506e6a4e6d} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

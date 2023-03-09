@@ -2,10 +2,6 @@ import "@stdlib/deploy";
 import "./messages";
 import "./UserPosition";
 
-message NewPositionIdMessage {
-    user: Address;
-}
-
 contract PositionsManagerContract with Deployable {
 
     const minTonsForStorage: Int = ton("0.01");
@@ -15,7 +11,6 @@ contract PositionsManagerContract with Deployable {
     lastPositionId: Int as uint32 = 0;
     stablecoinMasterAddress: Address;
     gateKeeperAddress: Address;
-
 
     init(owner: Address, gateKeeperAddress: Address, stablecoinMasterAddress: Address) {
         self.owner = owner;
@@ -82,7 +77,8 @@ contract PositionsManagerContract with Deployable {
             mode: SendIgnoreErrors, 
             bounce: true,
             body: SetPositionIdMessage{
-                positionId: self.lastPositionId
+                positionId: self.lastPositionId,
+                user: msg.user
             }.toCell()
         });
 

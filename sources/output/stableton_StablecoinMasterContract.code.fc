@@ -93,6 +93,28 @@ cell __gen_writecell_DeployOk((int) v) inline {
     return (sc_0, (v'to, v'amount));
 }
 
+(slice, ((slice, int))) __gen_read_MintMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2419415474);
+    var v'user = sc_0~__tact_load_address();
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'user, v'amount));
+}
+
+(slice, ((slice, int, int))) __gen_read_BurnMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3055907227);
+    var v'user = sc_0~__tact_load_address();
+    var v'amount = sc_0~load_coins();
+    var v'fees = sc_0~load_coins();
+    return (sc_0, (v'user, v'amount, v'fees));
+}
+
+(slice, ((slice, int))) __gen_read_RepayBurnNotification(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1446800788);
+    var v'user = sc_0~__tact_load_address();
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'user, v'amount));
+}
+
 builder __gen_write_TokenTransferInternal(builder build_0, (int, int, slice, slice, int, slice) v) inline_ref {
     var (v'queryId, v'amount, v'from, v'responseAddress, v'forwardTonAmount, v'forwardPayload) = v;
     build_0 = store_uint(build_0, 395134233, 32);
@@ -107,28 +129,6 @@ builder __gen_write_TokenTransferInternal(builder build_0, (int, int, slice, sli
 
 cell __gen_writecell_TokenTransferInternal((int, int, slice, slice, int, slice) v) inline {
     return __gen_write_TokenTransferInternal(begin_cell(), v).end_cell();
-}
-
-(slice, ((slice, int))) __gen_read_MintMessage(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3872727887);
-    var v'to = sc_0~__tact_load_address();
-    var v'amount = sc_0~load_coins();
-    return (sc_0, (v'to, v'amount));
-}
-
-(slice, ((slice, int, int))) __gen_read_BurnMessage(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 2772984165);
-    var v'address = sc_0~__tact_load_address();
-    var v'amount = sc_0~load_coins();
-    var v'fees = sc_0~load_coins();
-    return (sc_0, (v'address, v'amount, v'fees));
-}
-
-(slice, ((slice, int))) __gen_read_RepayBurnNotification(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1446800788);
-    var v'user = sc_0~__tact_load_address();
-    var v'amount = sc_0~load_coins();
-    return (sc_0, (v'user, v'amount));
 }
 
 builder __gen_write_StablecoinMasterContract(builder build_0, (int, int, slice, cell) v) inline {
@@ -343,14 +343,14 @@ _ $__gen_get_get_jetton_data() method_id(106029) {
 
 (((int, int, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_MintMessage((int, int, slice, cell) $self, (slice, int) $msg) impure inline {
     var ($self'totalSupply, $self'mintable, $self'owner, $self'content) = $self;
-    var ($msg'to, $msg'amount) = $msg;
-    ($self'totalSupply, $self'mintable, $self'owner, $self'content)~$__gen_StablecoinMasterContract_mint($msg'to, $msg'amount);
+    var ($msg'user, $msg'amount) = $msg;
+    ($self'totalSupply, $self'mintable, $self'owner, $self'content)~$__gen_StablecoinMasterContract_mint($msg'user, $msg'amount);
     return (($self'totalSupply, $self'mintable, $self'owner, $self'content), ());
 }
 
 (((int, int, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_BurnMessage((int, int, slice, cell) $self, (slice, int, int) $msg) impure inline {
     var ($self'totalSupply, $self'mintable, $self'owner, $self'content) = $self;
-    var ($msg'address, $msg'amount, $msg'fees) = $msg;
+    var ($msg'user, $msg'amount, $msg'fees) = $msg;
     return (($self'totalSupply, $self'mintable, $self'owner, $self'content), ());
 }
 
@@ -387,14 +387,14 @@ _ $__gen_get_get_jetton_data() method_id(106029) {
     }
     
     ;; Receive MintMessage message
-    if (op == 3872727887) {
+    if (op == 2419415474) {
         var msg = in_msg~__gen_read_MintMessage();
         self~$__gen_StablecoinMasterContract_receive_MintMessage(msg);
         return (self, true);
     }
     
     ;; Receive BurnMessage message
-    if (op == 2772984165) {
+    if (op == 3055907227) {
         var msg = in_msg~__gen_read_BurnMessage();
         self~$__gen_StablecoinMasterContract_receive_BurnMessage(msg);
         return (self, true);
@@ -455,7 +455,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://Qmd2V42zibVBKxYABgRZz8DRb9majDAkJm1T81SYo4tx4R";
+    return "ipfs://QmWMDxnMm35MRQcK2YqjQmzkJ5EYseBFLK86mcWRjPnjNm";
 }
 
 _ lazy_deployment_completed() {

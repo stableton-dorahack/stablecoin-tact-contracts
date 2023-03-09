@@ -1,77 +1,49 @@
-import { Address, Sender, toNano } from "ton";
-import { ContractSystem, Treasure } from "ton-emulator";
-import { PositionAddressContract } from "./output/stableton_PositionAddressContract";
+import { Address, OpenedContract, Sender, toNano } from "ton";
+import { ContractSystem, Logger, Tracker, Treasure } from "ton-emulator";
 import { UserPositionContract } from "./output/stableton_UserPositionContract";
+import { PositionAddressContract } from "./output/stableton_PositionAddressContract";
 
-describe.only("GateKeeperContract", () => {
+describe("PositionAddressContract", () => {
+    let system: ContractSystem;
+    let owner: Treasure;
+    let user: Treasure;
+    let position: Treasure;
+    let positionsManager: Treasure;
+
+    let positionAddressContract: OpenedContract<PositionAddressContract>;
+    let track: Tracker;
+    let logger: Logger;
+
+    beforeAll(async () => {
+        system = await ContractSystem.create();
+        owner = system.treasure("owner");
+        user = system.treasure("user");
+        position = system.treasure("position");
+
+        positionsManager = system.treasure("positionsManager");
+        positionAddressContract = system.open(await PositionAddressContract.fromInit(1n, positionsManager.address));
+        track = system.track(positionAddressContract.address);
+    });
+
     it("should deploy correctly", async () => {
-        let system = await ContractSystem.create();
-        let owner = system.treasure("owner");
-
-        let id = 1n;
-        let positionAddressContract = system.open(await PositionAddressContract.fromInit(id));
-
-        let track = system.track(positionAddressContract.address);
-        console.log("positionAddress address", positionAddressContract.address);
         await positionAddressContract.send(owner, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
 
         await system.run();
-
         expect(track.collect()).toMatchSnapshot();
 
         expect(await positionAddressContract.getGetPositionId()).toEqual(1n);
     });
 
-    // it("should throw if position address set not by userPosition", async () => {
-    //     let system = await ContractSystem.create();
-    //     let owner = system.treasure("owner");
-
-    //     let id = 1n;
-    //     let positionAddressContract = system.open(await PositionAddressContract.fromInit(id));
-
-    //     let track = system.track(positionAddressContract.address);
-    //     console.log("positionAddress address", positionAddressContract.address);
-    //     await positionAddressContract.send(owner, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
-    //     await positionAddressContract.send(
-    //         owner,
-    //         { value: toNano(1) },
-    //         { $$type: "SetPositionAddressMessage", user: owner.address }
-    //     );
-
-    //     await system.run();
-    //     expect(track.collect()).toMatchSnapshot();
-    // });
-
-    it("should set position address if called by userPosition contract", async () => {
-        let system = await ContractSystem.create();
-        let owner: Treasure = system.treasure("owner");
-        let user = system.treasure("user");
-        let position = system.treasure("position");
-        console.log("position address", position.address);
-
-        let id = 1n;
-        let positionAddressContract = system.open(await PositionAddressContract.fromInit(id));
-
-        let userPositionContract = system.open(await UserPositionContract.fromAddress(position.address));
-
-        let track = system.track(positionAddressContract.address);
-
-        await positionAddressContract.send(owner, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
-        // await system.run();
+    it("on setPositionAddress from userPosition", async () => {
         await positionAddressContract.send(
-            position,
-            { value: toNano(1) },
-            { $$type: "SetPositionAddressMessage", user: user.address }
+            owner,
+            { value: toNano(101) },
+            { $$type: "SetPositionAddressMessage", user: user.address, position: position.address }
         );
 
         await system.run();
         expect(track.collect()).toMatchSnapshot();
 
-        const setAddress = (await positionAddressContract.getGetPositionAddress()).toString();
-
-        console.log("address set", setAddress);
-
-        expect(setAddress).toEqual(position.address.toString());
-        expect(await positionAddressContract.getGetPositionId()).toEqual(id);
+        expect((await positionAddressContract.getGetPositionAddress()).toString()).toEqual(position.address.toString());
     });
 });

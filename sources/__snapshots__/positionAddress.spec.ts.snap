@@ -1,96 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GateKeeperContract should deploy correctly 1`] = `
+exports[`PositionAddressContract on setPositionAddress from userPosition 1`] = `
 [
-  {
-    "$seq": 0,
-    "events": [
-      {
-        "$type": "deploy",
-      },
-      {
-        "$type": "received",
-        "message": {
-          "body": {
-            "cell": "x{946A98B60000000000000000}",
-            "type": "cell",
-          },
-          "bounce": true,
-          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-          "to": "kQBghZpIvGnwP09Ep-wbwkdt3nBVhFlmFO88AZJ0OPR-JLQr",
-          "type": "internal",
-          "value": 1000000000n,
-        },
-      },
-      {
-        "$type": "processed",
-        "gasUsed": 7139n,
-      },
-      {
-        "$type": "sent",
-        "messages": [
-          {
-            "body": {
-              "cell": "x{AFF90F570000000000000000}",
-              "type": "cell",
-            },
-            "bounce": true,
-            "from": "kQBghZpIvGnwP09Ep-wbwkdt3nBVhFlmFO88AZJ0OPR-JLQr",
-            "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-            "type": "internal",
-            "value": 991665000n,
-          },
-        ],
-      },
-    ],
-  },
-]
-`;
-
-exports[`GateKeeperContract should set position address if called by userPosition contract 1`] = `
-[
-  {
-    "$seq": 0,
-    "events": [
-      {
-        "$type": "deploy",
-      },
-      {
-        "$type": "received",
-        "message": {
-          "body": {
-            "cell": "x{946A98B60000000000000000}",
-            "type": "cell",
-          },
-          "bounce": true,
-          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-          "to": "kQBghZpIvGnwP09Ep-wbwkdt3nBVhFlmFO88AZJ0OPR-JLQr",
-          "type": "internal",
-          "value": 1000000000n,
-        },
-      },
-      {
-        "$type": "processed",
-        "gasUsed": 7139n,
-      },
-      {
-        "$type": "sent",
-        "messages": [
-          {
-            "body": {
-              "cell": "x{AFF90F570000000000000000}",
-              "type": "cell",
-            },
-            "bounce": true,
-            "from": "kQBghZpIvGnwP09Ep-wbwkdt3nBVhFlmFO88AZJ0OPR-JLQr",
-            "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-            "type": "internal",
-            "value": 991665000n,
-          },
-        ],
-      },
-    ],
-  },
   {
     "$seq": 1,
     "events": [
@@ -98,19 +9,80 @@ exports[`GateKeeperContract should set position address if called by userPositio
         "$type": "received",
         "message": {
           "body": {
-            "cell": "x{CF891F9E800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B3_}",
+            "cell": "x{5DA6DE96800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B30001DC8F849F1A1B451DD1D5ED0C497DF2EB583D7FC37EFC48BD5D38F1B4073EB72_}",
             "type": "cell",
           },
           "bounce": true,
-          "from": "kQAHcj4SfGhtFHdHV7QxJffLrWD1_w378SL1dOPG0Bz63Ehu",
-          "to": "kQBghZpIvGnwP09Ep-wbwkdt3nBVhFlmFO88AZJ0OPR-JLQr",
+          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+          "to": "kQAvYPy9IeUb7xIP3vA_R_VGhWbfxYdB-dBIrgWiESamKzhQ",
+          "type": "internal",
+          "value": 101000000000n,
+        },
+      },
+      {
+        "$type": "failed",
+        "errorCode": 22230,
+        "errorMessage": "Already set",
+      },
+      {
+        "$type": "sent-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQAvYPy9IeUb7xIP3vA_R_VGhWbfxYdB-dBIrgWiESamKzhQ",
+          "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+          "type": "internal",
+          "value": 100995858000n,
+        },
+      },
+    ],
+  },
+]
+`;
+
+exports[`PositionAddressContract should deploy correctly 1`] = `
+[
+  {
+    "$seq": 0,
+    "events": [
+      {
+        "$type": "deploy",
+      },
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{946A98B60000000000000000}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+          "to": "kQAvYPy9IeUb7xIP3vA_R_VGhWbfxYdB-dBIrgWiESamKzhQ",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 2848n,
+        "gasUsed": 7369n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{AFF90F570000000000000000}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQAvYPy9IeUb7xIP3vA_R_VGhWbfxYdB-dBIrgWiESamKzhQ",
+            "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+            "type": "internal",
+            "value": 991435000n,
+          },
+        ],
       },
     ],
   },

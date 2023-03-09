@@ -782,33 +782,85 @@ function dictValueParserJettonWalletData(): DictionaryValue<JettonWalletData> {
     }
 }
 
+export type SetUserPositionDependecyMessage = {
+    $$type: 'SetUserPositionDependecyMessage';
+    stablecoinMasterAddress: Address;
+    positionsManagerAddress: Address;
+}
+
+export function storeSetUserPositionDependecyMessage(src: SetUserPositionDependecyMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(4030201083, 32);
+        b_0.storeAddress(src.stablecoinMasterAddress);
+        b_0.storeAddress(src.positionsManagerAddress);
+    };
+}
+
+export function loadSetUserPositionDependecyMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 4030201083) { throw Error('Invalid prefix'); }
+    let _stablecoinMasterAddress = sc_0.loadAddress();
+    let _positionsManagerAddress = sc_0.loadAddress();
+    return { $$type: 'SetUserPositionDependecyMessage' as const, stablecoinMasterAddress: _stablecoinMasterAddress, positionsManagerAddress: _positionsManagerAddress };
+}
+
+function loadTupleSetUserPositionDependecyMessage(source: TupleReader) {
+    let _stablecoinMasterAddress = source.readAddress();
+    let _positionsManagerAddress = source.readAddress();
+    return { $$type: 'SetUserPositionDependecyMessage' as const, stablecoinMasterAddress: _stablecoinMasterAddress, positionsManagerAddress: _positionsManagerAddress };
+}
+
+function storeTupleSetUserPositionDependecyMessage(source: SetUserPositionDependecyMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.stablecoinMasterAddress);
+    builder.writeAddress(source.positionsManagerAddress);
+    return builder.build();
+}
+
+function dictValueParserSetUserPositionDependecyMessage(): DictionaryValue<SetUserPositionDependecyMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeSetUserPositionDependecyMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadSetUserPositionDependecyMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type SetPositionIdMessage = {
     $$type: 'SetPositionIdMessage';
+    user: Address;
     positionId: bigint;
 }
 
 export function storeSetPositionIdMessage(src: SetPositionIdMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(11782869, 32);
-        b_0.storeUint(src.positionId, 8);
+        b_0.storeUint(1245051344, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeInt(src.positionId, 257);
     };
 }
 
 export function loadSetPositionIdMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 11782869) { throw Error('Invalid prefix'); }
-    let _positionId = sc_0.loadUintBig(8);
-    return { $$type: 'SetPositionIdMessage' as const, positionId: _positionId };
+    if (sc_0.loadUint(32) !== 1245051344) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _positionId = sc_0.loadIntBig(257);
+    return { $$type: 'SetPositionIdMessage' as const, user: _user, positionId: _positionId };
 }
 
 function loadTupleSetPositionIdMessage(source: TupleReader) {
+    let _user = source.readAddress();
     let _positionId = source.readBigNumber();
-    return { $$type: 'SetPositionIdMessage' as const, positionId: _positionId };
+    return { $$type: 'SetPositionIdMessage' as const, user: _user, positionId: _positionId };
 }
 
 function storeTupleSetPositionIdMessage(source: SetPositionIdMessage) {
     let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
     builder.writeNumber(source.positionId);
     return builder.build();
 }
@@ -820,6 +872,293 @@ function dictValueParserSetPositionIdMessage(): DictionaryValue<SetPositionIdMes
         },
         parse: (src) => {
             return loadSetPositionIdMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type NewPositionIdMessage = {
+    $$type: 'NewPositionIdMessage';
+    user: Address;
+}
+
+export function storeNewPositionIdMessage(src: NewPositionIdMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(225756565, 32);
+        b_0.storeAddress(src.user);
+    };
+}
+
+export function loadNewPositionIdMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 225756565) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    return { $$type: 'NewPositionIdMessage' as const, user: _user };
+}
+
+function loadTupleNewPositionIdMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    return { $$type: 'NewPositionIdMessage' as const, user: _user };
+}
+
+function storeTupleNewPositionIdMessage(source: NewPositionIdMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    return builder.build();
+}
+
+function dictValueParserNewPositionIdMessage(): DictionaryValue<NewPositionIdMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeNewPositionIdMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadNewPositionIdMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type SetPositionAddressMessage = {
+    $$type: 'SetPositionAddressMessage';
+    user: Address;
+    position: Address;
+}
+
+export function storeSetPositionAddressMessage(src: SetPositionAddressMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(1571217046, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeAddress(src.position);
+    };
+}
+
+export function loadSetPositionAddressMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 1571217046) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _position = sc_0.loadAddress();
+    return { $$type: 'SetPositionAddressMessage' as const, user: _user, position: _position };
+}
+
+function loadTupleSetPositionAddressMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    let _position = source.readAddress();
+    return { $$type: 'SetPositionAddressMessage' as const, user: _user, position: _position };
+}
+
+function storeTupleSetPositionAddressMessage(source: SetPositionAddressMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeAddress(source.position);
+    return builder.build();
+}
+
+function dictValueParserSetPositionAddressMessage(): DictionaryValue<SetPositionAddressMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeSetPositionAddressMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadSetPositionAddressMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type MintMessage = {
+    $$type: 'MintMessage';
+    user: Address;
+    amount: bigint;
+}
+
+export function storeMintMessage(src: MintMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(2419415474, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeCoins(src.amount);
+    };
+}
+
+export function loadMintMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 2419415474) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadCoins();
+    return { $$type: 'MintMessage' as const, user: _user, amount: _amount };
+}
+
+function loadTupleMintMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    return { $$type: 'MintMessage' as const, user: _user, amount: _amount };
+}
+
+function storeTupleMintMessage(source: MintMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    return builder.build();
+}
+
+function dictValueParserMintMessage(): DictionaryValue<MintMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeMintMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadMintMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type BurnMessage = {
+    $$type: 'BurnMessage';
+    user: Address;
+    amount: bigint;
+    fees: bigint;
+}
+
+export function storeBurnMessage(src: BurnMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(3055907227, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeCoins(src.amount);
+        b_0.storeCoins(src.fees);
+    };
+}
+
+export function loadBurnMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 3055907227) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadCoins();
+    let _fees = sc_0.loadCoins();
+    return { $$type: 'BurnMessage' as const, user: _user, amount: _amount, fees: _fees };
+}
+
+function loadTupleBurnMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    let _fees = source.readBigNumber();
+    return { $$type: 'BurnMessage' as const, user: _user, amount: _amount, fees: _fees };
+}
+
+function storeTupleBurnMessage(source: BurnMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    builder.writeNumber(source.fees);
+    return builder.build();
+}
+
+function dictValueParserBurnMessage(): DictionaryValue<BurnMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeBurnMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadBurnMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type RepayBurnNotification = {
+    $$type: 'RepayBurnNotification';
+    user: Address;
+    amount: bigint;
+}
+
+export function storeRepayBurnNotification(src: RepayBurnNotification) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(1446800788, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeCoins(src.amount);
+    };
+}
+
+export function loadRepayBurnNotification(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 1446800788) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadCoins();
+    return { $$type: 'RepayBurnNotification' as const, user: _user, amount: _amount };
+}
+
+function loadTupleRepayBurnNotification(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    return { $$type: 'RepayBurnNotification' as const, user: _user, amount: _amount };
+}
+
+function storeTupleRepayBurnNotification(source: RepayBurnNotification) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    return builder.build();
+}
+
+function dictValueParserRepayBurnNotification(): DictionaryValue<RepayBurnNotification> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeRepayBurnNotification(src)).endCell());
+        },
+        parse: (src) => {
+            return loadRepayBurnNotification(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type StablecoinBurnedMessage = {
+    $$type: 'StablecoinBurnedMessage';
+    user: Address;
+    amount: bigint;
+    fees: bigint;
+}
+
+export function storeStablecoinBurnedMessage(src: StablecoinBurnedMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(3535686764, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeUint(src.amount, 64);
+        b_0.storeUint(src.fees, 64);
+    };
+}
+
+export function loadStablecoinBurnedMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 3535686764) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadUintBig(64);
+    let _fees = sc_0.loadUintBig(64);
+    return { $$type: 'StablecoinBurnedMessage' as const, user: _user, amount: _amount, fees: _fees };
+}
+
+function loadTupleStablecoinBurnedMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    let _fees = source.readBigNumber();
+    return { $$type: 'StablecoinBurnedMessage' as const, user: _user, amount: _amount, fees: _fees };
+}
+
+function storeTupleStablecoinBurnedMessage(source: StablecoinBurnedMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    builder.writeNumber(source.fees);
+    return builder.build();
+}
+
+function dictValueParserStablecoinBurnedMessage(): DictionaryValue<StablecoinBurnedMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeStablecoinBurnedMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadStablecoinBurnedMessage(src.loadRef().beginParse());
         }
     }
 }
@@ -1219,152 +1558,6 @@ function dictValueParserTokenNotification(): DictionaryValue<TokenNotification> 
         },
         parse: (src) => {
             return loadTokenNotification(src.loadRef().beginParse());
-        }
-    }
-}
-
-export type MintMessage = {
-    $$type: 'MintMessage';
-    to: Address;
-    amount: bigint;
-}
-
-export function storeMintMessage(src: MintMessage) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(3872727887, 32);
-        b_0.storeAddress(src.to);
-        b_0.storeCoins(src.amount);
-    };
-}
-
-export function loadMintMessage(slice: Slice) {
-    let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 3872727887) { throw Error('Invalid prefix'); }
-    let _to = sc_0.loadAddress();
-    let _amount = sc_0.loadCoins();
-    return { $$type: 'MintMessage' as const, to: _to, amount: _amount };
-}
-
-function loadTupleMintMessage(source: TupleReader) {
-    let _to = source.readAddress();
-    let _amount = source.readBigNumber();
-    return { $$type: 'MintMessage' as const, to: _to, amount: _amount };
-}
-
-function storeTupleMintMessage(source: MintMessage) {
-    let builder = new TupleBuilder();
-    builder.writeAddress(source.to);
-    builder.writeNumber(source.amount);
-    return builder.build();
-}
-
-function dictValueParserMintMessage(): DictionaryValue<MintMessage> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeMintMessage(src)).endCell());
-        },
-        parse: (src) => {
-            return loadMintMessage(src.loadRef().beginParse());
-        }
-    }
-}
-
-export type BurnMessage = {
-    $$type: 'BurnMessage';
-    address: Address;
-    amount: bigint;
-    fees: bigint;
-}
-
-export function storeBurnMessage(src: BurnMessage) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(2772984165, 32);
-        b_0.storeAddress(src.address);
-        b_0.storeCoins(src.amount);
-        b_0.storeCoins(src.fees);
-    };
-}
-
-export function loadBurnMessage(slice: Slice) {
-    let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 2772984165) { throw Error('Invalid prefix'); }
-    let _address = sc_0.loadAddress();
-    let _amount = sc_0.loadCoins();
-    let _fees = sc_0.loadCoins();
-    return { $$type: 'BurnMessage' as const, address: _address, amount: _amount, fees: _fees };
-}
-
-function loadTupleBurnMessage(source: TupleReader) {
-    let _address = source.readAddress();
-    let _amount = source.readBigNumber();
-    let _fees = source.readBigNumber();
-    return { $$type: 'BurnMessage' as const, address: _address, amount: _amount, fees: _fees };
-}
-
-function storeTupleBurnMessage(source: BurnMessage) {
-    let builder = new TupleBuilder();
-    builder.writeAddress(source.address);
-    builder.writeNumber(source.amount);
-    builder.writeNumber(source.fees);
-    return builder.build();
-}
-
-function dictValueParserBurnMessage(): DictionaryValue<BurnMessage> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeBurnMessage(src)).endCell());
-        },
-        parse: (src) => {
-            return loadBurnMessage(src.loadRef().beginParse());
-        }
-    }
-}
-
-export type RepayBurnNotification = {
-    $$type: 'RepayBurnNotification';
-    user: Address;
-    amount: bigint;
-}
-
-export function storeRepayBurnNotification(src: RepayBurnNotification) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(1446800788, 32);
-        b_0.storeAddress(src.user);
-        b_0.storeCoins(src.amount);
-    };
-}
-
-export function loadRepayBurnNotification(slice: Slice) {
-    let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 1446800788) { throw Error('Invalid prefix'); }
-    let _user = sc_0.loadAddress();
-    let _amount = sc_0.loadCoins();
-    return { $$type: 'RepayBurnNotification' as const, user: _user, amount: _amount };
-}
-
-function loadTupleRepayBurnNotification(source: TupleReader) {
-    let _user = source.readAddress();
-    let _amount = source.readBigNumber();
-    return { $$type: 'RepayBurnNotification' as const, user: _user, amount: _amount };
-}
-
-function storeTupleRepayBurnNotification(source: RepayBurnNotification) {
-    let builder = new TupleBuilder();
-    builder.writeAddress(source.user);
-    builder.writeNumber(source.amount);
-    return builder.build();
-}
-
-function dictValueParserRepayBurnNotification(): DictionaryValue<RepayBurnNotification> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeRepayBurnNotification(src)).endCell());
-        },
-        parse: (src) => {
-            return loadRepayBurnNotification(src.loadRef().beginParse());
         }
     }
 }

@@ -2,23 +2,6 @@ import "@stdlib/deploy";
 import "./messages";
 import "./StablecoinJetton";
 
-message MintMessage {
-    to: Address;
-    amount: Int as coins;
-}
-
-message BurnMessage {
-    address: Address;
-    amount: Int as coins;
-    fees: Int as coins;
-}
-
-message RepayBurnNotification {
-    user: Address;
-    amount: Int as coins;
-
-}
-
 
 contract StablecoinMasterContract with Deployable {
    
@@ -41,7 +24,7 @@ contract StablecoinMasterContract with Deployable {
     receive(msg: MintMessage) {
         // todo check if sender is userPosition
         // question - do we need responseAddress? notifications?
-        self.mint(msg.to, msg.amount);
+        self.mint(msg.user, msg.amount);
     }
 
     /*

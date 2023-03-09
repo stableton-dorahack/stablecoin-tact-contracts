@@ -3,7 +3,7 @@ Contract: StablecoinMasterContract
 BOC Size: 978 bytes
 
 # Types
-Total Types: 26
+Total Types: 30
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -65,9 +65,37 @@ Signature: `JettonData{totalSupply:int257,mintable:bool,owner:address,content:Ma
 TLB: `_ balance:int257 owner:address master:address walletCode:^cell = JettonWalletData`
 Signature: `JettonWalletData{balance:int257,owner:address,master:address,walletCode:^cell}`
 
+## SetUserPositionDependecyMessage
+TLB: `set_user_position_dependecy_message#f037fcfb stablecoinMasterAddress:address positionsManagerAddress:address = SetUserPositionDependecyMessage`
+Signature: `SetUserPositionDependecyMessage{stablecoinMasterAddress:address,positionsManagerAddress:address}`
+
 ## SetPositionIdMessage
-TLB: `set_position_id_message#00b3cad5 positionId:uint8 = SetPositionIdMessage`
-Signature: `SetPositionIdMessage{positionId:uint8}`
+TLB: `set_position_id_message#4a35f9d0 user:address positionId:int257 = SetPositionIdMessage`
+Signature: `SetPositionIdMessage{user:address,positionId:int257}`
+
+## NewPositionIdMessage
+TLB: `new_position_id_message#0d74c595 user:address = NewPositionIdMessage`
+Signature: `NewPositionIdMessage{user:address}`
+
+## SetPositionAddressMessage
+TLB: `set_position_address_message#5da6de96 user:address position:address = SetPositionAddressMessage`
+Signature: `SetPositionAddressMessage{user:address,position:address}`
+
+## MintMessage
+TLB: `mint_message#903559b2 user:address amount:coins = MintMessage`
+Signature: `MintMessage{user:address,amount:coins}`
+
+## BurnMessage
+TLB: `burn_message#b625719b user:address amount:coins fees:coins = BurnMessage`
+Signature: `BurnMessage{user:address,amount:coins,fees:coins}`
+
+## RepayBurnNotification
+TLB: `repay_burn_notification#563c6d94 user:address amount:coins = RepayBurnNotification`
+Signature: `RepayBurnNotification{user:address,amount:coins}`
+
+## StablecoinBurnedMessage
+TLB: `stablecoin_burned_message#d2be4c6c user:address amount:uint64 fees:uint64 = StablecoinBurnedMessage`
+Signature: `StablecoinBurnedMessage{user:address,amount:uint64,fees:uint64}`
 
 ## TokenTransfer
 TLB: `token_transfer#0f8a7ea5 queryId:uint64 amount:coins destination:address responseDestination:Maybe address customPayload:Maybe ^cell forwardTonAmount:coins forwardPayload:remainder<slice> = TokenTransfer`
@@ -96,18 +124,6 @@ Signature: `TokenExcesses{queryId:uint64}`
 ## TokenNotification
 TLB: `token_notification#7362d09c queryId:uint64 amount:coins from:address forwardPayload:remainder<slice> = TokenNotification`
 Signature: `TokenNotification{queryId:uint64,amount:coins,from:address,forwardPayload:remainder<slice>}`
-
-## MintMessage
-TLB: `mint_message#e6d5234f to:address amount:coins = MintMessage`
-Signature: `MintMessage{to:address,amount:coins}`
-
-## BurnMessage
-TLB: `burn_message#a5486165 address:address amount:coins fees:coins = BurnMessage`
-Signature: `BurnMessage{address:address,amount:coins,fees:coins}`
-
-## RepayBurnNotification
-TLB: `repay_burn_notification#563c6d94 user:address amount:coins = RepayBurnNotification`
-Signature: `RepayBurnNotification{user:address,amount:coins}`
 
 # Get Methods
 Total Get Methods: 2

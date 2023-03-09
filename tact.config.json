@@ -7,11 +7,6 @@
         },
         {
             "name": "stableton",
-            "path": "./sources/positionAddress.tact",
-            "output": "./sources/output"
-        },
-        {
-            "name": "stableton",
             "path": "./sources/positionsManager.tact",
             "output": "./sources/output"
         },

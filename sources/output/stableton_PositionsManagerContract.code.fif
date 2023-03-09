@@ -50,17 +50,17 @@ PROGRAM{
   DECLPROC __gen_constructor_SendParameters$bounce_to_value_mode_body
   DECLPROC $reply
   DECLPROC $__gen_Context_readForwardFee
+  DECLPROC __gen_constructor_SendParameters$to_value_mode_bounce_body
   DECLPROC $__gen_UserPositionContract_init_child
+  DECLPROC __gen_constructor_SendParameters$to_value_mode_bounce_body_code_data
   DECLPROC __gen_constructor_DeployOk$queryId
   DECLPROC $__gen_PositionsManagerContract_lastPositionId
   129904 DECLMETHOD $__gen_get_lastPositionId
   DECLPROC $__gen_PositionsManagerContract_balance
   104128 DECLMETHOD $__gen_get_balance
-  DECLPROC __gen_constructor_SendParameters$to_value_mode_bounce_body_code_data
   DECLPROC __gen_constructor_DepositCollateralMessage$amount_user
   DECLPROC $__gen_PositionsManagerContract_receive_DepositCollateralMessage
-  DECLPROC __gen_constructor_SendParameters$to_value_mode_bounce_body
-  DECLPROC __gen_constructor_SetPositionIdMessage$positionId
+  DECLPROC __gen_constructor_SetPositionIdMessage$positionId_user
   DECLPROC $__gen_PositionsManagerContract_receive_NewPositionIdMessage
   DECLPROC $__gen_PositionsManagerContract_receive_WithdrawStablecoinMessage
   DECLPROC $__gen_PositionsManagerContract_receive_IncreaseTotalStableMessage
@@ -362,14 +362,17 @@ PROGRAM{
     3 -ROLL
   }>
   __gen_write_SetPositionIdMessage PROCINLINE:<{
-    11782869 PUSHINT
-    ROT
+    1245051344 PUSHINT
+    s0 s3 XCHG2
     32 STU
-    8 STU
+    SWAP
+    __tact_store_address INLINECALLDICT
+    257 PUSHINT
+    STIX
   }>
   __gen_writecell_SetPositionIdMessage PROCINLINE:<{
     NEWC
-    SWAP
+    -ROT
     __gen_write_SetPositionIdMessage INLINECALLDICT
     ENDC
   }>
@@ -580,18 +583,31 @@ PROGRAM{
     3 MULCONST
     1 RSHIFT#
   }>
+  __gen_constructor_SendParameters$to_value_mode_bounce_body PROCINLINE:<{
+    s1 s4 XCHG
+    s3 s3 s0 XCHG3
+    PUSHNULL
+    PUSHNULL
+  }>
   $__gen_UserPositionContract_init_child PROC:<{
     SWAP
     CTOS
     LDDICT
     DROP
     NEWDICT
-    SWAP
+    OVER
     33846 PUSHINT
     __tact_dict_get_code INLINECALLDICT
     SWAP
     33846 PUSHINT
     s2 PUSH
+    __tact_dict_set_code INLINECALLDICT
+    s0 s2 XCHG
+    63327 PUSHINT
+    __tact_dict_get_code INLINECALLDICT
+    s1 s2 XCHG
+    63327 PUSHINT
+    SWAP
     __tact_dict_set_code INLINECALLDICT
     NEWC
     SWAP
@@ -606,6 +622,11 @@ PROGRAM{
     ROT
     __gen_write_$init$UserPositionContract INLINECALLDICT
     ENDC
+  }>
+  __gen_constructor_SendParameters$to_value_mode_bounce_body_code_data PROCINLINE:<{
+    s3 s6 XCHG
+    s3 s5 XCHG
+    s3 s4 XCHG
   }>
   __gen_constructor_DeployOk$queryId PROCINLINE:<{
   }>
@@ -624,11 +645,6 @@ PROGRAM{
   $__gen_get_balance PROC:<{
     __gen_load_PositionsManagerContract INLINECALLDICT
     $__gen_PositionsManagerContract_balance INLINECALLDICT
-  }>
-  __gen_constructor_SendParameters$to_value_mode_bounce_body_code_data PROCINLINE:<{
-    s3 s6 XCHG
-    s3 s5 XCHG
-    s3 s4 XCHG
   }>
   __gen_constructor_DepositCollateralMessage$amount_user PROCINLINE:<{
     SWAP
@@ -668,13 +684,8 @@ PROGRAM{
     __gen_constructor_SendParameters$to_value_mode_bounce_body_code_data INLINECALLDICT
     $send INLINECALLDICT
   }>
-  __gen_constructor_SendParameters$to_value_mode_bounce_body PROCINLINE:<{
-    s1 s4 XCHG
-    s3 s3 s0 XCHG3
-    PUSHNULL
-    PUSHNULL
-  }>
-  __gen_constructor_SetPositionIdMessage$positionId PROCINLINE:<{
+  __gen_constructor_SetPositionIdMessage$positionId_user PROCINLINE:<{
+    SWAP
   }>
   $__gen_PositionsManagerContract_receive_NewPositionIdMessage PROCINLINE:<{
     s0 s3 XCHG
@@ -683,17 +694,20 @@ PROGRAM{
     s2 s3 XCHG
     3 BLKDROP
     __tact_context_sys GETGLOB
-    s0 s5 XCHG2
+    s5 PUSH
     $__gen_UserPositionContract_init_child CALLDICT
     $contractAddress INLINECALLDICT
     DROP
     100000000 PUSHINT
     2 PUSHINT
-    TRUE
     s3 PUSH
-    __gen_constructor_SetPositionIdMessage$positionId INLINECALLDICT
+    TRUE
+    s0 s8 XCHG
+    __gen_constructor_SetPositionIdMessage$positionId_user INLINECALLDICT
     __gen_writecell_SetPositionIdMessage INLINECALLDICT
-    s4 s7 XCHG
+    s3 s4 XCHG
+    s1 s3 s0 XCHG3
+    s1 s7 XCHG
     __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
     $send INLINECALLDICT
   }>
@@ -962,7 +976,7 @@ PROGRAM{
     42980537499636128163026532310500881091 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d5954334b766557557671524852626d68763831476679425371546d7654483832347a704839434557324e7641} PUSHSLICE
+    x{697066733a2f2f516d5870506536394c5567357a5766335048696b665672546a6f4a533779346363357850316761526e6241643156} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

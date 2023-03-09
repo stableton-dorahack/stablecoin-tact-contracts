@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: UserPositionContract
-BOC Size: 816 bytes
+BOC Size: 1678 bytes
 
 # Types
-Total Types: 18
+Total Types: 25
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -24,6 +24,10 @@ Signature: `Deploy{queryId:uint64}`
 ## DeployOk
 TLB: `deploy_ok#aff90f57 queryId:uint64 = DeployOk`
 Signature: `DeployOk{queryId:uint64}`
+
+## ChangeOwner
+TLB: `change_owner#0f474d03 newOwner:address = ChangeOwner`
+Signature: `ChangeOwner{newOwner:address}`
 
 ## DepositCollateralMessage
 TLB: `deposit_collateral_message#11dfb138 user:address amount:coins = DepositCollateralMessage`
@@ -65,24 +69,52 @@ Signature: `JettonData{totalSupply:int257,mintable:bool,owner:address,content:Ma
 TLB: `_ balance:int257 owner:address master:address walletCode:^cell = JettonWalletData`
 Signature: `JettonWalletData{balance:int257,owner:address,master:address,walletCode:^cell}`
 
-## SetPositionIdMessage
-TLB: `set_position_id_message#00b3cad5 positionId:uint8 = SetPositionIdMessage`
-Signature: `SetPositionIdMessage{positionId:uint8}`
+## SetUserPositionDependecyMessage
+TLB: `set_user_position_dependecy_message#f037fcfb stablecoinMasterAddress:address positionsManagerAddress:address = SetUserPositionDependecyMessage`
+Signature: `SetUserPositionDependecyMessage{stablecoinMasterAddress:address,positionsManagerAddress:address}`
 
-## PositionState
-TLB: `_ collateral:coins debt:uint64 = PositionState`
-Signature: `PositionState{collateral:coins,debt:uint64}`
+## SetPositionIdMessage
+TLB: `set_position_id_message#4a35f9d0 user:address positionId:int257 = SetPositionIdMessage`
+Signature: `SetPositionIdMessage{user:address,positionId:int257}`
+
+## NewPositionIdMessage
+TLB: `new_position_id_message#0d74c595 user:address = NewPositionIdMessage`
+Signature: `NewPositionIdMessage{user:address}`
+
+## SetPositionAddressMessage
+TLB: `set_position_address_message#5da6de96 user:address position:address = SetPositionAddressMessage`
+Signature: `SetPositionAddressMessage{user:address,position:address}`
+
+## MintMessage
+TLB: `mint_message#903559b2 user:address amount:coins = MintMessage`
+Signature: `MintMessage{user:address,amount:coins}`
+
+## BurnMessage
+TLB: `burn_message#b625719b user:address amount:coins fees:coins = BurnMessage`
+Signature: `BurnMessage{user:address,amount:coins,fees:coins}`
+
+## RepayBurnNotification
+TLB: `repay_burn_notification#563c6d94 user:address amount:coins = RepayBurnNotification`
+Signature: `RepayBurnNotification{user:address,amount:coins}`
 
 ## StablecoinBurnedMessage
 TLB: `stablecoin_burned_message#d2be4c6c user:address amount:uint64 fees:uint64 = StablecoinBurnedMessage`
 Signature: `StablecoinBurnedMessage{user:address,amount:uint64,fees:uint64}`
 
+## PositionState
+TLB: `_ collateral:coins debt:uint64 = PositionState`
+Signature: `PositionState{collateral:coins,debt:uint64}`
+
 # Get Methods
-Total Get Methods: 2
+Total Get Methods: 4
 
 ## getPositionUser
 
+## getPositionId
+
 ## getPositionState
+
+## owner
 
 # Error Codes
 2: Stack undeflow
@@ -108,3 +140,9 @@ Total Get Methods: 2
 134: Invalid argument
 135: Code of a contract was not found
 136: Invalid address
+15032: not from stablecoin master
+22230: Already set
+31797: debt less than repay amount
+53160: not from positions manager
+61910: not from positionsManager
+63577: withdrawal amount more than position has

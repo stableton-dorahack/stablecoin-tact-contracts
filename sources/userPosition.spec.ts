@@ -1,65 +1,185 @@
-import { Address, Sender, toNano } from "ton";
-import { ContractSystem, Treasure } from "ton-emulator";
-import { PositionAddressContract } from "./output/stableton_PositionAddressContract";
+import { Address, OpenedContract, Sender, toNano } from "ton";
+import { ContractSystem, Logger, Tracker, Treasure } from "ton-emulator";
+import { PositionsManagerContract } from "./output/stableton_PositionsManagerContract";
 import { UserPositionContract } from "./output/stableton_UserPositionContract";
 
-describe.only("UserPositionContract", () => {
+describe("PositionsManagerContract", () => {
     let system: ContractSystem;
     let owner: Treasure;
     let user: Treasure;
+    let gateKeeper: Treasure;
+    let stablecoinMaster: Treasure;
+    let positionsManager: Treasure;
+    let userPositionContract: OpenedContract<UserPositionContract>;
+    let track: Tracker;
+    let logger: Logger;
 
     beforeAll(async () => {
         system = await ContractSystem.create();
         owner = system.treasure("owner");
         user = system.treasure("user");
+        gateKeeper = system.treasure("gateKeeper");
+        stablecoinMaster = system.treasure("stablecoinMaster");
+        positionsManager = system.treasure("positionsManager");
+
+        userPositionContract = system.open(await UserPositionContract.fromInit(user.address));
+
+        userPositionContract.send(
+            owner,
+            { value: toNano(1) },
+            {
+                $$type: "SetUserPositionDependecyMessage",
+                stablecoinMasterAddress: stablecoinMaster.address,
+                positionsManagerAddress: positionsManager.address,
+            }
+        );
+        track = system.track(userPositionContract.address);
+        logger = system.log(userPositionContract.address);
     });
 
-    it("should deploy correctly", async () => {
-        let userPositionContract = system.open(await UserPositionContract.fromInit(user.address));
-
-        let track = system.track(userPositionContract.address);
-
+    it("should deploy correctly and send newPositionId request to positionsManager", async () => {
         await userPositionContract.send(owner, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
+        console.log("positionsManager", positionsManager.address);
 
         await system.run();
-
         expect(track.collect()).toMatchSnapshot();
 
-        const getPositionUser = (await userPositionContract.getGetPositionUser()).toString();
-
-        expect(getPositionUser).toEqual(user.address.toString());
+        // expect(await positionsManagerContract.getLastPositionId()).toEqual(0n);
     });
 
-    // it("should set position address if called by userPosition contract", async () => {
-    //     let system = await ContractSystem.create();
-    //     let owner: Treasure = system.treasure("owner");
-    //     let user = system.treasure("user");
-    //     let position = system.treasure("position");
-    //     console.log("position address", position.address);
+    it("on setPositionId from positionsManager should set positionId and deploy positionAddress contract", async () => {
+        await userPositionContract.send(
+            positionsManager,
+            { value: toNano(1) },
+            { $$type: "SetPositionIdMessage", positionId: 23n, user: user.address }
+        );
 
-    //     let id = 1n;
-    //     let positionAddressContract = system.open(await PositionAddressContract.fromInit(id));
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
 
-    //     let userPositionContract = system.open(await UserPositionContract.fromAddress(position.address));
+        expect(await userPositionContract.getGetPositionId()).toEqual(23n);
+    });
 
-    //     let track = system.track(positionAddressContract.address);
+    it("on witdrawStablecoin from positionsManager should revert unhealthy position", async () => {
+        await userPositionContract.send(
+            positionsManager,
+            { value: toNano(1) },
+            { $$type: "SetPositionIdMessage", positionId: 23n, user: user.address }
+        );
 
-    //     await positionAddressContract.send(owner, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
-    //     // await system.run();
-    //     await positionAddressContract.send(
-    //         position,
-    //         { value: toNano(1) },
-    //         { $$type: "SetPositionAddressMessage", user: user.address }
-    //     );
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
 
-    //     await system.run();
-    //     expect(track.collect()).toMatchSnapshot();
+        expect(await userPositionContract.getGetPositionId()).toEqual(23n);
+    });
 
-    //     const setAddress = (await positionAddressContract.getGetPositionAddress()).toString();
+    // todo add actions to init healthy position
+    it("on addCollateral from positionsManager with healthy position", async () => {
+        await userPositionContract.send(
+            positionsManager,
+            { value: toNano(1) },
+            { $$type: "DepositCollateralMessage", user: user.address, amount: 100n }
+        );
 
-    //     console.log("address set", setAddress);
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
 
-    //     expect(setAddress).toEqual(position.address.toString());
-    //     expect(await positionAddressContract.getGetPositionId()).toEqual(id);
-    // });
+        const postitionState = await userPositionContract.getGetPositionState();
+        console.log({ postitionState });
+
+        expect(postitionState).toEqual({ $$type: "PositionState", collateral: 100n, debt: 0n });
+    });
+
+    // todo add actions to init healthy position
+    it("on withdrawStablecoin from positionsManager with healthy position", async () => {
+        await userPositionContract.send(
+            positionsManager,
+            { value: toNano(1) },
+            { $$type: "WithdrawStablecoinMessage", user: user.address, amount: 100n, debtRate: 1000n }
+        );
+
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
+
+        const postitionState = await userPositionContract.getGetPositionState();
+        console.log({ postitionState });
+
+        expect(postitionState).toEqual({ $$type: "PositionState", collateral: 100n, debt: 100n });
+    });
+
+    it("on repayStablecoin from positionsManager with healthy position revert if debt less than amount", async () => {
+        await userPositionContract.send(
+            positionsManager,
+            { value: toNano(1) },
+            { $$type: "RepayStablecoinMessage", user: user.address, amount: 150n, debtRate: 1000n }
+        );
+
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
+
+        const postitionState = await userPositionContract.getGetPositionState();
+        console.log({ postitionState });
+    });
+
+    it("on repayStablecoin from positionsManager with healthy position", async () => {
+        await userPositionContract.send(
+            positionsManager,
+            { value: toNano(1) },
+            { $$type: "RepayStablecoinMessage", user: user.address, amount: 100n, debtRate: 1000n }
+        );
+
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
+
+        const postitionState = await userPositionContract.getGetPositionState();
+        console.log({ postitionState });
+    });
+
+    it("on stablecoin burned ", async () => {
+        await userPositionContract.send(
+            stablecoinMaster,
+            { value: toNano(1) },
+            { $$type: "StablecoinBurnedMessage", user: user.address, amount: 100n, fees: 1n }
+        );
+
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
+
+        const postitionState = await userPositionContract.getGetPositionState();
+        console.log({ postitionState });
+
+        expect(postitionState).toEqual({ $$type: "PositionState", collateral: 100n, debt: 0n });
+    });
+
+    it("on withdraw collateral revert if more than exists ", async () => {
+        await userPositionContract.send(
+            positionsManager,
+            { value: toNano(1) },
+            { $$type: "WithdrawCollateralMessage", user: user.address, amount: 150n, debtRate: 1000n }
+        );
+
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
+
+        const postitionState = await userPositionContract.getGetPositionState();
+        console.log("withdraw more", { postitionState });
+
+        expect(postitionState).toEqual({ $$type: "PositionState", collateral: 100n, debt: 0n });
+    });
+
+    it("on withdraw collateral decrease position collateral ", async () => {
+        await userPositionContract.send(
+            positionsManager,
+            { value: toNano(1) },
+            { $$type: "WithdrawCollateralMessage", user: user.address, amount: 100n, debtRate: 1000n }
+        );
+
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
+
+        const postitionState = await userPositionContract.getGetPositionState();
+        console.log("withdraw ok", { postitionState });
+
+        expect(postitionState).toEqual({ $$type: "PositionState", collateral: 0n, debt: 0n });
+    });
 });

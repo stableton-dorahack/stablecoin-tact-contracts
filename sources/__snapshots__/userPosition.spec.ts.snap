@@ -1,6 +1,464 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`UserPositionContract should deploy correctly 1`] = `
+exports[`PositionsManagerContract on addCollateral from positionsManager with healthy position 1`] = `
+[
+  {
+    "$seq": 6,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{11DFB138800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B22C9_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 4754n,
+      },
+    ],
+  },
+]
+`;
+
+exports[`PositionsManagerContract on repayStablecoin from positionsManager with healthy position 1`] = `
+[
+  {
+    "$seq": 10,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{6E81F446800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B200000000000000C800000000000007D1_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 8560n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{B625719B800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B22C8203_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+            "to": "kQCDr0Gm-nivCD9KWPb6JkiDulGZ8eNb2Xm_HNi39oyNbBwJ",
+            "type": "internal",
+            "value": 498577000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 11,
+    "events": [
+      {
+        "$type": "received-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQCDr0Gm-nivCD9KWPb6JkiDulGZ8eNb2Xm_HNi39oyNbBwJ",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 497577000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 3883n,
+      },
+    ],
+  },
+]
+`;
+
+exports[`PositionsManagerContract on repayStablecoin from positionsManager with healthy position revert if debt less than amount 1`] = `
+[
+  {
+    "$seq": 9,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{6E81F446800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2000000000000012C00000000000007D1_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "failed",
+        "errorCode": 31797,
+        "errorMessage": "debt less than repay amount",
+      },
+      {
+        "$type": "sent-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "to": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+          "type": "internal",
+          "value": 995455000n,
+        },
+      },
+    ],
+  },
+]
+`;
+
+exports[`PositionsManagerContract on setPositionId from positionsManager should set positionId and deploy positionAddress contract 1`] = `
+[
+  {
+    "$seq": 3,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{4A35F9D0800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000000000000000000000000000000000000000000000000000000000017}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 14206n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{5DA6DE96800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B3002F269235DC7B1F093EF2B00E9D759508E0753BC0C07CDE81406E2EC957307655E_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+            "to": "kQC6oIIXKNeAZYFDhu_MI1vXrY7saC_K4jyVRxIhkxaqDj7q",
+            "type": "internal",
+            "value": 491221000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`PositionsManagerContract on stablecoin burned  1`] = `
+[
+  {
+    "$seq": 12,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{D2BE4C6C800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B200000000000000C80000000000000003_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCDr0Gm-nivCD9KWPb6JkiDulGZ8eNb2Xm_HNi39oyNbBwJ",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 8616n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{ED81304A800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B200000000000000C80000000000000003_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+            "to": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+            "type": "internal",
+            "value": 398473000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`PositionsManagerContract on witdrawStablecoin from positionsManager should revert unhealthy position 1`] = `
+[
+  {
+    "$seq": 4,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{4A35F9D0800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000000000000000000000000000000000000000000000000000000000017}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 14206n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{5DA6DE96800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B3002F269235DC7B1F093EF2B00E9D759508E0753BC0C07CDE81406E2EC957307655E_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+            "to": "kQC6oIIXKNeAZYFDhu_MI1vXrY7saC_K4jyVRxIhkxaqDj7q",
+            "type": "internal",
+            "value": 491221000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 5,
+    "events": [
+      {
+        "$type": "received-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQC6oIIXKNeAZYFDhu_MI1vXrY7saC_K4jyVRxIhkxaqDj7q",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 487097000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 3883n,
+      },
+    ],
+  },
+]
+`;
+
+exports[`PositionsManagerContract on withdraw collateral decrease position collateral  1`] = `
+[
+  {
+    "$seq": 14,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{6829D55E800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B22C800000000000000000000000000000000000000000000000000000000000003E8}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 8865n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{C3CD33BF800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B200000000000000C9_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+            "to": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+            "type": "internal",
+            "value": 98537000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`PositionsManagerContract on withdraw collateral revert if more than exists  1`] = `
+[
+  {
+    "$seq": 13,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{6829D55E800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B232C00000000000000000000000000000000000000000000000000000000000003E8}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "failed",
+        "errorCode": 63577,
+        "errorMessage": "withdrawal amount more than position has",
+      },
+      {
+        "$type": "sent-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "to": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+          "type": "internal",
+          "value": 995134000n,
+        },
+      },
+    ],
+  },
+]
+`;
+
+exports[`PositionsManagerContract on withdrawStablecoin from positionsManager with healthy position 1`] = `
+[
+  {
+    "$seq": 7,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{F3554CD7800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B200000000000000C800000000000007D1_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 11266n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{903559B2800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B22C9_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+            "to": "kQCDr0Gm-nivCD9KWPb6JkiDulGZ8eNb2Xm_HNi39oyNbBwJ",
+            "type": "internal",
+            "value": 498589000n,
+          },
+        ],
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{96096519800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B200000000000000C9_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+            "to": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
+            "type": "internal",
+            "value": 398537000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 8,
+    "events": [
+      {
+        "$type": "received-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQCDr0Gm-nivCD9KWPb6JkiDulGZ8eNb2Xm_HNi39oyNbBwJ",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 497589000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 3883n,
+      },
+    ],
+  },
+]
+`;
+
+exports[`PositionsManagerContract should deploy correctly and send newPositionId request to positionsManager 1`] = `
 [
   {
     "$seq": 0,
@@ -12,19 +470,58 @@ exports[`UserPositionContract should deploy correctly 1`] = `
         "$type": "received",
         "message": {
           "body": {
-            "cell": "x{946A98B60000000000000000}",
+            "cell": "x{F037FCFB801075E834DF4F15E107E94B1EDF44C910774A333E3C6B7B2F37E39B16FED191AD90029B0D3E36F9DAA7A17CB3EEFBC971186DDB85B5DFDB4AC98366EE9E613E0ECBE2_}",
             "type": "cell",
           },
           "bounce": true,
           "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-          "to": "kQCI1U_g2i9UaMrI3AvyDpJt7_GJan6qa1ZuiEem4RrUQP_e",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 8000n,
+        "gasUsed": 9506n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{0D74C595800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B3_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+            "to": "kQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHTW",
+            "type": "internal",
+            "value": 98601000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 1,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{946A98B60000000000000000}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 8620n,
       },
       {
         "$type": "sent",
@@ -35,12 +532,34 @@ exports[`UserPositionContract should deploy correctly 1`] = `
               "type": "cell",
             },
             "bounce": true,
-            "from": "kQCI1U_g2i9UaMrI3AvyDpJt7_GJan6qa1ZuiEem4RrUQP_e",
+            "from": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
             "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
             "type": "internal",
-            "value": 990804000n,
+            "value": 990184000n,
           },
         ],
+      },
+    ],
+  },
+  {
+    "$seq": 2,
+    "events": [
+      {
+        "$type": "received-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHTW",
+          "to": "kQC8mkjXcex8JPvKwDp11lQjgdTvAwHzegUBuLslXMHZV83k",
+          "type": "internal",
+          "value": 97601000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 3883n,
       },
     ],
   },

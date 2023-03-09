@@ -501,7 +501,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmRnAFFpYKRZaAGHPyRYue9nhqZRyhvQrjwMixnRmF2d9U";
+    return "ipfs://Qmdip5Ufw285KGMPBss66UvWMzCLxP7htY2vdprjR5zYuK";
 }
 
 _ lazy_deployment_completed() {

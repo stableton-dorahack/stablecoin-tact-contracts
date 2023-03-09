@@ -65,6 +65,45 @@ struct JettonWalletData {
 
 // userPosition messages
 
+message SetUserPositionDependecyMessage {
+    stablecoinMasterAddress: Address;
+    positionsManagerAddress: Address;
+}
+
 message SetPositionIdMessage {
-    positionId: Int as uint8;
+    user: Address;
+    positionId: Int;
+}
+
+message NewPositionIdMessage {
+    user: Address;
+}
+
+message SetPositionAddressMessage { 
+    user: Address;
+    position: Address;
+}
+
+// stablecoinMaster messages
+
+message MintMessage {
+    user: Address;
+    amount: Int as coins;
+}
+
+message BurnMessage {
+    user: Address;
+    amount: Int as coins;
+    fees: Int as coins;
+}
+
+message RepayBurnNotification {
+    user: Address;
+    amount: Int as coins;
+}
+
+message StablecoinBurnedMessage {
+    user: Address;
+    amount: Int as uint64;
+    fees: Int as uint64;
 }

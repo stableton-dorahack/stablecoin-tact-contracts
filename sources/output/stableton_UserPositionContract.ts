@@ -271,6 +271,48 @@ function dictValueParserDeployOk(): DictionaryValue<DeployOk> {
     }
 }
 
+export type ChangeOwner = {
+    $$type: 'ChangeOwner';
+    newOwner: Address;
+}
+
+export function storeChangeOwner(src: ChangeOwner) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(256331011, 32);
+        b_0.storeAddress(src.newOwner);
+    };
+}
+
+export function loadChangeOwner(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 256331011) { throw Error('Invalid prefix'); }
+    let _newOwner = sc_0.loadAddress();
+    return { $$type: 'ChangeOwner' as const, newOwner: _newOwner };
+}
+
+function loadTupleChangeOwner(source: TupleReader) {
+    let _newOwner = source.readAddress();
+    return { $$type: 'ChangeOwner' as const, newOwner: _newOwner };
+}
+
+function storeTupleChangeOwner(source: ChangeOwner) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.newOwner);
+    return builder.build();
+}
+
+function dictValueParserChangeOwner(): DictionaryValue<ChangeOwner> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeChangeOwner(src)).endCell());
+        },
+        parse: (src) => {
+            return loadChangeOwner(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type DepositCollateralMessage = {
     $$type: 'DepositCollateralMessage';
     user: Address;
@@ -782,33 +824,85 @@ function dictValueParserJettonWalletData(): DictionaryValue<JettonWalletData> {
     }
 }
 
+export type SetUserPositionDependecyMessage = {
+    $$type: 'SetUserPositionDependecyMessage';
+    stablecoinMasterAddress: Address;
+    positionsManagerAddress: Address;
+}
+
+export function storeSetUserPositionDependecyMessage(src: SetUserPositionDependecyMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(4030201083, 32);
+        b_0.storeAddress(src.stablecoinMasterAddress);
+        b_0.storeAddress(src.positionsManagerAddress);
+    };
+}
+
+export function loadSetUserPositionDependecyMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 4030201083) { throw Error('Invalid prefix'); }
+    let _stablecoinMasterAddress = sc_0.loadAddress();
+    let _positionsManagerAddress = sc_0.loadAddress();
+    return { $$type: 'SetUserPositionDependecyMessage' as const, stablecoinMasterAddress: _stablecoinMasterAddress, positionsManagerAddress: _positionsManagerAddress };
+}
+
+function loadTupleSetUserPositionDependecyMessage(source: TupleReader) {
+    let _stablecoinMasterAddress = source.readAddress();
+    let _positionsManagerAddress = source.readAddress();
+    return { $$type: 'SetUserPositionDependecyMessage' as const, stablecoinMasterAddress: _stablecoinMasterAddress, positionsManagerAddress: _positionsManagerAddress };
+}
+
+function storeTupleSetUserPositionDependecyMessage(source: SetUserPositionDependecyMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.stablecoinMasterAddress);
+    builder.writeAddress(source.positionsManagerAddress);
+    return builder.build();
+}
+
+function dictValueParserSetUserPositionDependecyMessage(): DictionaryValue<SetUserPositionDependecyMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeSetUserPositionDependecyMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadSetUserPositionDependecyMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type SetPositionIdMessage = {
     $$type: 'SetPositionIdMessage';
+    user: Address;
     positionId: bigint;
 }
 
 export function storeSetPositionIdMessage(src: SetPositionIdMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(11782869, 32);
-        b_0.storeUint(src.positionId, 8);
+        b_0.storeUint(1245051344, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeInt(src.positionId, 257);
     };
 }
 
 export function loadSetPositionIdMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 11782869) { throw Error('Invalid prefix'); }
-    let _positionId = sc_0.loadUintBig(8);
-    return { $$type: 'SetPositionIdMessage' as const, positionId: _positionId };
+    if (sc_0.loadUint(32) !== 1245051344) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _positionId = sc_0.loadIntBig(257);
+    return { $$type: 'SetPositionIdMessage' as const, user: _user, positionId: _positionId };
 }
 
 function loadTupleSetPositionIdMessage(source: TupleReader) {
+    let _user = source.readAddress();
     let _positionId = source.readBigNumber();
-    return { $$type: 'SetPositionIdMessage' as const, positionId: _positionId };
+    return { $$type: 'SetPositionIdMessage' as const, user: _user, positionId: _positionId };
 }
 
 function storeTupleSetPositionIdMessage(source: SetPositionIdMessage) {
     let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
     builder.writeNumber(source.positionId);
     return builder.build();
 }
@@ -824,47 +918,237 @@ function dictValueParserSetPositionIdMessage(): DictionaryValue<SetPositionIdMes
     }
 }
 
-export type PositionState = {
-    $$type: 'PositionState';
-    collateral: bigint;
-    debt: bigint;
+export type NewPositionIdMessage = {
+    $$type: 'NewPositionIdMessage';
+    user: Address;
 }
 
-export function storePositionState(src: PositionState) {
+export function storeNewPositionIdMessage(src: NewPositionIdMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeCoins(src.collateral);
-        b_0.storeUint(src.debt, 64);
+        b_0.storeUint(225756565, 32);
+        b_0.storeAddress(src.user);
     };
 }
 
-export function loadPositionState(slice: Slice) {
+export function loadNewPositionIdMessage(slice: Slice) {
     let sc_0 = slice;
-    let _collateral = sc_0.loadCoins();
-    let _debt = sc_0.loadUintBig(64);
-    return { $$type: 'PositionState' as const, collateral: _collateral, debt: _debt };
+    if (sc_0.loadUint(32) !== 225756565) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    return { $$type: 'NewPositionIdMessage' as const, user: _user };
 }
 
-function loadTuplePositionState(source: TupleReader) {
-    let _collateral = source.readBigNumber();
-    let _debt = source.readBigNumber();
-    return { $$type: 'PositionState' as const, collateral: _collateral, debt: _debt };
+function loadTupleNewPositionIdMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    return { $$type: 'NewPositionIdMessage' as const, user: _user };
 }
 
-function storeTuplePositionState(source: PositionState) {
+function storeTupleNewPositionIdMessage(source: NewPositionIdMessage) {
     let builder = new TupleBuilder();
-    builder.writeNumber(source.collateral);
-    builder.writeNumber(source.debt);
+    builder.writeAddress(source.user);
     return builder.build();
 }
 
-function dictValueParserPositionState(): DictionaryValue<PositionState> {
+function dictValueParserNewPositionIdMessage(): DictionaryValue<NewPositionIdMessage> {
     return {
         serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storePositionState(src)).endCell());
+            buidler.storeRef(beginCell().store(storeNewPositionIdMessage(src)).endCell());
         },
         parse: (src) => {
-            return loadPositionState(src.loadRef().beginParse());
+            return loadNewPositionIdMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type SetPositionAddressMessage = {
+    $$type: 'SetPositionAddressMessage';
+    user: Address;
+    position: Address;
+}
+
+export function storeSetPositionAddressMessage(src: SetPositionAddressMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(1571217046, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeAddress(src.position);
+    };
+}
+
+export function loadSetPositionAddressMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 1571217046) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _position = sc_0.loadAddress();
+    return { $$type: 'SetPositionAddressMessage' as const, user: _user, position: _position };
+}
+
+function loadTupleSetPositionAddressMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    let _position = source.readAddress();
+    return { $$type: 'SetPositionAddressMessage' as const, user: _user, position: _position };
+}
+
+function storeTupleSetPositionAddressMessage(source: SetPositionAddressMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeAddress(source.position);
+    return builder.build();
+}
+
+function dictValueParserSetPositionAddressMessage(): DictionaryValue<SetPositionAddressMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeSetPositionAddressMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadSetPositionAddressMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type MintMessage = {
+    $$type: 'MintMessage';
+    user: Address;
+    amount: bigint;
+}
+
+export function storeMintMessage(src: MintMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(2419415474, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeCoins(src.amount);
+    };
+}
+
+export function loadMintMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 2419415474) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadCoins();
+    return { $$type: 'MintMessage' as const, user: _user, amount: _amount };
+}
+
+function loadTupleMintMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    return { $$type: 'MintMessage' as const, user: _user, amount: _amount };
+}
+
+function storeTupleMintMessage(source: MintMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    return builder.build();
+}
+
+function dictValueParserMintMessage(): DictionaryValue<MintMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeMintMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadMintMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type BurnMessage = {
+    $$type: 'BurnMessage';
+    user: Address;
+    amount: bigint;
+    fees: bigint;
+}
+
+export function storeBurnMessage(src: BurnMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(3055907227, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeCoins(src.amount);
+        b_0.storeCoins(src.fees);
+    };
+}
+
+export function loadBurnMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 3055907227) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadCoins();
+    let _fees = sc_0.loadCoins();
+    return { $$type: 'BurnMessage' as const, user: _user, amount: _amount, fees: _fees };
+}
+
+function loadTupleBurnMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    let _fees = source.readBigNumber();
+    return { $$type: 'BurnMessage' as const, user: _user, amount: _amount, fees: _fees };
+}
+
+function storeTupleBurnMessage(source: BurnMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    builder.writeNumber(source.fees);
+    return builder.build();
+}
+
+function dictValueParserBurnMessage(): DictionaryValue<BurnMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeBurnMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadBurnMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type RepayBurnNotification = {
+    $$type: 'RepayBurnNotification';
+    user: Address;
+    amount: bigint;
+}
+
+export function storeRepayBurnNotification(src: RepayBurnNotification) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(1446800788, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeCoins(src.amount);
+    };
+}
+
+export function loadRepayBurnNotification(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 1446800788) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadCoins();
+    return { $$type: 'RepayBurnNotification' as const, user: _user, amount: _amount };
+}
+
+function loadTupleRepayBurnNotification(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    return { $$type: 'RepayBurnNotification' as const, user: _user, amount: _amount };
+}
+
+function storeTupleRepayBurnNotification(source: RepayBurnNotification) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    return builder.build();
+}
+
+function dictValueParserRepayBurnNotification(): DictionaryValue<RepayBurnNotification> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeRepayBurnNotification(src)).endCell());
+        },
+        parse: (src) => {
+            return loadRepayBurnNotification(src.loadRef().beginParse());
         }
     }
 }
@@ -921,6 +1205,51 @@ function dictValueParserStablecoinBurnedMessage(): DictionaryValue<StablecoinBur
     }
 }
 
+export type PositionState = {
+    $$type: 'PositionState';
+    collateral: bigint;
+    debt: bigint;
+}
+
+export function storePositionState(src: PositionState) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeCoins(src.collateral);
+        b_0.storeUint(src.debt, 64);
+    };
+}
+
+export function loadPositionState(slice: Slice) {
+    let sc_0 = slice;
+    let _collateral = sc_0.loadCoins();
+    let _debt = sc_0.loadUintBig(64);
+    return { $$type: 'PositionState' as const, collateral: _collateral, debt: _debt };
+}
+
+function loadTuplePositionState(source: TupleReader) {
+    let _collateral = source.readBigNumber();
+    let _debt = source.readBigNumber();
+    return { $$type: 'PositionState' as const, collateral: _collateral, debt: _debt };
+}
+
+function storeTuplePositionState(source: PositionState) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.collateral);
+    builder.writeNumber(source.debt);
+    return builder.build();
+}
+
+function dictValueParserPositionState(): DictionaryValue<PositionState> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storePositionState(src)).endCell());
+        },
+        parse: (src) => {
+            return loadPositionState(src.loadRef().beginParse());
+        }
+    }
+}
+
  type UserPositionContract_init_args = {
     $$type: 'UserPositionContract_init_args';
     user: Address;
@@ -934,8 +1263,8 @@ function initUserPositionContract_init_args(src: UserPositionContract_init_args)
 }
 
 async function UserPositionContract_init(user: Address) {
-    const __code = Cell.fromBase64('te6ccgECEwEAAyQAART/APSkE/S88sgLAQIBYgIDAsTQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY4S+kABAfpAAQHTB/oA0z9VQGwVjof6QAEB0ds84lUU2zwwyPhCAcx/AcoAVUBQVM8WWM8WywdY+gLLP8ntVBEEAgFYDA0E8nAh10nCH5UwINcLH94Cklt/4CGCEBHfsTi6jhkx0x8BghAR37E4uvLggfpAAQH6AFlsElt/4CGCCLPK1bqOGjHTHwGCCLPK1bry4IHTBwExI8MAkTORMOJ/4CGCEPNVTNe64wIhghBugfRGuuMCIYIQ0r5MbLrjAiEFBgcIADox0x8BghDzVUzXuvLggfpAAQHTP9M/VSBsE18DfwA6MdMfAYIQboH0Rrry4IH6QAEB0z/TP1UgbBNfA38AOjHTHwGCENK+TGy68uCB+kABAdM/0z9VIGwTXwN/AbKCEGgp1V66jiAx0x8BghBoKdVeuvLggfpAAQH6AIEBAdcAVSBsE18Df+ABghCUapi2uo6i0x8BghCUapi2uvLggdM/ATHIAYIQr/kPV1jLH8s/yds8f+AwcAkBJvhBbyQQI18Df3BQA4BCAW1t2zwKAfbIcQHKAVAHAcoAcAHKAlAFzxZQA/oCcAHKaCNusyVus7GOTH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMyXMzMBcAHKAOIhbrMLADCcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAAcbu9GCcFzsPV0srnsehOw51kqFG2aCcJ3WNS0rZHyzItOvLf3xYjmCcCBVwBuAZ2OUzlg6rkclssOAICcQ4PAlipUO1E0NQB+GLSAAGOEvpAAQH6QAEB0wf6ANM/VUBsFY6H+kABAdHbPOLbPBEQAliqqO1E0NQB+GLSAAGOEvpAAQH6QAEB0wf6ANM/VUBsFY6H+kABAdHbPOLbPBESAARfBAAucFRwACDIcgHLAXABywASygfL/8nQVSAABGwy');
-    const __system = Cell.fromBase64('te6cckECFQEAAy4AAQHAAQEFoQhtAgEU/wD0pBP0vPLICwMCAWILBAIBWAoFAgJxCAYCWKqo7UTQ1AH4YtIAAY4S+kABAfpAAQHTB/oA0z9VQGwVjof6QAEB0ds84ts8FAcABGwyAlipUO1E0NQB+GLSAAGOEvpAAQH6QAEB0wf6ANM/VUBsFY6H+kABAdHbPOLbPBQJAARfBABxu70YJwXOw9XSyuex6E7DnWSoUbZoJwndY1LStkfLMi068t/fFiOYJwIFXAG4BnY5TOWDquRyWyw4AsTQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAY4S+kABAfpAAQHTB/oA0z9VQGwVjof6QAEB0ds84lUU2zwwyPhCAcx/AcoAVUBQVM8WWM8WywdY+gLLP8ntVBQMBPJwIddJwh+VMCDXCx/eApJbf+AhghAR37E4uo4ZMdMfAYIQEd+xOLry4IH6QAEB+gBZbBJbf+AhggizytW6jhox0x8BggizytW68uCB0wcBMSPDAJEzkTDif+AhghDzVUzXuuMCIYIQboH0RrrjAiGCENK+TGy64wIhExIRDQGyghBoKdVeuo4gMdMfAYIQaCnVXrry4IH6QAEB+gCBAQHXAFUgbBNfA3/gAYIQlGqYtrqOotMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8nbPH/gMHAOASb4QW8kECNfA39wUAOAQgFtbds8DwH2yHEBygFQBwHKAHABygJQBc8WUAP6AnABymgjbrMlbrOxjkx/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMlzMzAXABygDiIW6zEAAwnH8BygABIG7y0IABzJUxcAHKAOLJAfsAADox0x8BghDSvkxsuvLggfpAAQHTP9M/VSBsE18DfwA6MdMfAYIQboH0Rrry4IH6QAEB0z/TP1UgbBNfA38AOjHTHwGCEPNVTNe68uCB+kABAdM/0z9VIGwTXwN/AC5wVHAAIMhyAcsBcAHLABLKB8v/ydBVIM8+vss=');
+    const __code = Cell.fromBase64('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');
+    const __system = Cell.fromBase64('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');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -968,6 +1297,12 @@ const UserPositionContract_errors: { [key: number]: { message: string } } = {
     134: { message: `Invalid argument` },
     135: { message: `Code of a contract was not found` },
     136: { message: `Invalid address` },
+    15032: { message: `not from stablecoin master` },
+    22230: { message: `Already set` },
+    31797: { message: `debt less than repay amount` },
+    53160: { message: `not from positions manager` },
+    61910: { message: `not from positionsManager` },
+    63577: { message: `withdrawal amount more than position has` },
 }
 
 export class UserPositionContract implements Contract {
@@ -997,9 +1332,12 @@ export class UserPositionContract implements Contract {
         this.init = init;
     }
     
-    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: DepositCollateralMessage | SetPositionIdMessage | WithdrawStablecoinMessage | RepayStablecoinMessage | StablecoinBurnedMessage | WithdrawCollateralMessage | Deploy) {
+    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: SetUserPositionDependecyMessage | DepositCollateralMessage | SetPositionIdMessage | WithdrawStablecoinMessage | RepayStablecoinMessage | StablecoinBurnedMessage | WithdrawCollateralMessage | Deploy) {
         
         let body: Cell | null = null;
+        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'SetUserPositionDependecyMessage') {
+            body = beginCell().store(storeSetUserPositionDependecyMessage(message)).endCell();
+        }
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'DepositCollateralMessage') {
             body = beginCell().store(storeDepositCollateralMessage(message)).endCell();
         }
@@ -1034,10 +1372,24 @@ export class UserPositionContract implements Contract {
         return result;
     }
     
+    async getGetPositionId(provider: ContractProvider) {
+        let builder = new TupleBuilder();
+        let source = (await provider.get('getPositionId', builder.build())).stack;
+        let result = source.readBigNumber();
+        return result;
+    }
+    
     async getGetPositionState(provider: ContractProvider) {
         let builder = new TupleBuilder();
         let source = (await provider.get('getPositionState', builder.build())).stack;
         const result = loadTuplePositionState(source);
+        return result;
+    }
+    
+    async getOwner(provider: ContractProvider) {
+        let builder = new TupleBuilder();
+        let source = (await provider.get('owner', builder.build())).stack;
+        let result = source.readAddress();
         return result;
     }
     
