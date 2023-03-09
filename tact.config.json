@@ -1,8 +1,38 @@
 {
     "projects": [
         {
-            "name": "sample",
+            "name": "stableton",
             "path": "./sources/gateKeeper.tact",
+            "output": "./sources/output"
+        },
+        {
+            "name": "stableton",
+            "path": "./sources/positionAddress.tact",
+            "output": "./sources/output"
+        },
+        {
+            "name": "stableton",
+            "path": "./sources/positionsManager.tact",
+            "output": "./sources/output"
+        },
+        {
+            "name": "stableton",
+            "path": "./sources/stablecoinJetton.tact",
+            "output": "./sources/output"
+        },
+        {
+            "name": "stableton",
+            "path": "./sources/stablecoinMaster.tact",
+            "output": "./sources/output"
+        },
+        {
+            "name": "stableton",
+            "path": "./sources/userPosition.tact",
+            "output": "./sources/output"
+        },
+        {
+            "name": "stableton",
+            "path": "./sources/userStatus.tact",
             "output": "./sources/output"
         }
     ]

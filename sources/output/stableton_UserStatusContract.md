@@ -1,9 +1,9 @@
 # TACT Compilation Report
-Contract: GateKeeperContract
-BOC Size: 823 bytes
+Contract: UserStatusContract
+BOC Size: 519 bytes
 
 # Types
-Total Types: 9
+Total Types: 6
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -25,28 +25,14 @@ Signature: `Deploy{queryId:uint64}`
 TLB: `deploy_ok#aff90f57 queryId:uint64 = DeployOk`
 Signature: `DeployOk{queryId:uint64}`
 
-## PoolSettings
-TLB: `_ liquidationRatio:uint32 stabilityFeeRate:uint32 lastAccumulationTime:uint32 closeFactorBps:uint32 liquidatorIncentiveBps:uint32 treasutyFeeBps:uint32 = PoolSettings`
-Signature: `PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,lastAccumulationTime:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32,treasutyFeeBps:uint32}`
-
-## PoolSettingsMsg
-TLB: `pool_settings_msg#e1b180f1 liquidationRatio:uint32 stabilityFeeRate:uint32 lastAccumulationTime:uint32 closeFactorBps:uint32 liquidatorIncentiveBps:uint32 treasutyFeeBps:uint32 = PoolSettingsMsg`
-Signature: `PoolSettingsMsg{liquidationRatio:uint32,stabilityFeeRate:uint32,lastAccumulationTime:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32,treasutyFeeBps:uint32}`
-
-## DebtRate
-TLB: `_ debtAccumulatedRate:uint32 lastAccumulationTime:uint32 = DebtRate`
-Signature: `DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}`
-
-## UpdateTonPriceMsg
-TLB: `update_ton_price_msg#0d11babd price:uint32 = UpdateTonPriceMsg`
-Signature: `UpdateTonPriceMsg{price:uint32}`
+## SetMessageMsg
+TLB: `set_message_msg#0b05e6bc message:^string = SetMessageMsg`
+Signature: `SetMessageMsg{message:^string}`
 
 # Get Methods
-Total Get Methods: 2
+Total Get Methods: 1
 
-## poolSettings
-
-## tonPrice
+## message
 
 # Error Codes
 2: Stack undeflow
@@ -73,4 +59,3 @@ Total Get Methods: 2
 135: Code of a contract was not found
 136: Invalid address
 4429: Invalid sender
-57414: StabilityFeeCollector/invalid-block.timestamp

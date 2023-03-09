@@ -1,64 +1,23 @@
 import { toNano } from "ton";
 import { ContractSystem } from "ton-emulator";
-import { GateKeeperContract } from "./output/sample_GateKeeperContract";
+import { GateKeeperContract } from "./output/stableton_GateKeeperContract";
 
-describe("contract", () => {
+describe("GateKeeperContract", () => {
     it("should deploy correctly", async () => {
         // Create ContractSystem and deploy contract
         let system = await ContractSystem.create();
         let owner = system.treasure("owner");
         let nonOwner = system.treasure("non-owner");
+        let user = system.treasure("user");
+
         let contract = system.open(await GateKeeperContract.fromInit(owner.address));
+        console.log("GateKeeper address", contract.address);
         let track = system.track(contract.address);
         await contract.send(owner, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
         await system.run();
         // console.log("track.collect()", track.collect());
-        expect(track.collect()).toMatchInlineSnapshot(`
-            [
-              {
-                "$seq": 0,
-                "events": [
-                  {
-                    "$type": "deploy",
-                  },
-                  {
-                    "$type": "received",
-                    "message": {
-                      "body": {
-                        "cell": "x{946A98B60000000000000000}",
-                        "type": "cell",
-                      },
-                      "bounce": true,
-                      "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-                      "to": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
-                      "type": "internal",
-                      "value": 1000000000n,
-                    },
-                  },
-                  {
-                    "$type": "processed",
-                    "gasUsed": 7021n,
-                  },
-                  {
-                    "$type": "sent",
-                    "messages": [
-                      {
-                        "body": {
-                          "cell": "x{AFF90F570000000000000000}",
-                          "type": "cell",
-                        },
-                        "bounce": true,
-                        "from": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
-                        "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-                        "type": "internal",
-                        "value": 991783000n,
-                      },
-                    ],
-                  },
-                ],
-              },
-            ]
-        `);
+
+        expect(track.collect()).toMatchSnapshot();
 
         // Check counter
         console.log("contract.getPoolSettings()", await contract.getPoolSettings());
@@ -88,33 +47,7 @@ describe("contract", () => {
             }
         );
         await system.run();
-        expect(track.collect()).toMatchInlineSnapshot(`
-            [
-              {
-                "$seq": 1,
-                "events": [
-                  {
-                    "$type": "received",
-                    "message": {
-                      "body": {
-                        "cell": "x{E1B180F1000000020000000200000002000000020000000200000002}",
-                        "type": "cell",
-                      },
-                      "bounce": true,
-                      "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-                      "to": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
-                      "type": "internal",
-                      "value": 1000000000n,
-                    },
-                  },
-                  {
-                    "$type": "processed",
-                    "gasUsed": 4300n,
-                  },
-                ],
-              },
-            ]
-        `);
+        expect(track.collect()).toMatchSnapshot();
 
         // Check counter
         console.log("contract.getPoolSettings()", await contract.getPoolSettings());
@@ -143,47 +76,7 @@ describe("contract", () => {
             }
         );
         await system.run();
-        expect(track.collect()).toMatchInlineSnapshot(`
-            [
-              {
-                "$seq": 2,
-                "events": [
-                  {
-                    "$type": "received",
-                    "message": {
-                      "body": {
-                        "cell": "x{E1B180F1000000020000000200000002000000020000000200000002}",
-                        "type": "cell",
-                      },
-                      "bounce": true,
-                      "from": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
-                      "to": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
-                      "type": "internal",
-                      "value": 1000000000n,
-                    },
-                  },
-                  {
-                    "$type": "failed",
-                    "errorCode": 4429,
-                    "errorMessage": "Invalid sender",
-                  },
-                  {
-                    "$type": "sent-bounced",
-                    "message": {
-                      "body": {
-                        "type": "empty",
-                      },
-                      "bounce": false,
-                      "from": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
-                      "to": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
-                      "type": "internal",
-                      "value": 995968000n,
-                    },
-                  },
-                ],
-              },
-            ]
-        `);
+        expect(track.collect()).toMatchSnapshot();
     });
 
     it("should set ton price", async () => {
@@ -211,31 +104,7 @@ describe("contract", () => {
             }
         );
         await system.run();
-        expect(track.collect()[1]).toMatchInlineSnapshot(`
-              {
-                "$seq": 1,
-                "events": [
-                  {
-                    "$type": "received",
-                    "message": {
-                      "body": {
-                        "cell": "x{0D11BABD00000002}",
-                        "type": "cell",
-                      },
-                      "bounce": true,
-                      "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-                      "to": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
-                      "type": "internal",
-                      "value": 1000000000n,
-                    },
-                  },
-                  {
-                    "$type": "processed",
-                    "gasUsed": 4036n,
-                  },
-                ],
-              }
-        `);
+        expect(track.collect()[1]).toMatchSnapshot();
 
         // Check updated ton price
         console.log("contract.getTonPrice()", await contract.getTonPrice());
@@ -253,46 +122,6 @@ describe("contract", () => {
         );
 
         await system.run();
-        expect(track.collect()).toMatchInlineSnapshot(`
-            [
-              {
-                "$seq": 2,
-                "events": [
-                  {
-                    "$type": "received",
-                    "message": {
-                      "body": {
-                        "cell": "x{0D11BABD00000002}",
-                        "type": "cell",
-                      },
-                      "bounce": true,
-                      "from": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
-                      "to": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
-                      "type": "internal",
-                      "value": 1000000000n,
-                    },
-                  },
-                  {
-                    "$type": "failed",
-                    "errorCode": 4429,
-                    "errorMessage": "Invalid sender",
-                  },
-                  {
-                    "$type": "sent-bounced",
-                    "message": {
-                      "body": {
-                        "type": "empty",
-                      },
-                      "bounce": false,
-                      "from": "kQBY4DUzgEkiUS8jtqDMbin6QxrED9SnK_en5gITP7p3FZh2",
-                      "to": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
-                      "type": "internal",
-                      "value": 996232000n,
-                    },
-                  },
-                ],
-              },
-            ]
-        `);
+        expect(track.collect()).toMatchSnapshot();
     });
 });

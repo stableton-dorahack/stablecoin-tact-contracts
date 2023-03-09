@@ -1,0 +1,186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GateKeeperContract should deploy correctly 1`] = `
+[
+  {
+    "$seq": 0,
+    "events": [
+      {
+        "$type": "deploy",
+      },
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{946A98B60000000000000000}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+          "to": "kQB4UTpAiYl55AQ-lk5jfnhz34Tj88_XuJjT2WwqskTRnRf_",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 10604n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{AFF90F570000000000000000}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQB4UTpAiYl55AQ-lk5jfnhz34Tj88_XuJjT2WwqskTRnRf_",
+            "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+            "type": "internal",
+            "value": 988200000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`GateKeeperContract should deploy correctly 2`] = `
+[
+  {
+    "$seq": 1,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{E1B180F1000000020000000200000002000000020000000200000002}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+          "to": "kQB4UTpAiYl55AQ-lk5jfnhz34Tj88_XuJjT2WwqskTRnRf_",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 5826n,
+      },
+    ],
+  },
+]
+`;
+
+exports[`GateKeeperContract should deploy correctly 3`] = `
+[
+  {
+    "$seq": 2,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{E1B180F1000000020000000200000002000000020000000200000002}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
+          "to": "kQB4UTpAiYl55AQ-lk5jfnhz34Tj88_XuJjT2WwqskTRnRf_",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "failed",
+        "errorCode": 4429,
+        "errorMessage": "Invalid sender",
+      },
+      {
+        "$type": "sent-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQB4UTpAiYl55AQ-lk5jfnhz34Tj88_XuJjT2WwqskTRnRf_",
+          "to": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
+          "type": "internal",
+          "value": 995406000n,
+        },
+      },
+    ],
+  },
+]
+`;
+
+exports[`GateKeeperContract should set ton price 1`] = `
+{
+  "$seq": 1,
+  "events": [
+    {
+      "$type": "received",
+      "message": {
+        "body": {
+          "cell": "x{0D11BABD00000002}",
+          "type": "cell",
+        },
+        "bounce": true,
+        "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+        "to": "kQB4UTpAiYl55AQ-lk5jfnhz34Tj88_XuJjT2WwqskTRnRf_",
+        "type": "internal",
+        "value": 1000000000n,
+      },
+    },
+    {
+      "$type": "processed",
+      "gasUsed": 5431n,
+    },
+  ],
+}
+`;
+
+exports[`GateKeeperContract should set ton price 2`] = `
+[
+  {
+    "$seq": 2,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{0D11BABD00000002}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
+          "to": "kQB4UTpAiYl55AQ-lk5jfnhz34Tj88_XuJjT2WwqskTRnRf_",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "failed",
+        "errorCode": 4429,
+        "errorMessage": "Invalid sender",
+      },
+      {
+        "$type": "sent-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQB4UTpAiYl55AQ-lk5jfnhz34Tj88_XuJjT2WwqskTRnRf_",
+          "to": "kQCVnZ1On-Ja4xfAfMbsq--jatb5sNnOUN421AHaXbebcCWH",
+          "type": "internal",
+          "value": 995814000n,
+        },
+      },
+    ],
+  },
+]
+`;

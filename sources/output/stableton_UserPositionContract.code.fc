@@ -1,0 +1,390 @@
+#pragma version =0.4.1;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+forall X -> X __tact_not_null(X x) inline { throw_if(128, null?(x)); return x; }
+
+global (int, slice, int, slice) __tact_context;
+global cell __tact_context_sys;
+
+(int, slice, int, slice) __tact_context_get() inline { return __tact_context; }
+
+() __tact_verify_address(slice address) inline {
+    throw_unless(136, address.slice_bits() != 267);
+}
+
+builder __tact_store_bool(builder b, int v) inline {
+    b = b.store_int(v, 1);
+    return b;
+}
+
+(slice, slice) __tact_load_address(slice cs) inline {
+    slice raw = cs~load_msg_addr();
+    __tact_verify_address(raw);
+    return (cs, raw);
+}
+
+builder __tact_store_address(builder b, slice address) inline {
+    __tact_verify_address(address);
+    b = b.store_slice(address);
+    return b;
+}
+
+slice __tact_create_address(int chain, int hash) inline {
+    var b = begin_cell();
+    b = b.store_uint(2, 2);
+    b = b.store_uint(0, 1);
+    b = b.store_int(chain, 8);
+    b = b.store_uint(hash, 256);
+    return b.end_cell().begin_parse();
+}
+
+(slice, ((int))) __gen_read_Deploy(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2490013878);
+    var v'queryId = sc_0~load_uint(64);
+    return (sc_0, (v'queryId));
+}
+
+builder __gen_write_DeployOk(builder build_0, (int) v) inline {
+    var (v'queryId) = v;
+    build_0 = store_uint(build_0, 2952335191, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    return build_0;
+}
+
+cell __gen_writecell_DeployOk((int) v) inline {
+    return __gen_write_DeployOk(begin_cell(), v).end_cell();
+}
+
+(slice, ((slice, int))) __gen_read_DepositCollateralMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 299872568);
+    var v'user = sc_0~__tact_load_address();
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'user, v'amount));
+}
+
+(slice, ((slice, int, int))) __gen_read_WithdrawCollateralMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1747572062);
+    var v'user = sc_0~__tact_load_address();
+    var v'amount = sc_0~load_coins();
+    var v'debtRate = sc_0~load_int(257);
+    return (sc_0, (v'user, v'amount, v'debtRate));
+}
+
+(slice, ((slice, int, int))) __gen_read_WithdrawStablecoinMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 4082453719);
+    var v'user = sc_0~__tact_load_address();
+    var v'amount = sc_0~load_uint(64);
+    var v'debtRate = sc_0~load_uint(64);
+    return (sc_0, (v'user, v'amount, v'debtRate));
+}
+
+(slice, ((slice, int, int))) __gen_read_RepayStablecoinMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1854010438);
+    var v'user = sc_0~__tact_load_address();
+    var v'amount = sc_0~load_uint(64);
+    var v'debtRate = sc_0~load_uint(64);
+    return (sc_0, (v'user, v'amount, v'debtRate));
+}
+
+(slice, ((int))) __gen_read_SetPositionIdMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 11782869);
+    var v'positionId = sc_0~load_uint(8);
+    return (sc_0, (v'positionId));
+}
+
+(slice, ((slice, int, int))) __gen_read_StablecoinBurnedMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3535686764);
+    var v'user = sc_0~__tact_load_address();
+    var v'amount = sc_0~load_uint(64);
+    var v'fees = sc_0~load_uint(64);
+    return (sc_0, (v'user, v'amount, v'fees));
+}
+
+builder __gen_write_UserPositionContract(builder build_0, (slice, slice, int, int, int) v) inline {
+    var (v'user, v'stablecoinMasterAddress, v'positionId, v'collateral, v'debt) = v;
+    build_0 = __tact_store_address(build_0, v'user);
+    build_0 = __tact_store_address(build_0, v'stablecoinMasterAddress);
+    build_0 = build_0.store_uint(v'positionId, 8);
+    build_0 = build_0.store_coins(v'collateral);
+    build_0 = build_0.store_uint(v'debt, 64);
+    return build_0;
+}
+
+(slice, ((slice, slice, int, int, int))) __gen_read_UserPositionContract(slice sc_0) inline {
+    var v'user = sc_0~__tact_load_address();
+    var v'stablecoinMasterAddress = sc_0~__tact_load_address();
+    var v'positionId = sc_0~load_uint(8);
+    var v'collateral = sc_0~load_coins();
+    var v'debt = sc_0~load_uint(64);
+    return (sc_0, (v'user, v'stablecoinMasterAddress, v'positionId, v'collateral, v'debt));
+}
+
+(int, int) __gen_PositionState_to_external(((int, int)) v) inline {
+    var (v'collateral, v'debt) = v; 
+    return (v'collateral, v'debt);
+}
+
+(slice, ((slice))) __gen_read_$init$UserPositionContract(slice sc_0) inline {
+    var v'user = sc_0~__tact_load_address();
+    return (sc_0, (v'user));
+}
+
+(slice, slice, int, int, int) $__gen_UserPositionContract_init(slice $user) impure inline_ref {
+    var (($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt)) = (null(), null(), 0, 0, 0);
+    $self'user = $user;
+    $self'stablecoinMasterAddress = __tact_create_address(0, 0);
+    return ($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt);
+}
+
+(slice, slice, int, int, int) __gen_load_UserPositionContract() impure inline {
+    slice $sc = get_data().begin_parse();
+    __tact_context_sys = $sc~load_ref();
+    int $loaded = $sc~load_int(1);
+    if ($loaded) {
+        return $sc~__gen_read_UserPositionContract();
+    } else {
+        (slice user) = $sc~__gen_read_$init$UserPositionContract();
+        $sc.end_parse();
+        return $__gen_UserPositionContract_init(user);
+    }
+}
+
+() __gen_store_UserPositionContract((slice, slice, int, int, int) v) impure inline {
+    builder b = begin_cell();
+    b = b.store_ref(__tact_context_sys);
+    b = b.store_int(true, 1);
+    b = __gen_write_UserPositionContract(b, v);
+    set_data(b.end_cell());
+}
+
+() $send((int, slice, int, int, cell, cell, cell) $params) impure inline_ref {
+    var (($params'bounce, $params'to, $params'value, $params'mode, $params'body, $params'code, $params'data)) = $params;
+    builder $b = begin_cell();
+    $b = store_int($b, 1, 2);
+    $b = __tact_store_bool($b, $params'bounce);
+    $b = store_int($b, 0, 3);
+    $b = __tact_store_address($b, $params'to);
+    $b = store_coins($b, $params'value);
+    $b = store_int($b, 0, ((((1 + 4) + 4) + 64) + 32));
+    if (((~ null?($params'code)) | (~ null?($params'data)))) {
+        $b = __tact_store_bool($b, true);
+        builder $bc = begin_cell();
+        $bc = __tact_store_bool($bc, false);
+        $bc = __tact_store_bool($bc, false);
+        if ((~ null?($params'code))) {
+            $bc = __tact_store_bool($bc, true);
+            $bc = store_ref($bc, __tact_not_null($params'code));
+        } else {
+            $bc = __tact_store_bool($bc, false);
+        }
+        if ((~ null?($params'data))) {
+            $bc = __tact_store_bool($bc, true);
+            $bc = store_ref($bc, __tact_not_null($params'data));
+        } else {
+            $bc = __tact_store_bool($bc, false);
+        }
+        $bc = __tact_store_bool($bc, false);
+        $b = __tact_store_bool($b, true);
+        $b = store_ref($b, end_cell($bc));
+    } else {
+        $b = __tact_store_bool($b, false);
+    }
+    cell $body = $params'body;
+    if ((~ null?($body))) {
+        $b = __tact_store_bool($b, true);
+        $b = store_ref($b, __tact_not_null($body));
+    } else {
+        $b = __tact_store_bool($b, false);
+    }
+    cell $c = end_cell($b);
+    send_raw_message($c, $params'mode);
+}
+
+((int, slice, int, int, cell, cell, cell)) __gen_constructor_SendParameters$bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline {
+    return (bounce, to, value, mode, body, null(), null());
+}
+
+() $reply(cell $body) impure inline_ref {
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    $send(__gen_constructor_SendParameters$bounce_to_value_mode_body(true, $ctx'sender, 0, (64 + 2), $body));
+}
+
+slice $__gen_UserPositionContract_getPositionUser((slice, slice, int, int, int) $self) impure inline_ref {
+    var (($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt)) = $self;
+    return $self'user;
+}
+
+_ $__gen_get_getPositionUser() method_id(117072) {
+    var self = __gen_load_UserPositionContract();
+    var res = $__gen_UserPositionContract_getPositionUser(self);
+    return res;
+}
+
+((int, int)) __gen_constructor_PositionState$collateral_debt(int collateral, int debt) inline {
+    return (collateral, debt);
+}
+
+(int, int) $__gen_UserPositionContract_getPositionState((slice, slice, int, int, int) $self) impure inline_ref {
+    var (($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt)) = $self;
+    return __gen_constructor_PositionState$collateral_debt($self'collateral, $self'debt);
+}
+
+_ $__gen_get_getPositionState() method_id(118440) {
+    var self = __gen_load_UserPositionContract();
+    var res = $__gen_UserPositionContract_getPositionState(self);
+    return __gen_PositionState_to_external(res);
+}
+
+(((slice, slice, int, int, int)), ()) $__gen_UserPositionContract_receive_DepositCollateralMessage((slice, slice, int, int, int) $self, (slice, int) $msg) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt) = $self;
+    var ($msg'user, $msg'amount) = $msg;
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt), ());
+}
+
+(((slice, slice, int, int, int)), ()) $__gen_UserPositionContract_receive_SetPositionIdMessage((slice, slice, int, int, int) $self, (int) $msg) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt) = $self;
+    var ($msg'positionId) = $msg;
+    if (($self'positionId != 0)) {
+        $self'positionId = $msg'positionId;
+    }
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt), ());
+}
+
+(((slice, slice, int, int, int)), ()) $__gen_UserPositionContract_receive_WithdrawStablecoinMessage((slice, slice, int, int, int) $self, (slice, int, int) $msg) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt) = $self;
+    var ($msg'user, $msg'amount, $msg'debtRate) = $msg;
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt), ());
+}
+
+(((slice, slice, int, int, int)), ()) $__gen_UserPositionContract_receive_RepayStablecoinMessage((slice, slice, int, int, int) $self, (slice, int, int) $msg) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt) = $self;
+    var ($msg'user, $msg'amount, $msg'debtRate) = $msg;
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt), ());
+}
+
+(((slice, slice, int, int, int)), ()) $__gen_UserPositionContract_receive_StablecoinBurnedMessage((slice, slice, int, int, int) $self, (slice, int, int) $msg) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt) = $self;
+    var ($msg'user, $msg'amount, $msg'fees) = $msg;
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt), ());
+}
+
+(((slice, slice, int, int, int)), ()) $__gen_UserPositionContract_receive_WithdrawCollateralMessage((slice, slice, int, int, int) $self, (slice, int, int) $msg) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt) = $self;
+    var ($msg'user, $msg'amount, $msg'debtRate) = $msg;
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt), ());
+}
+
+((int)) __gen_constructor_DeployOk$queryId(int queryId) inline {
+    return (queryId);
+}
+
+(((slice, slice, int, int, int)), ()) $__gen_UserPositionContract_receive_Deploy((slice, slice, int, int, int) $self, (int) $deploy) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt) = $self;
+    var ($deploy'queryId) = $deploy;
+    $reply(__gen_writecell_DeployOk(__gen_constructor_DeployOk$queryId($deploy'queryId)));
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionId, $self'collateral, $self'debt), ());
+}
+
+((slice, slice, int, int, int), int) __gen_router_UserPositionContract((slice, slice, int, int, int) self, int msg_bounced, slice in_msg) impure inline_ref {
+    
+    ;; Parse incoming message
+    int op = 0;
+    if (slice_bits(in_msg) >= 32) {
+        op = in_msg.preload_uint(32);
+    }
+    
+    ;; Handle bounced messages
+    if (msg_bounced) {
+        return (self, true);
+    }
+    
+    ;; Receive DepositCollateralMessage message
+    if (op == 299872568) {
+        var msg = in_msg~__gen_read_DepositCollateralMessage();
+        self~$__gen_UserPositionContract_receive_DepositCollateralMessage(msg);
+        return (self, true);
+    }
+    
+    ;; Receive SetPositionIdMessage message
+    if (op == 11782869) {
+        var msg = in_msg~__gen_read_SetPositionIdMessage();
+        self~$__gen_UserPositionContract_receive_SetPositionIdMessage(msg);
+        return (self, true);
+    }
+    
+    ;; Receive WithdrawStablecoinMessage message
+    if (op == 4082453719) {
+        var msg = in_msg~__gen_read_WithdrawStablecoinMessage();
+        self~$__gen_UserPositionContract_receive_WithdrawStablecoinMessage(msg);
+        return (self, true);
+    }
+    
+    ;; Receive RepayStablecoinMessage message
+    if (op == 1854010438) {
+        var msg = in_msg~__gen_read_RepayStablecoinMessage();
+        self~$__gen_UserPositionContract_receive_RepayStablecoinMessage(msg);
+        return (self, true);
+    }
+    
+    ;; Receive StablecoinBurnedMessage message
+    if (op == 3535686764) {
+        var msg = in_msg~__gen_read_StablecoinBurnedMessage();
+        self~$__gen_UserPositionContract_receive_StablecoinBurnedMessage(msg);
+        return (self, true);
+    }
+    
+    ;; Receive WithdrawCollateralMessage message
+    if (op == 1747572062) {
+        var msg = in_msg~__gen_read_WithdrawCollateralMessage();
+        self~$__gen_UserPositionContract_receive_WithdrawCollateralMessage(msg);
+        return (self, true);
+    }
+    
+    ;; Receive Deploy message
+    if (op == 2490013878) {
+        var msg = in_msg~__gen_read_Deploy();
+        self~$__gen_UserPositionContract_receive_Deploy(msg);
+        return (self, true);
+    }
+    
+    return (self, false);
+}
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    var msg_flags = cs~load_uint(4);
+    var msg_bounced = ((msg_flags & 1) == 1 ? true : false);
+    slice msg_sender_addr = cs~load_msg_addr();
+    __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    
+    ;; Load contract data
+    var self = __gen_load_UserPositionContract();
+    
+    ;; Handle operation
+    int handled = self~__gen_router_UserPositionContract(msg_bounced, in_msg);
+    
+    ;; Throw if not handled
+    throw_unless(handled, 130);
+    
+    ;; Persist state
+    __gen_store_UserPositionContract(self);
+}
+
+_ supported_interfaces() method_id {
+    return (
+        "org.ton.introspection.v0"H >> 128,
+        "org.ton.abi.ipfs.v0"H >> 128,
+        "org.ton.deploy.lazy.v0"H >> 128
+    );
+}
+
+_ get_abi_ipfs() {
+    return "ipfs://QmZu94Ssomrxoo5FKQq4C2booMqErm2P8HUtABzYWpaqM2";
+}
+
+_ lazy_deployment_completed() {
+    return get_data().begin_parse().load_int(1);
+}
