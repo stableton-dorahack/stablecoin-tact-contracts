@@ -23,7 +23,6 @@ PROGRAM{
   DECLPROC __gen_writecell_IncreaseTotalStableMessage
   DECLPROC __gen_write_DecreaseTotalStableMessage
   DECLPROC __gen_writecell_DecreaseTotalStableMessage
-  DECLPROC __gen_read_SetUserPositionDependecyMessage
   DECLPROC __gen_read_SetPositionIdMessage
   DECLPROC __gen_write_NewPositionIdMessage
   DECLPROC __gen_writecell_NewPositionIdMessage
@@ -31,12 +30,11 @@ PROGRAM{
   DECLPROC __gen_writecell_SetPositionAddressMessage
   DECLPROC __gen_write_MintMessage
   DECLPROC __gen_writecell_MintMessage
-  DECLPROC __gen_write_BurnMessage
-  DECLPROC __gen_writecell_BurnMessage
+  DECLPROC __gen_write_RepayBurnMessage
+  DECLPROC __gen_writecell_RepayBurnMessage
   DECLPROC __gen_read_StablecoinBurnedMessage
   DECLPROC __gen_write_UserPositionContract
   DECLPROC __gen_read_UserPositionContract
-  DECLPROC __gen_Context_get_sender
   DECLPROC __gen_PositionState_to_external
   DECLPROC __gen_read_$init$UserPositionContract
   DECLPROC __gen_write_$init$PositionAddressContract
@@ -56,10 +54,6 @@ PROGRAM{
   DECLPROC __gen_constructor_PositionState$collateral_debt
   DECLPROC $__gen_UserPositionContract_getPositionState
   118440 DECLMETHOD $__gen_get_getPositionState
-  DECLPROC $__gen_UserPositionContract_requireOwner
-  DECLPROC $__gen_UserPositionContract_owner
-  83229 DECLMETHOD $__gen_get_owner
-  DECLPROC $__gen_UserPositionContract_receive_SetUserPositionDependecyMessage
   DECLPROC $__gen_UserPositionContract_receive_DepositCollateralMessage
   DECLPROC __gen_constructor_SendParameters$to_value_mode_bounce_body_code_data
   DECLPROC __gen_constructor_SetPositionAddressMessage$user_position
@@ -68,7 +62,7 @@ PROGRAM{
   DECLPROC __gen_constructor_MintMessage$user_amount
   DECLPROC __gen_constructor_IncreaseTotalStableMessage$user_amount
   DECLPROC $__gen_UserPositionContract_receive_WithdrawStablecoinMessage
-  DECLPROC __gen_constructor_BurnMessage$user_amount_fees
+  DECLPROC __gen_constructor_RepayBurnMessage$user_amount_fees
   DECLPROC $__gen_UserPositionContract_receive_RepayStablecoinMessage
   DECLPROC __gen_constructor_DecreaseTotalStableMessage$user_amount_fees
   DECLPROC $__gen_UserPositionContract_receive_StablecoinBurnedMessage
@@ -268,17 +262,6 @@ PROGRAM{
     __gen_write_DecreaseTotalStableMessage INLINECALLDICT
     ENDC
   }>
-  __gen_read_SetUserPositionDependecyMessage PROCINLINE:<{
-    32 LDU
-    SWAP
-    4030201083 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    __tact_load_address INLINECALLDICT
-    SWAP
-    __tact_load_address INLINECALLDICT
-    s1 s2 XCHG
-  }>
   __gen_read_SetPositionIdMessage PROCINLINE:<{
     32 LDU
     SWAP
@@ -334,8 +317,8 @@ PROGRAM{
     __gen_write_MintMessage INLINECALLDICT
     ENDC
   }>
-  __gen_write_BurnMessage PROCINLINE:<{
-    3055907227 PUSHINT
+  __gen_write_RepayBurnMessage PROCINLINE:<{
+    2959459244 PUSHINT
     s0 s4 XCHG2
     32 STU
     ROT
@@ -345,22 +328,22 @@ PROGRAM{
     SWAP
     STGRAMS
   }>
-  __gen_writecell_BurnMessage PROCINLINE:<{
+  __gen_writecell_RepayBurnMessage PROCINLINE:<{
     NEWC
     3 -ROLL
-    __gen_write_BurnMessage INLINECALLDICT
+    __gen_write_RepayBurnMessage INLINECALLDICT
     ENDC
   }>
   __gen_read_StablecoinBurnedMessage PROCINLINE:<{
     32 LDU
     SWAP
-    3535686764 PUSHINT
+    3929120156 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
-    64 LDU
-    64 LDU
+    LDGRAMS
+    LDGRAMS
     3 -ROLL
   }>
   __gen_write_UserPositionContract PROCINLINE:<{
@@ -402,14 +385,15 @@ PROGRAM{
     s4 s6 XCHG
     s4 s5 XCHG
   }>
-  __gen_Context_get_sender PROCINLINE:<{
-    s2 s3 XCHG
-    3 BLKDROP
-  }>
   __gen_PositionState_to_external PROCINLINE:<{
   }>
   __gen_read_$init$UserPositionContract PROCINLINE:<{
     __tact_load_address INLINECALLDICT
+    SWAP
+    __tact_load_address INLINECALLDICT
+    SWAP
+    __tact_load_address INLINECALLDICT
+    s3 s3 s0 XCHG3
   }>
   __gen_write_$init$PositionAddressContract PROCINLINE:<{
     s0 s2 XCHG
@@ -526,26 +510,23 @@ PROGRAM{
   __gen_constructor_NewPositionIdMessage$user PROCINLINE:<{
   }>
   $__gen_UserPositionContract_init PROCREF:<{
+    PUSHNULL
     0 PUSHINT
-    s0 s0 PUSH2
-    __tact_context_get INLINECALLDICT
-    s2 s3 XCHG
-    3 BLKDROP
-    s4 s1 s1 PUSH3
-    __tact_create_address INLINECALLDICT
-    s3 s3 PUSH2
-    __tact_create_address INLINECALLDICT
+    s0 s0 s4 PUSH3
     100000000 PUSHINT
     2 PUSHINT
     TRUE
     s0 s10 XCHG
     __gen_constructor_NewPositionIdMessage$user INLINECALLDICT
     __gen_writecell_NewPositionIdMessage INLINECALLDICT
-    s3 PUSH
+    s8 PUSH
+    s0 s4 XCHG
     s11 s11 XCHG2
     __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
     $send INLINECALLDICT
-    4 3 BLKSWAP
+    s3 s6 XCHG
+    s3 s5 XCHG
+    s3 s4 XCHG
   }>
   __gen_load_UserPositionContract PROCINLINE:<{
     c4 PUSH
@@ -560,8 +541,9 @@ PROGRAM{
       1 7 BLKDROP2
     }>ELSE<{
       __gen_read_$init$UserPositionContract INLINECALLDICT
-      SWAP
+      s0 s3 XCHG
       ENDS
+      ROT
       $__gen_UserPositionContract_init INLINECALLDICT
     }>
   }>
@@ -625,33 +607,6 @@ PROGRAM{
     __gen_load_UserPositionContract INLINECALLDICT
     $__gen_UserPositionContract_getPositionState INLINECALLDICT
     __gen_PositionState_to_external INLINECALLDICT
-  }>
-  $__gen_UserPositionContract_requireOwner PROCREF:<{
-    __tact_context_get INLINECALLDICT
-    __gen_Context_get_sender INLINECALLDICT
-    s7 PUSH
-    __tact_address_eq INLINECALLDICT
-    132 THROWIFNOT
-  }>
-  $__gen_UserPositionContract_owner PROCREF:<{
-    6 BLKDROP
-  }>
-  $__gen_get_owner PROC:<{
-    __gen_load_UserPositionContract INLINECALLDICT
-    $__gen_UserPositionContract_owner INLINECALLDICT
-  }>
-  $__gen_UserPositionContract_receive_SetUserPositionDependecyMessage PROCINLINE:<{
-    s6 s8 XCHG
-    5 4 REVERSE
-    s3 s7 XCHG
-    s8 s7 s8 XCHG3
-    $__gen_UserPositionContract_requireOwner INLINECALLDICT
-    s3 POP
-    s3 POP
-    s4 s6 XCHG
-    s3 s5 XCHG
-    s3 s4 XCHG
-    -ROT
   }>
   $__gen_UserPositionContract_receive_DepositCollateralMessage PROCINLINE:<{
     NIP
@@ -765,7 +720,7 @@ PROGRAM{
     $send INLINECALLDICT
     ADD
   }>
-  __gen_constructor_BurnMessage$user_amount_fees PROCINLINE:<{
+  __gen_constructor_RepayBurnMessage$user_amount_fees PROCINLINE:<{
   }>
   $__gen_UserPositionContract_receive_RepayStablecoinMessage PROCINLINE:<{
     DROP
@@ -785,8 +740,8 @@ PROGRAM{
     TRUE
     s4 s3 XCHG2
     1 PUSHINT
-    __gen_constructor_BurnMessage$user_amount_fees INLINECALLDICT
-    __gen_writecell_BurnMessage INLINECALLDICT
+    __gen_constructor_RepayBurnMessage$user_amount_fees INLINECALLDICT
+    __gen_writecell_RepayBurnMessage INLINECALLDICT
     s8 PUSH
     s4 s1 s4 XCHG3
     s3 s3 XCHG2
@@ -871,16 +826,6 @@ PROGRAM{
       TRUE
     }>
     OVER
-    4030201083 PUSHINT
-    EQUAL
-    IFJMP:<{
-      NIP
-      __gen_read_SetUserPositionDependecyMessage INLINECALLDICT
-      1 2 BLKDROP2
-      $__gen_UserPositionContract_receive_SetUserPositionDependecyMessage INLINECALLDICT
-      TRUE
-    }>
-    OVER
     299872568 PUSHINT
     EQUAL
     IFJMP:<{
@@ -921,7 +866,7 @@ PROGRAM{
       TRUE
     }>
     OVER
-    3535686764 PUSHINT
+    3929120156 PUSHINT
     EQUAL
     IFJMP:<{
       NIP
@@ -981,10 +926,9 @@ PROGRAM{
     123515602279859691144772641439386770278 PUSHINT
     209801025412363888721030803524359905849 PUSHINT
     42980537499636128163026532310500881091 PUSHINT
-    86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d59576f6b6a416177584a7a4d33724a537459665638566875564252464b37486251436e503536416b72644142} PUSHSLICE
+    x{697066733a2f2f516d5a7858523456377636764c6b4a6e624d6459723567714377727270533978546472627070465551346a6f5573} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

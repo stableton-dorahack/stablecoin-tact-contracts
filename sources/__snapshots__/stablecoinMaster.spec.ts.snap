@@ -1,0 +1,222 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StablecoinMasterContract on MintFeesMessage should increase amount and send internaltransfer to jetton 1`] = `
+[
+  {
+    "$seq": 4,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{9D42541D800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B22C9_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
+          "to": "kQCvEGmk27vea3FYBdf6TiCp3U30vtq0p62qJHO0fGPgxIkv",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 16187n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{178D451900000000000000001648015E20D349B777BCD6E2B00BAFF49C4153BA9BE97DB5694F5B5448E768F8C7C189000F09EF37737BBC73C560B450414B23F79B25E7598106D0B9ACBC6FDA0091349642_}",
+              "type": "cell",
+            },
+            "bounce": false,
+            "from": "kQCvEGmk27vea3FYBdf6TiCp3U30vtq0p62qJHO0fGPgxIkv",
+            "to": "kQDIdzjMufp9FBvkEN02I0Kv1I9eMfkaQCDY7zHgfQ-Mij71",
+            "type": "internal",
+            "value": 968349000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`StablecoinMasterContract on mintMessage should increase totalsupply and transfer amount 1`] = `
+[
+  {
+    "$seq": 1,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{903559B2800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B22C9_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQBqJ1A2wQ5MkOBlhdTr7ML850tmbmDecFDAEvNUwHvm0sGh",
+          "to": "kQCvEGmk27vea3FYBdf6TiCp3U30vtq0p62qJHO0fGPgxIkv",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 22427n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{178D451900000000000000001648015E20D349B777BCD6E2B00BAFF49C4153BA9BE97DB5694F5B5448E768F8C7C189000F09EF37737BBC73C560B450414B23F79B25E7598106D0B9ACBC6FDA0091349642_}",
+              "type": "cell",
+            },
+            "bounce": false,
+            "from": "kQCvEGmk27vea3FYBdf6TiCp3U30vtq0p62qJHO0fGPgxIkv",
+            "to": "kQDIdzjMufp9FBvkEN02I0Kv1I9eMfkaQCDY7zHgfQ-Mij71",
+            "type": "internal",
+            "value": 962109000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`StablecoinMasterContract on repayBurn should send burn message to jetton 1`] = `
+[
+  {
+    "$seq": 2,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{B065C3AC800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B22C8215_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQBqJ1A2wQ5MkOBlhdTr7ML850tmbmDecFDAEvNUwHvm0sGh",
+          "to": "kQCvEGmk27vea3FYBdf6TiCp3U30vtq0p62qJHO0fGPgxIkv",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 19491n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{B065C3AC800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B22C8215_}",
+              "type": "cell",
+            },
+            "bounce": false,
+            "from": "kQCvEGmk27vea3FYBdf6TiCp3U30vtq0p62qJHO0fGPgxIkv",
+            "to": "kQDIdzjMufp9FBvkEN02I0Kv1I9eMfkaQCDY7zHgfQ-Mij71",
+            "type": "internal",
+            "value": 979086000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`StablecoinMasterContract on repayBurnNotification should send stablecoinBurned to user position 1`] = `
+[
+  {
+    "$seq": 3,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{8C5F4C71800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B22C8215_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCbJtY__64ruXlW7yhdMOa8y_YHO5HIIyKFXWvVWb58-ckR",
+          "to": "kQCvEGmk27vea3FYBdf6TiCp3U30vtq0p62qJHO0fGPgxIkv",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "failed",
+        "errorCode": 4429,
+        "errorMessage": "Invalid sender",
+      },
+      {
+        "$type": "sent-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQCvEGmk27vea3FYBdf6TiCp3U30vtq0p62qJHO0fGPgxIkv",
+          "to": "kQCbJtY__64ruXlW7yhdMOa8y_YHO5HIIyKFXWvVWb58-ckR",
+          "type": "internal",
+          "value": 990460000n,
+        },
+      },
+    ],
+  },
+]
+`;
+
+exports[`StablecoinMasterContract should deploy correctly and set init state 1`] = `
+[
+  {
+    "$seq": 0,
+    "events": [
+      {
+        "$type": "deploy",
+      },
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{946A98B60000000000000000}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+          "to": "kQCvEGmk27vea3FYBdf6TiCp3U30vtq0p62qJHO0fGPgxIkv",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 7781n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{AFF90F570000000000000000}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQCvEGmk27vea3FYBdf6TiCp3U30vtq0p62qJHO0fGPgxIkv",
+            "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+            "type": "internal",
+            "value": 991023000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;

@@ -20,7 +20,7 @@ describe("PositionsManagerContract", () => {
         gateKeeper = system.treasure("gateKeeper");
         stablecoinMaster = system.treasure("stablecoinMaster");
         positionsManagerContract = system.open(
-            await PositionsManagerContract.fromInit(owner.address, gateKeeper.address, stablecoinMaster.address)
+            await PositionsManagerContract.fromInit(gateKeeper.address, stablecoinMaster.address)
         );
         track = system.track(positionsManagerContract.address);
         logger = system.log(positionsManagerContract.address);

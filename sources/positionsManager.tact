@@ -1,4 +1,5 @@
 import "@stdlib/deploy";
+import "@stdlib/ownable";
 import "./messages";
 import "./UserPosition";
 
@@ -12,8 +13,10 @@ contract PositionsManagerContract with Deployable {
     stablecoinMasterAddress: Address;
     gateKeeperAddress: Address;
 
-    init(owner: Address, gateKeeperAddress: Address, stablecoinMasterAddress: Address) {
-        self.owner = owner;
+    init(gateKeeperAddress: Address, stablecoinMasterAddress: Address) {
+        let ctx: Context = context();
+        self.owner = ctx.sender;
+
         self.gateKeeperAddress = gateKeeperAddress;
         self.stablecoinMasterAddress = stablecoinMasterAddress;
     }
@@ -36,7 +39,7 @@ contract PositionsManagerContract with Deployable {
 
         // require(ctx.value > msg.amount + fwdFee + 2 * self.gasConsumption + self.minTonsForStorage, "Invalid value");
         require(ctx.value > msg.amount + ton("0.5"), "Invalid value");
-        let init: StateInit = initOf UserPositionContract(msg.user);
+        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
         let userPositionAddress: Address = contractAddress(init);
 
         // later - need maybe send amount to separate contract with payseparategas
@@ -66,7 +69,7 @@ contract PositionsManagerContract with Deployable {
 
         let ctx: Context = context();
 
-        let init: StateInit = initOf UserPositionContract(msg.user);
+        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
         let userPositionAddress: Address = contractAddress(init);
 
         // todo check if message from userPosition
@@ -93,7 +96,7 @@ contract PositionsManagerContract with Deployable {
         let ctx: Context = context();
         require(ctx.sender == self.gateKeeperAddress, "not from gateKeeper");
 
-        let init: StateInit = initOf UserPositionContract(msg.user);
+        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
         let userPositionAddress: Address = contractAddress(init);
 
         send(SendParameters{
@@ -112,7 +115,7 @@ contract PositionsManagerContract with Deployable {
     */
     receive(msg: IncreaseTotalStableMessage) {
 
-        let init: StateInit = initOf UserPositionContract(msg.user);
+        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
         let userPositionAddress: Address = contractAddress(init);
 
         // todo check if message from userPosition
@@ -137,7 +140,7 @@ contract PositionsManagerContract with Deployable {
         let ctx: Context = context();
         require(ctx.sender == self.gateKeeperAddress, "not from gateKeeper");
 
-        let init: StateInit = initOf UserPositionContract(msg.user);
+        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
         let userPositionAddress: Address = contractAddress(init);
 
         send(SendParameters{
@@ -156,7 +159,7 @@ contract PositionsManagerContract with Deployable {
     */
     receive(msg: DecreaseTotalStableMessage) {
 
-        let init: StateInit = initOf UserPositionContract(msg.user);
+        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
         let userPositionAddress: Address = contractAddress(init);
 
         // todo check if message from userPosition
@@ -179,7 +182,7 @@ contract PositionsManagerContract with Deployable {
         let ctx: Context = context();
         require(ctx.sender == self.gateKeeperAddress, "not from gateKeeper");
 
-        let init: StateInit = initOf UserPositionContract(msg.user);
+        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
         let userPositionAddress: Address = contractAddress(init);
 
         send(SendParameters{
@@ -198,7 +201,7 @@ contract PositionsManagerContract with Deployable {
     */
     receive(msg: DoWithdrawCollateralMessage) {
 
-        let init: StateInit = initOf UserPositionContract(msg.user);
+        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
         let userPositionAddress: Address = contractAddress(init);
 
         // todo check if message from userPosition

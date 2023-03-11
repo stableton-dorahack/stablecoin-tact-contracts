@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: StablecoinMasterContract
-BOC Size: 978 bytes
+BOC Size: 1695 bytes
 
 # Types
-Total Types: 30
+Total Types: 32
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -24,6 +24,10 @@ Signature: `Deploy{queryId:uint64}`
 ## DeployOk
 TLB: `deploy_ok#aff90f57 queryId:uint64 = DeployOk`
 Signature: `DeployOk{queryId:uint64}`
+
+## ChangeOwner
+TLB: `change_owner#0f474d03 newOwner:address = ChangeOwner`
+Signature: `ChangeOwner{newOwner:address}`
 
 ## DepositCollateralMessage
 TLB: `deposit_collateral_message#11dfb138 user:address amount:coins = DepositCollateralMessage`
@@ -85,17 +89,17 @@ Signature: `SetPositionAddressMessage{user:address,position:address}`
 TLB: `mint_message#903559b2 user:address amount:coins = MintMessage`
 Signature: `MintMessage{user:address,amount:coins}`
 
-## BurnMessage
-TLB: `burn_message#b625719b user:address amount:coins fees:coins = BurnMessage`
-Signature: `BurnMessage{user:address,amount:coins,fees:coins}`
+## RepayBurnMessage
+TLB: `repay_burn_message#b065c3ac user:address amount:coins fees:coins = RepayBurnMessage`
+Signature: `RepayBurnMessage{user:address,amount:coins,fees:coins}`
 
 ## RepayBurnNotification
-TLB: `repay_burn_notification#563c6d94 user:address amount:coins = RepayBurnNotification`
-Signature: `RepayBurnNotification{user:address,amount:coins}`
+TLB: `repay_burn_notification#8c5f4c71 user:address amount:coins fees:coins = RepayBurnNotification`
+Signature: `RepayBurnNotification{user:address,amount:coins,fees:coins}`
 
 ## StablecoinBurnedMessage
-TLB: `stablecoin_burned_message#d2be4c6c user:address amount:uint64 fees:uint64 = StablecoinBurnedMessage`
-Signature: `StablecoinBurnedMessage{user:address,amount:uint64,fees:uint64}`
+TLB: `stablecoin_burned_message#ea319d9c user:address amount:coins fees:coins = StablecoinBurnedMessage`
+Signature: `StablecoinBurnedMessage{user:address,amount:coins,fees:coins}`
 
 ## TokenTransfer
 TLB: `token_transfer#0f8a7ea5 queryId:uint64 amount:coins destination:address responseDestination:Maybe address customPayload:Maybe ^cell forwardTonAmount:coins forwardPayload:remainder<slice> = TokenTransfer`
@@ -105,13 +109,13 @@ Signature: `TokenTransfer{queryId:uint64,amount:coins,destination:address,respon
 TLB: `token_transfer_internal#178d4519 queryId:uint64 amount:coins from:address responseAddress:Maybe address forwardTonAmount:coins forwardPayload:remainder<slice> = TokenTransferInternal`
 Signature: `TokenTransferInternal{queryId:uint64,amount:coins,from:address,responseAddress:Maybe address,forwardTonAmount:coins,forwardPayload:remainder<slice>}`
 
+## TokenNotification
+TLB: `token_notification#7362d09c queryId:uint64 amount:coins from:address forwardPayload:remainder<slice> = TokenNotification`
+Signature: `TokenNotification{queryId:uint64,amount:coins,from:address,forwardPayload:remainder<slice>}`
+
 ## TokenBurn
 TLB: `token_burn#595f07bc queryId:uint64 amount:coins owner:address responseAddress:Maybe address = TokenBurn`
 Signature: `TokenBurn{queryId:uint64,amount:coins,owner:address,responseAddress:Maybe address}`
-
-## RepayBurnMessage
-TLB: `repay_burn_message#203e98f3 amount:coins fees:coins = RepayBurnMessage`
-Signature: `RepayBurnMessage{amount:coins,fees:coins}`
 
 ## TokenBurnNotification
 TLB: `token_burn_notification#7bdd97de queryId:uint64 amount:coins owner:address responseAddress:Maybe address = TokenBurnNotification`
@@ -121,17 +125,25 @@ Signature: `TokenBurnNotification{queryId:uint64,amount:coins,owner:address,resp
 TLB: `token_excesses#d53276db queryId:uint64 = TokenExcesses`
 Signature: `TokenExcesses{queryId:uint64}`
 
-## TokenNotification
-TLB: `token_notification#7362d09c queryId:uint64 amount:coins from:address forwardPayload:remainder<slice> = TokenNotification`
-Signature: `TokenNotification{queryId:uint64,amount:coins,from:address,forwardPayload:remainder<slice>}`
+## TokenUpdateContent
+TLB: `token_update_content#0c087a9e content:Maybe ^cell = TokenUpdateContent`
+Signature: `TokenUpdateContent{content:Maybe ^cell}`
+
+## PositionState
+TLB: `_ collateral:coins debt:uint64 = PositionState`
+Signature: `PositionState{collateral:coins,debt:uint64}`
 
 # Get Methods
-Total Get Methods: 2
+Total Get Methods: 4
 
 ## get_wallet_address
 Argument: owner
 
 ## get_jetton_data
+
+## totalSupply
+
+## owner
 
 # Error Codes
 2: Stack undeflow
@@ -158,5 +170,13 @@ Argument: owner
 135: Code of a contract was not found
 136: Invalid address
 4429: Invalid sender
+13650: Invalid bounced message
+15032: not from stablecoin master
 16059: Invalid value
+22230: Already set
+31797: debt less than repay amount
+33545: not from gatekeeper
+53160: not from positions manager
+61910: not from positionsManager
 62972: Invalid balance
+63577: withdrawal amount more than position has

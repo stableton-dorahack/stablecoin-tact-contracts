@@ -149,13 +149,6 @@ cell __gen_writecell_DecreaseTotalStableMessage((slice, int, int) v) inline {
     return __gen_write_DecreaseTotalStableMessage(begin_cell(), v).end_cell();
 }
 
-(slice, ((slice, slice))) __gen_read_SetUserPositionDependecyMessage(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 4030201083);
-    var v'stablecoinMasterAddress = sc_0~__tact_load_address();
-    var v'positionsManagerAddress = sc_0~__tact_load_address();
-    return (sc_0, (v'stablecoinMasterAddress, v'positionsManagerAddress));
-}
-
 (slice, ((slice, int))) __gen_read_SetPositionIdMessage(slice sc_0) inline {
     throw_unless(129, sc_0~load_uint(32) == 1245051344);
     var v'user = sc_0~__tact_load_address();
@@ -198,24 +191,24 @@ cell __gen_writecell_MintMessage((slice, int) v) inline {
     return __gen_write_MintMessage(begin_cell(), v).end_cell();
 }
 
-builder __gen_write_BurnMessage(builder build_0, (slice, int, int) v) inline {
+builder __gen_write_RepayBurnMessage(builder build_0, (slice, int, int) v) inline {
     var (v'user, v'amount, v'fees) = v;
-    build_0 = store_uint(build_0, 3055907227, 32);
+    build_0 = store_uint(build_0, 2959459244, 32);
     build_0 = __tact_store_address(build_0, v'user);
     build_0 = build_0.store_coins(v'amount);
     build_0 = build_0.store_coins(v'fees);
     return build_0;
 }
 
-cell __gen_writecell_BurnMessage((slice, int, int) v) inline {
-    return __gen_write_BurnMessage(begin_cell(), v).end_cell();
+cell __gen_writecell_RepayBurnMessage((slice, int, int) v) inline {
+    return __gen_write_RepayBurnMessage(begin_cell(), v).end_cell();
 }
 
 (slice, ((slice, int, int))) __gen_read_StablecoinBurnedMessage(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3535686764);
+    throw_unless(129, sc_0~load_uint(32) == 3929120156);
     var v'user = sc_0~__tact_load_address();
-    var v'amount = sc_0~load_uint(64);
-    var v'fees = sc_0~load_uint(64);
+    var v'amount = sc_0~load_coins();
+    var v'fees = sc_0~load_coins();
     return (sc_0, (v'user, v'amount, v'fees));
 }
 
@@ -245,19 +238,16 @@ builder __gen_write_UserPositionContract(builder build_0, (slice, slice, slice, 
     return (sc_0, (v'owner, v'user, v'stablecoinMasterAddress, v'positionsManagerAddress, v'positionId, v'collateral, v'debt));
 }
 
-_ __gen_Context_get_sender((int, slice, int, slice) v) inline {
-    var (v'bounced, v'sender, v'value, v'raw) = v;
-    return v'sender;
-}
-
 (int, int) __gen_PositionState_to_external(((int, int)) v) inline {
     var (v'collateral, v'debt) = v; 
     return (v'collateral, v'debt);
 }
 
-(slice, ((slice))) __gen_read_$init$UserPositionContract(slice sc_0) inline {
+(slice, ((slice, slice, slice))) __gen_read_$init$UserPositionContract(slice sc_0) inline {
     var v'user = sc_0~__tact_load_address();
-    return (sc_0, (v'user));
+    var v'stablecoinMasterAddress = sc_0~__tact_load_address();
+    var v'positionsManagerAddress = sc_0~__tact_load_address();
+    return (sc_0, (v'user, v'stablecoinMasterAddress, v'positionsManagerAddress));
 }
 
 builder __gen_write_$init$PositionAddressContract(builder build_0, (int, slice) v) inline {
@@ -318,13 +308,11 @@ builder __gen_write_$init$PositionAddressContract(builder build_0, (int, slice) 
     return (user);
 }
 
-(slice, slice, slice, slice, int, int, int) $__gen_UserPositionContract_init(slice $user) impure inline_ref {
+(slice, slice, slice, slice, int, int, int) $__gen_UserPositionContract_init(slice $user, slice $stablecoinMasterAddress, slice $positionsManagerAddress) impure inline_ref {
     var (($self'owner, $self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt)) = (null(), null(), null(), null(), 0, 0, 0);
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    $self'owner = $ctx'sender;
     $self'user = $user;
-    $self'stablecoinMasterAddress = __tact_create_address(0, 0);
-    $self'positionsManagerAddress = __tact_create_address(0, 0);
+    $self'stablecoinMasterAddress = $stablecoinMasterAddress;
+    $self'positionsManagerAddress = $positionsManagerAddress;
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'positionsManagerAddress, 100000000, 2, true, __gen_writecell_NewPositionIdMessage(__gen_constructor_NewPositionIdMessage$user($user))));
     return ($self'owner, $self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt);
 }
@@ -336,9 +324,9 @@ builder __gen_write_$init$PositionAddressContract(builder build_0, (int, slice) 
     if ($loaded) {
         return $sc~__gen_read_UserPositionContract();
     } else {
-        (slice user) = $sc~__gen_read_$init$UserPositionContract();
+        (slice user, slice stablecoinMasterAddress, slice positionsManagerAddress) = $sc~__gen_read_$init$UserPositionContract();
         $sc.end_parse();
-        return $__gen_UserPositionContract_init(user);
+        return $__gen_UserPositionContract_init(user, stablecoinMasterAddress, positionsManagerAddress);
     }
 }
 
@@ -399,32 +387,6 @@ _ $__gen_get_getPositionState() method_id(118440) {
     var self = __gen_load_UserPositionContract();
     var res = $__gen_UserPositionContract_getPositionState(self);
     return __gen_PositionState_to_external(res);
-}
-
-((slice, slice, slice, slice, int, int, int), ()) $__gen_UserPositionContract_requireOwner((slice, slice, slice, slice, int, int, int) $self) impure inline_ref {
-    var (($self'owner, $self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt)) = $self;
-    throw_unless(132, __tact_address_eq(__gen_Context_get_sender(__tact_context_get()), $self'owner));
-    return (($self'owner, $self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt), ());
-}
-
-slice $__gen_UserPositionContract_owner((slice, slice, slice, slice, int, int, int) $self) impure inline_ref {
-    var (($self'owner, $self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt)) = $self;
-    return $self'owner;
-}
-
-_ $__gen_get_owner() method_id(83229) {
-    var self = __gen_load_UserPositionContract();
-    var res = $__gen_UserPositionContract_owner(self);
-    return res;
-}
-
-(((slice, slice, slice, slice, int, int, int)), ()) $__gen_UserPositionContract_receive_SetUserPositionDependecyMessage((slice, slice, slice, slice, int, int, int) $self, (slice, slice) $msg) impure inline {
-    var ($self'owner, $self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt) = $self;
-    var ($msg'stablecoinMasterAddress, $msg'positionsManagerAddress) = $msg;
-    ($self'owner, $self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt)~$__gen_UserPositionContract_requireOwner();
-    $self'stablecoinMasterAddress = $msg'stablecoinMasterAddress;
-    $self'positionsManagerAddress = $msg'positionsManagerAddress;
-    return (($self'owner, $self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt), ());
 }
 
 (((slice, slice, slice, slice, int, int, int)), ()) $__gen_UserPositionContract_receive_DepositCollateralMessage((slice, slice, slice, slice, int, int, int) $self, (slice, int) $msg) impure inline {
@@ -493,7 +455,7 @@ _ $__gen_get_owner() method_id(83229) {
     return (($self'owner, $self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt), ());
 }
 
-((slice, int, int)) __gen_constructor_BurnMessage$user_amount_fees(slice user, int amount, int fees) inline {
+((slice, int, int)) __gen_constructor_RepayBurnMessage$user_amount_fees(slice user, int amount, int fees) inline {
     return (user, amount, fees);
 }
 
@@ -504,7 +466,7 @@ _ $__gen_get_owner() method_id(83229) {
     throw_unless(61910, __tact_address_eq($ctx'sender, $self'positionsManagerAddress));
     throw_unless(31797, ($self'debt >= $msg'amount));
     int $amountToBurn = $msg'amount;
-    $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'stablecoinMasterAddress, 500000000, 2, true, __gen_writecell_BurnMessage(__gen_constructor_BurnMessage$user_amount_fees($msg'user, $amountToBurn, 1))));
+    $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'stablecoinMasterAddress, 500000000, 2, true, __gen_writecell_RepayBurnMessage(__gen_constructor_RepayBurnMessage$user_amount_fees($msg'user, $amountToBurn, 1))));
     return (($self'owner, $self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt), ());
 }
 
@@ -561,13 +523,6 @@ _ $__gen_get_owner() method_id(83229) {
         return (self, true);
     }
     
-    ;; Receive SetUserPositionDependecyMessage message
-    if (op == 4030201083) {
-        var msg = in_msg~__gen_read_SetUserPositionDependecyMessage();
-        self~$__gen_UserPositionContract_receive_SetUserPositionDependecyMessage(msg);
-        return (self, true);
-    }
-    
     ;; Receive DepositCollateralMessage message
     if (op == 299872568) {
         var msg = in_msg~__gen_read_DepositCollateralMessage();
@@ -597,7 +552,7 @@ _ $__gen_get_owner() method_id(83229) {
     }
     
     ;; Receive StablecoinBurnedMessage message
-    if (op == 3535686764) {
+    if (op == 3929120156) {
         var msg = in_msg~__gen_read_StablecoinBurnedMessage();
         self~$__gen_UserPositionContract_receive_StablecoinBurnedMessage(msg);
         return (self, true);
@@ -646,13 +601,12 @@ _ supported_interfaces() method_id {
     return (
         "org.ton.introspection.v0"H >> 128,
         "org.ton.abi.ipfs.v0"H >> 128,
-        "org.ton.deploy.lazy.v0"H >> 128,
-        "org.ton.ownable"H >> 128
+        "org.ton.deploy.lazy.v0"H >> 128
     );
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmYWokjAawXJzM3rJStYfV8VhuVBRFK7HbQCnP56AkrdAB";
+    return "ipfs://QmZxXR4V7v6vLkJnbMdYr5gqCwrrpS9xTdrbppFUQ4joUs";
 }
 
 _ lazy_deployment_completed() {

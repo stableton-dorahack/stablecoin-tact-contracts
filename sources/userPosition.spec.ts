@@ -22,17 +22,10 @@ describe("PositionsManagerContract", () => {
         stablecoinMaster = system.treasure("stablecoinMaster");
         positionsManager = system.treasure("positionsManager");
 
-        userPositionContract = system.open(await UserPositionContract.fromInit(user.address));
-
-        userPositionContract.send(
-            owner,
-            { value: toNano(1) },
-            {
-                $$type: "SetUserPositionDependecyMessage",
-                stablecoinMasterAddress: stablecoinMaster.address,
-                positionsManagerAddress: positionsManager.address,
-            }
+        userPositionContract = system.open(
+            await UserPositionContract.fromInit(user.address, stablecoinMaster.address, positionsManager.address)
         );
+
         track = system.track(userPositionContract.address);
         logger = system.log(userPositionContract.address);
     });

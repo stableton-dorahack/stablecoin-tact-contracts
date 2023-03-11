@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: UserPositionContract
-BOC Size: 1678 bytes
+BOC Size: 1516 bytes
 
 # Types
-Total Types: 25
+Total Types: 31
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -24,10 +24,6 @@ Signature: `Deploy{queryId:uint64}`
 ## DeployOk
 TLB: `deploy_ok#aff90f57 queryId:uint64 = DeployOk`
 Signature: `DeployOk{queryId:uint64}`
-
-## ChangeOwner
-TLB: `change_owner#0f474d03 newOwner:address = ChangeOwner`
-Signature: `ChangeOwner{newOwner:address}`
 
 ## DepositCollateralMessage
 TLB: `deposit_collateral_message#11dfb138 user:address amount:coins = DepositCollateralMessage`
@@ -89,32 +85,58 @@ Signature: `SetPositionAddressMessage{user:address,position:address}`
 TLB: `mint_message#903559b2 user:address amount:coins = MintMessage`
 Signature: `MintMessage{user:address,amount:coins}`
 
-## BurnMessage
-TLB: `burn_message#b625719b user:address amount:coins fees:coins = BurnMessage`
-Signature: `BurnMessage{user:address,amount:coins,fees:coins}`
+## RepayBurnMessage
+TLB: `repay_burn_message#b065c3ac user:address amount:coins fees:coins = RepayBurnMessage`
+Signature: `RepayBurnMessage{user:address,amount:coins,fees:coins}`
 
 ## RepayBurnNotification
-TLB: `repay_burn_notification#563c6d94 user:address amount:coins = RepayBurnNotification`
-Signature: `RepayBurnNotification{user:address,amount:coins}`
+TLB: `repay_burn_notification#8c5f4c71 user:address amount:coins fees:coins = RepayBurnNotification`
+Signature: `RepayBurnNotification{user:address,amount:coins,fees:coins}`
 
 ## StablecoinBurnedMessage
-TLB: `stablecoin_burned_message#d2be4c6c user:address amount:uint64 fees:uint64 = StablecoinBurnedMessage`
-Signature: `StablecoinBurnedMessage{user:address,amount:uint64,fees:uint64}`
+TLB: `stablecoin_burned_message#ea319d9c user:address amount:coins fees:coins = StablecoinBurnedMessage`
+Signature: `StablecoinBurnedMessage{user:address,amount:coins,fees:coins}`
+
+## TokenTransfer
+TLB: `token_transfer#0f8a7ea5 queryId:uint64 amount:coins destination:address responseDestination:Maybe address customPayload:Maybe ^cell forwardTonAmount:coins forwardPayload:remainder<slice> = TokenTransfer`
+Signature: `TokenTransfer{queryId:uint64,amount:coins,destination:address,responseDestination:Maybe address,customPayload:Maybe ^cell,forwardTonAmount:coins,forwardPayload:remainder<slice>}`
+
+## TokenTransferInternal
+TLB: `token_transfer_internal#178d4519 queryId:uint64 amount:coins from:address responseAddress:Maybe address forwardTonAmount:coins forwardPayload:remainder<slice> = TokenTransferInternal`
+Signature: `TokenTransferInternal{queryId:uint64,amount:coins,from:address,responseAddress:Maybe address,forwardTonAmount:coins,forwardPayload:remainder<slice>}`
+
+## TokenNotification
+TLB: `token_notification#7362d09c queryId:uint64 amount:coins from:address forwardPayload:remainder<slice> = TokenNotification`
+Signature: `TokenNotification{queryId:uint64,amount:coins,from:address,forwardPayload:remainder<slice>}`
+
+## TokenBurn
+TLB: `token_burn#595f07bc queryId:uint64 amount:coins owner:address responseAddress:Maybe address = TokenBurn`
+Signature: `TokenBurn{queryId:uint64,amount:coins,owner:address,responseAddress:Maybe address}`
+
+## TokenBurnNotification
+TLB: `token_burn_notification#7bdd97de queryId:uint64 amount:coins owner:address responseAddress:Maybe address = TokenBurnNotification`
+Signature: `TokenBurnNotification{queryId:uint64,amount:coins,owner:address,responseAddress:Maybe address}`
+
+## TokenExcesses
+TLB: `token_excesses#d53276db queryId:uint64 = TokenExcesses`
+Signature: `TokenExcesses{queryId:uint64}`
+
+## TokenUpdateContent
+TLB: `token_update_content#0c087a9e content:Maybe ^cell = TokenUpdateContent`
+Signature: `TokenUpdateContent{content:Maybe ^cell}`
 
 ## PositionState
 TLB: `_ collateral:coins debt:uint64 = PositionState`
 Signature: `PositionState{collateral:coins,debt:uint64}`
 
 # Get Methods
-Total Get Methods: 4
+Total Get Methods: 3
 
 ## getPositionUser
 
 ## getPositionId
 
 ## getPositionState
-
-## owner
 
 # Error Codes
 2: Stack undeflow

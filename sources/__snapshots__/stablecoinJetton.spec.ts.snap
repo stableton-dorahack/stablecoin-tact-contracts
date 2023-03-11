@@ -1,0 +1,118 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StablecoinJettonContract on repayBurned message should decrease balance and send repayBurnNotification to master 1`] = `
+[
+  {
+    "$seq": 1,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{178D4519000000000000000A203E8800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B204_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCDr0Gm-nivCD9KWPb6JkiDulGZ8eNb2Xm_HNi39oyNbBwJ",
+          "to": "kQA5W0EgDzQi5RcifEJim7Hc2IKHXDcn2aFejFz4vefLKNCh",
+          "type": "internal",
+          "value": 10000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 4903n,
+      },
+    ],
+  },
+]
+`;
+
+exports[`StablecoinJettonContract on repayBurned message should decrease balance and send repayBurnNotification to master 2`] = `
+[
+  {
+    "$seq": 2,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{B065C3AC800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B22C8203_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCDr0Gm-nivCD9KWPb6JkiDulGZ8eNb2Xm_HNi39oyNbBwJ",
+          "to": "kQA5W0EgDzQi5RcifEJim7Hc2IKHXDcn2aFejFz4vefLKNCh",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 7561n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{8C5F4C71800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B22C8203_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQA5W0EgDzQi5RcifEJim7Hc2IKHXDcn2aFejFz4vefLKNCh",
+            "to": "kQCDr0Gm-nivCD9KWPb6JkiDulGZ8eNb2Xm_HNi39oyNbBwJ",
+            "type": "internal",
+            "value": 991016000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`StablecoinJettonContract on repayBurned message should fail if amount repayed more than balance 1`] = `
+[
+  {
+    "$seq": 0,
+    "events": [
+      {
+        "$type": "deploy",
+      },
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{B065C3AC800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B22C8203_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQCDr0Gm-nivCD9KWPb6JkiDulGZ8eNb2Xm_HNi39oyNbBwJ",
+          "to": "kQA5W0EgDzQi5RcifEJim7Hc2IKHXDcn2aFejFz4vefLKNCh",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "failed",
+        "errorCode": 62972,
+        "errorMessage": "Invalid balance",
+      },
+      {
+        "$type": "sent-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQA5W0EgDzQi5RcifEJim7Hc2IKHXDcn2aFejFz4vefLKNCh",
+          "to": "kQCDr0Gm-nivCD9KWPb6JkiDulGZ8eNb2Xm_HNi39oyNbBwJ",
+          "type": "internal",
+          "value": 995845000n,
+        },
+      },
+    ],
+  },
+]
+`;

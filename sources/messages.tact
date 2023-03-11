@@ -91,7 +91,7 @@ message MintMessage {
     amount: Int as coins;
 }
 
-message BurnMessage {
+message RepayBurnMessage {
     user: Address;
     amount: Int as coins;
     fees: Int as coins;
@@ -100,10 +100,61 @@ message BurnMessage {
 message RepayBurnNotification {
     user: Address;
     amount: Int as coins;
+    fees: Int as coins;
 }
 
 message StablecoinBurnedMessage {
     user: Address;
-    amount: Int as uint64;
-    fees: Int as uint64;
+    amount: Int as coins;
+    fees: Int as coins;
+}
+
+// jetton messages
+
+message(0xf8a7ea5) TokenTransfer {
+    queryId: Int as uint64;
+    amount: Int as coins;
+    destination: Address;
+    responseDestination: Address?;
+    customPayload: Cell?;
+    forwardTonAmount: Int as coins;
+    forwardPayload: Slice as remaining;
+}
+
+message(0x178d4519) TokenTransferInternal {
+    queryId: Int as uint64;
+    amount: Int as coins;
+    from: Address;
+    responseAddress: Address?;
+    forwardTonAmount: Int as coins;
+    forwardPayload: Slice as remaining;
+}
+
+message(0x7362d09c) TokenNotification {
+    queryId: Int as uint64;
+    amount: Int as coins;
+    from: Address;
+    forwardPayload: Slice as remaining;
+}
+
+message(0x595f07bc) TokenBurn {
+    queryId: Int as uint64;
+    amount: Int as coins;
+    owner: Address;
+    responseAddress: Address?;
+}
+
+message(0x7bdd97de) TokenBurnNotification {
+    queryId: Int as uint64;
+    amount: Int as coins;
+    owner: Address;
+    responseAddress: Address?;
+}
+
+message(0xd53276db) TokenExcesses {
+    queryId: Int as uint64;
+}
+
+message TokenUpdateContent {
+    content: Cell?;
 }

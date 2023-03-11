@@ -404,19 +404,25 @@ PROGRAM{
     s3 s3 s0 XCHG3
   }>
   __gen_write_$init$UserPositionContract PROCINLINE:<{
+    2SWAP
+    __tact_store_address INLINECALLDICT
+    ROT
+    __tact_store_address INLINECALLDICT
+    SWAP
     __tact_store_address INLINECALLDICT
   }>
   __gen_read_$init$PositionsManagerContract PROCINLINE:<{
     __tact_load_address INLINECALLDICT
     SWAP
     __tact_load_address INLINECALLDICT
-    SWAP
-    __tact_load_address INLINECALLDICT
-    s3 s3 s0 XCHG3
+    s1 s2 XCHG
   }>
   $__gen_PositionsManagerContract_init PROCREF:<{
     0 PUSHINT
-    s0 s2 XCHG
+    __tact_context_get INLINECALLDICT
+    s2 s3 XCHG
+    3 BLKDROP
+    s2 s3 XCHG2
   }>
   __gen_load_PositionsManagerContract PROCINLINE:<{
     c4 PUSH
@@ -431,9 +437,9 @@ PROGRAM{
       1 4 BLKDROP2
     }>ELSE<{
       __gen_read_$init$PositionsManagerContract INLINECALLDICT
-      s0 s3 XCHG
+      s0 s2 XCHG
       ENDS
-      ROT
+      SWAP
       $__gen_PositionsManagerContract_init INLINECALLDICT
     }>
   }>
@@ -590,7 +596,7 @@ PROGRAM{
     PUSHNULL
   }>
   $__gen_UserPositionContract_init_child PROC:<{
-    SWAP
+    s0 s3 XCHG
     CTOS
     LDDICT
     DROP
@@ -619,7 +625,8 @@ PROGRAM{
     FALSE
     SWAP
     1 STI
-    ROT
+    3 -ROLL
+    s0 s4 XCHG
     __gen_write_$init$UserPositionContract INLINECALLDICT
     ENDC
   }>
@@ -667,7 +674,8 @@ PROGRAM{
     GREATER
     THROWANYIFNOT
     __tact_context_sys GETGLOB
-    s2 PUSH
+    MYADDR
+    s3 s5 s(-2) PU2XC
     $__gen_UserPositionContract_init_child CALLDICT
     2DUP
     $contractAddress INLINECALLDICT
@@ -694,7 +702,8 @@ PROGRAM{
     s2 s3 XCHG
     3 BLKDROP
     __tact_context_sys GETGLOB
-    s5 PUSH
+    MYADDR
+    s6 s5 s(-2) PU2XC
     $__gen_UserPositionContract_init_child CALLDICT
     $contractAddress INLINECALLDICT
     DROP
@@ -720,7 +729,8 @@ PROGRAM{
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
     __tact_context_sys GETGLOB
-    s3 PUSH
+    MYADDR
+    s4 s6 s(-2) PU2XC
     $__gen_UserPositionContract_init_child CALLDICT
     $contractAddress INLINECALLDICT
     100000000 PUSHINT
@@ -736,7 +746,8 @@ PROGRAM{
   }>
   $__gen_PositionsManagerContract_receive_IncreaseTotalStableMessage PROCINLINE:<{
     __tact_context_sys GETGLOB
-    s2 PUSH
+    MYADDR
+    s3 s5 s(-2) PU2XC
     $__gen_UserPositionContract_init_child CALLDICT
     $contractAddress INLINECALLDICT
     DROP
@@ -761,7 +772,8 @@ PROGRAM{
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
     __tact_context_sys GETGLOB
-    s3 PUSH
+    MYADDR
+    s4 s6 s(-2) PU2XC
     $__gen_UserPositionContract_init_child CALLDICT
     $contractAddress INLINECALLDICT
     100000000 PUSHINT
@@ -777,7 +789,8 @@ PROGRAM{
   }>
   $__gen_PositionsManagerContract_receive_DecreaseTotalStableMessage PROCINLINE:<{
     __tact_context_sys GETGLOB
-    s3 PUSH
+    MYADDR
+    s4 s6 s(-2) PU2XC
     $__gen_UserPositionContract_init_child CALLDICT
     $contractAddress INLINECALLDICT
     DROP
@@ -801,7 +814,8 @@ PROGRAM{
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
     __tact_context_sys GETGLOB
-    s3 PUSH
+    MYADDR
+    s4 s6 s(-2) PU2XC
     $__gen_UserPositionContract_init_child CALLDICT
     $contractAddress INLINECALLDICT
     100000000 PUSHINT
@@ -817,7 +831,8 @@ PROGRAM{
   }>
   $__gen_PositionsManagerContract_receive_DoWithdrawCollateralMessage PROCINLINE:<{
     __tact_context_sys GETGLOB
-    s2 PUSH
+    MYADDR
+    s3 s5 s(-2) PU2XC
     $__gen_UserPositionContract_init_child CALLDICT
     $contractAddress INLINECALLDICT
     DROP
@@ -976,7 +991,7 @@ PROGRAM{
     42980537499636128163026532310500881091 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d5870506536394c5567357a5766335048696b665672546a6f4a533779346363357850316761526e6241643156} PUSHSLICE
+    x{697066733a2f2f516d4e7a4e3533596f437a77384e6e7a437345356968524267697050396459557678386b4c715570723531593434} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

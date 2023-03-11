@@ -261,22 +261,24 @@ builder __gen_write_PositionsManagerContract(builder build_0, (slice, int, slice
     return (sc_0, (v'owner, v'lastPositionId, v'stablecoinMasterAddress, v'gateKeeperAddress));
 }
 
-builder __gen_write_$init$UserPositionContract(builder build_0, (slice) v) inline {
-    var (v'user) = v;
+builder __gen_write_$init$UserPositionContract(builder build_0, (slice, slice, slice) v) inline {
+    var (v'user, v'stablecoinMasterAddress, v'positionsManagerAddress) = v;
     build_0 = __tact_store_address(build_0, v'user);
+    build_0 = __tact_store_address(build_0, v'stablecoinMasterAddress);
+    build_0 = __tact_store_address(build_0, v'positionsManagerAddress);
     return build_0;
 }
 
-(slice, ((slice, slice, slice))) __gen_read_$init$PositionsManagerContract(slice sc_0) inline {
-    var v'owner = sc_0~__tact_load_address();
+(slice, ((slice, slice))) __gen_read_$init$PositionsManagerContract(slice sc_0) inline {
     var v'gateKeeperAddress = sc_0~__tact_load_address();
     var v'stablecoinMasterAddress = sc_0~__tact_load_address();
-    return (sc_0, (v'owner, v'gateKeeperAddress, v'stablecoinMasterAddress));
+    return (sc_0, (v'gateKeeperAddress, v'stablecoinMasterAddress));
 }
 
-(slice, int, slice, slice) $__gen_PositionsManagerContract_init(slice $owner, slice $gateKeeperAddress, slice $stablecoinMasterAddress) impure inline_ref {
+(slice, int, slice, slice) $__gen_PositionsManagerContract_init(slice $gateKeeperAddress, slice $stablecoinMasterAddress) impure inline_ref {
     var (($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress)) = (null(), 0, null(), null());
-    $self'owner = $owner;
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    $self'owner = $ctx'sender;
     $self'gateKeeperAddress = $gateKeeperAddress;
     $self'stablecoinMasterAddress = $stablecoinMasterAddress;
     return ($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress);
@@ -289,9 +291,9 @@ builder __gen_write_$init$UserPositionContract(builder build_0, (slice) v) inlin
     if ($loaded) {
         return $sc~__gen_read_PositionsManagerContract();
     } else {
-        (slice owner, slice gateKeeperAddress, slice stablecoinMasterAddress) = $sc~__gen_read_$init$PositionsManagerContract();
+        (slice gateKeeperAddress, slice stablecoinMasterAddress) = $sc~__gen_read_$init$PositionsManagerContract();
         $sc.end_parse();
-        return $__gen_PositionsManagerContract_init(owner, gateKeeperAddress, stablecoinMasterAddress);
+        return $__gen_PositionsManagerContract_init(gateKeeperAddress, stablecoinMasterAddress);
     }
 }
 
@@ -374,7 +376,7 @@ int $__gen_Context_readForwardFee((int, slice, int, slice) $self) impure inline_
     return (bounce, to, value, mode, body, null(), null());
 }
 
-(cell, cell) $__gen_UserPositionContract_init_child(cell sys', slice $user) {
+(cell, cell) $__gen_UserPositionContract_init_child(cell sys', slice $user, slice $stablecoinMasterAddress, slice $positionsManagerAddress) {
     slice sc' = sys'.begin_parse();
     cell source = sc'~load_dict();
     cell contracts = new_dict();
@@ -391,7 +393,7 @@ int $__gen_Context_readForwardFee((int, slice, int, slice) $self) impure inline_
     builder b = begin_cell();
     b = b.store_ref(begin_cell().store_dict(contracts).end_cell());
     b = b.store_int(false, 1);
-    b = __gen_write_$init$UserPositionContract(b, ($user));
+    b = __gen_write_$init$UserPositionContract(b, ($user, $stablecoinMasterAddress, $positionsManagerAddress));
     return (mine, b.end_cell());
 }
 
@@ -436,7 +438,7 @@ _ $__gen_get_balance() method_id(104128) {
     throw_unless(5576, __tact_address_eq($ctx'sender, $self'gateKeeperAddress));
     int $fwdFee = $__gen_Context_readForwardFee(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw));
     throw_unless(16059, ($ctx'value > ($msg'amount + 500000000)));
-    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user);
+    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user, $self'stablecoinMasterAddress, my_address());
     slice $userPositionAddress = $contractAddress(($init'code, $init'data));
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body_code_data($userPositionAddress, 500000000, 2, true, __gen_writecell_DepositCollateralMessage(__gen_constructor_DepositCollateralMessage$amount_user($msg'amount, $msg'user)), $init'code, $init'data));
     return (($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress), ());
@@ -451,7 +453,7 @@ _ $__gen_get_balance() method_id(104128) {
     var ($msg'user) = $msg;
     $self'lastPositionId = ($self'lastPositionId + 1);
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user);
+    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user, $self'stablecoinMasterAddress, my_address());
     slice $userPositionAddress = $contractAddress(($init'code, $init'data));
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($ctx'sender, 100000000, 2, true, __gen_writecell_SetPositionIdMessage(__gen_constructor_SetPositionIdMessage$positionId_user($self'lastPositionId, $msg'user))));
     return (($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress), ());
@@ -462,7 +464,7 @@ _ $__gen_get_balance() method_id(104128) {
     var ($msg'user, $msg'amount, $msg'debtRate) = $msg;
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
     throw_unless(5576, __tact_address_eq($ctx'sender, $self'gateKeeperAddress));
-    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user);
+    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user, $self'stablecoinMasterAddress, my_address());
     slice $userPositionAddress = $contractAddress(($init'code, $init'data));
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($userPositionAddress, 100000000, 2, true, __gen_writecell_WithdrawStablecoinMessage(($msg'user, $msg'amount, $msg'debtRate))));
     return (($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress), ());
@@ -471,7 +473,7 @@ _ $__gen_get_balance() method_id(104128) {
 (((slice, int, slice, slice)), ()) $__gen_PositionsManagerContract_receive_IncreaseTotalStableMessage((slice, int, slice, slice) $self, (slice, int) $msg) impure inline {
     var ($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress) = $self;
     var ($msg'user, $msg'amount) = $msg;
-    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user);
+    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user, $self'stablecoinMasterAddress, my_address());
     slice $userPositionAddress = $contractAddress(($init'code, $init'data));
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'gateKeeperAddress, 100000000, 2, true, __gen_writecell_IncreaseTotalStableMessage(($msg'user, $msg'amount))));
     return (($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress), ());
@@ -482,7 +484,7 @@ _ $__gen_get_balance() method_id(104128) {
     var ($msg'user, $msg'amount, $msg'debtRate) = $msg;
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
     throw_unless(5576, __tact_address_eq($ctx'sender, $self'gateKeeperAddress));
-    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user);
+    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user, $self'stablecoinMasterAddress, my_address());
     slice $userPositionAddress = $contractAddress(($init'code, $init'data));
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($userPositionAddress, 100000000, 2, true, __gen_writecell_RepayStablecoinMessage(($msg'user, $msg'amount, $msg'debtRate))));
     return (($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress), ());
@@ -491,7 +493,7 @@ _ $__gen_get_balance() method_id(104128) {
 (((slice, int, slice, slice)), ()) $__gen_PositionsManagerContract_receive_DecreaseTotalStableMessage((slice, int, slice, slice) $self, (slice, int, int) $msg) impure inline {
     var ($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress) = $self;
     var ($msg'user, $msg'amount, $msg'fees) = $msg;
-    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user);
+    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user, $self'stablecoinMasterAddress, my_address());
     slice $userPositionAddress = $contractAddress(($init'code, $init'data));
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'gateKeeperAddress, 100000000, 2, true, __gen_writecell_DecreaseTotalStableMessage(($msg'user, $msg'amount, $msg'fees))));
     return (($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress), ());
@@ -502,7 +504,7 @@ _ $__gen_get_balance() method_id(104128) {
     var ($msg'user, $msg'amount, $msg'debtRate) = $msg;
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
     throw_unless(5576, __tact_address_eq($ctx'sender, $self'gateKeeperAddress));
-    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user);
+    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user, $self'stablecoinMasterAddress, my_address());
     slice $userPositionAddress = $contractAddress(($init'code, $init'data));
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($userPositionAddress, 100000000, 2, true, __gen_writecell_WithdrawCollateralMessage(($msg'user, $msg'amount, $msg'debtRate))));
     return (($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress), ());
@@ -511,7 +513,7 @@ _ $__gen_get_balance() method_id(104128) {
 (((slice, int, slice, slice)), ()) $__gen_PositionsManagerContract_receive_DoWithdrawCollateralMessage((slice, int, slice, slice) $self, (slice, int) $msg) impure inline {
     var ($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress) = $self;
     var ($msg'user, $msg'amount) = $msg;
-    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user);
+    var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user, $self'stablecoinMasterAddress, my_address());
     slice $userPositionAddress = $contractAddress(($init'code, $init'data));
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'gateKeeperAddress, 100000000, 2, true, __gen_writecell_DoWithdrawCollateralMessage(($msg'user, $msg'amount))));
     return (($self'owner, $self'lastPositionId, $self'stablecoinMasterAddress, $self'gateKeeperAddress), ());
@@ -634,7 +636,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmXpPe69LUg5zWf3PHikfVrTjoJS7y4cc5xP1gaRnbAd1V";
+    return "ipfs://QmNzN53YoCzw8NnzCsE5ihRBgipP9dYUvx8kLqUpr51Y44";
 }
 
 _ lazy_deployment_completed() {

@@ -1,5 +1,4 @@
 import "@stdlib/deploy";
-import "@stdlib/ownable";
 import "./messages";
 
 
@@ -9,7 +8,7 @@ struct PositionState {
 }
 
 
-contract UserPositionContract with Deployable, Ownable {
+contract UserPositionContract with Deployable {
 
     owner: Address;
     user: Address; // who owns this position
@@ -20,13 +19,10 @@ contract UserPositionContract with Deployable, Ownable {
     debt: Int as uint64 = 0;
 
 
-    init(user: Address) {
-        let ctx: Context = context();
-        self.owner = ctx.sender;
-
+    init(user: Address, stablecoinMasterAddress: Address, positionsManagerAddress: Address) {
         self.user = user; 
-        self.stablecoinMasterAddress = newAddress(0, 0);
-        self.positionsManagerAddress = newAddress(0, 0);
+        self.stablecoinMasterAddress = stablecoinMasterAddress;
+        self.positionsManagerAddress = positionsManagerAddress;
         // todo call positionsManager.newPositionId(user)
         send(SendParameters{
             to: self.positionsManagerAddress, 
@@ -37,14 +33,6 @@ contract UserPositionContract with Deployable, Ownable {
                 user: user
             }.toCell()
         });
-    }
-
-    // owner setters
-
-    receive(msg: SetUserPositionDependecyMessage) {
-        self.requireOwner();
-        self.stablecoinMasterAddress = msg.stablecoinMasterAddress;
-        self.positionsManagerAddress = msg.positionsManagerAddress;
     }
 
 
@@ -165,7 +153,7 @@ contract UserPositionContract with Deployable, Ownable {
             value: ton("0.5"),
             mode: SendIgnoreErrors, 
             bounce: true,
-            body: BurnMessage{
+            body: RepayBurnMessage{
                 user: msg.user,
                 amount: amountToBurn, 
                 fees: 1 // todo calculate fees 
@@ -233,7 +221,6 @@ contract UserPositionContract with Deployable, Ownable {
                 amount: msg.amount
             }.toCell()
         });
-        
     }
    
 
