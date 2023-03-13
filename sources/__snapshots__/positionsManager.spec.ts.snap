@@ -1,7 +1,46 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PositionsManagerContract deploys new user position contract, keep collateral and forward addCollateral  1`] = `
+exports[`PositionsManagerContract deploys new user position contract and forward addCollateral  1`] = `
 [
+  {
+    "$seq": 2,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{DDED1FE8800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2A2E90EDD000000000020000000200000002000000020000000200000002935F1B401_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
+          "to": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
+          "type": "internal",
+          "value": 101000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 22548n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{DDED1FE8800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2A2E90EDD000000000020000000200000002000000020000000200000002935F1B401_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
+            "to": "kQD-q_URnMcLNDmDEG6mn-oUsoeIHbzZCmHSBKok9925RPb1",
+            "type": "internal",
+            "value": 100942928000n,
+          },
+        ],
+      },
+    ],
+  },
   {
     "$seq": 3,
     "events": [
@@ -9,33 +48,33 @@ exports[`PositionsManagerContract deploys new user position contract, keep colla
         "$type": "received",
         "message": {
           "body": {
-            "cell": "x{11DFB138800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2A2E90EDD001_}",
+            "cell": "x{0D74C595800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B3_}",
             "type": "cell",
           },
           "bounce": true,
-          "from": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
-          "to": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+          "from": "kQD-q_URnMcLNDmDEG6mn-oUsoeIHbzZCmHSBKok9925RPb1",
+          "to": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
           "type": "internal",
-          "value": 101000000000n,
+          "value": 98601000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 13289n,
+        "gasUsed": 20542n,
       },
       {
         "$type": "sent",
         "messages": [
           {
             "body": {
-              "cell": "x{11DFB138800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2A2E90EDD001_}",
+              "cell": "x{4A35F9D0800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000000000000000000000000000000000000000000000000000000000001}",
               "type": "cell",
             },
             "bounce": true,
-            "from": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
-            "to": "kQCCtoYa0CoPBJwPRSykM6QTesdKiuiuq72tx7CXdHH4xWLh",
+            "from": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
+            "to": "kQD-q_URnMcLNDmDEG6mn-oUsoeIHbzZCmHSBKok9925RPb1",
             "type": "internal",
-            "value": 490002000n,
+            "value": 98344000n,
           },
         ],
       },
@@ -58,28 +97,28 @@ exports[`PositionsManagerContract newPositionId request from userPosition, incre
           },
           "bounce": true,
           "from": "kQBqJ1A2wQ5MkOBlhdTr7ML850tmbmDecFDAEvNUwHvm0sGh",
-          "to": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+          "to": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 11032n,
+        "gasUsed": 20542n,
       },
       {
         "$type": "sent",
         "messages": [
           {
             "body": {
-              "cell": "x{00B3CAD501}",
+              "cell": "x{4A35F9D0800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000000000000000000000000000000000000000000000000000000000002}",
               "type": "cell",
             },
             "bounce": true,
-            "from": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+            "from": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
             "to": "kQBqJ1A2wQ5MkOBlhdTr7ML850tmbmDecFDAEvNUwHvm0sGh",
             "type": "internal",
-            "value": 98860000n,
+            "value": 98344000n,
           },
         ],
       },
@@ -91,7 +130,7 @@ exports[`PositionsManagerContract newPositionId request from userPosition, incre
 exports[`PositionsManagerContract on decreaseTotalStable from userPosition forwards message to the gateKeeper 1`] = `
 [
   {
-    "$seq": 8,
+    "$seq": 10,
     "events": [
       {
         "$type": "received",
@@ -102,14 +141,14 @@ exports[`PositionsManagerContract on decreaseTotalStable from userPosition forwa
           },
           "bounce": true,
           "from": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
-          "to": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+          "to": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 11810n,
+        "gasUsed": 21034n,
       },
       {
         "$type": "sent",
@@ -120,7 +159,7 @@ exports[`PositionsManagerContract on decreaseTotalStable from userPosition forwa
               "type": "cell",
             },
             "bounce": true,
-            "from": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+            "from": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
             "to": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
             "type": "internal",
             "value": 98473000n,
@@ -135,7 +174,7 @@ exports[`PositionsManagerContract on decreaseTotalStable from userPosition forwa
 exports[`PositionsManagerContract on doWithdrawCollateral from userPosition forwards message to the gateKeeper 1`] = `
 [
   {
-    "$seq": 10,
+    "$seq": 11,
     "events": [
       {
         "$type": "received",
@@ -146,14 +185,14 @@ exports[`PositionsManagerContract on doWithdrawCollateral from userPosition forw
           },
           "bounce": true,
           "from": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
-          "to": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+          "to": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 12058n,
+        "gasUsed": 21182n,
       },
       {
         "$type": "sent",
@@ -164,7 +203,7 @@ exports[`PositionsManagerContract on doWithdrawCollateral from userPosition forw
               "type": "cell",
             },
             "bounce": true,
-            "from": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+            "from": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
             "to": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
             "type": "internal",
             "value": 98537000n,
@@ -179,7 +218,7 @@ exports[`PositionsManagerContract on doWithdrawCollateral from userPosition forw
 exports[`PositionsManagerContract on increaseTotalStable from userPosition forwards message to the gateKeeper 1`] = `
 [
   {
-    "$seq": 6,
+    "$seq": 7,
     "events": [
       {
         "$type": "received",
@@ -190,14 +229,14 @@ exports[`PositionsManagerContract on increaseTotalStable from userPosition forwa
           },
           "bounce": true,
           "from": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
-          "to": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+          "to": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 11462n,
+        "gasUsed": 20689n,
       },
       {
         "$type": "sent",
@@ -208,10 +247,10 @@ exports[`PositionsManagerContract on increaseTotalStable from userPosition forwa
               "type": "cell",
             },
             "bounce": true,
-            "from": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+            "from": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
             "to": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
             "type": "internal",
-            "value": 98537000n,
+            "value": 977848000n,
           },
         ],
       },
@@ -223,85 +262,63 @@ exports[`PositionsManagerContract on increaseTotalStable from userPosition forwa
 exports[`PositionsManagerContract on repayStable from gateKeeper forwards message to the userPosition 1`] = `
 [
   {
-    "$seq": 7,
+    "$seq": 8,
     "events": [
       {
         "$type": "received",
         "message": {
           "body": {
-            "cell": "x{6E81F446800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000002E90EDD0000000000000000003_}",
+            "cell": "x{BEF31E07800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000002E90EDD000000000020000000200000002000000020000000200000002935F1B401_}",
             "type": "cell",
           },
           "bounce": true,
           "from": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
-          "to": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+          "to": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 11803n,
+        "gasUsed": 21848n,
       },
       {
         "$type": "sent",
         "messages": [
           {
             "body": {
-              "cell": "x{6E81F446800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000002E90EDD0000000000000000003_}",
+              "cell": "x{BEF31E07800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000002E90EDD000000000020000000200000002000000020000000200000002935F1B401_}",
               "type": "cell",
             },
             "bounce": true,
-            "from": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
-            "to": "kQCCtoYa0CoPBJwPRSykM6QTesdKiuiuq72tx7CXdHH4xWLh",
+            "from": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
+            "to": "kQD-q_URnMcLNDmDEG6mn-oUsoeIHbzZCmHSBKok9925RPb1",
             "type": "internal",
-            "value": 98473000n,
+            "value": 98309000n,
           },
         ],
       },
     ],
   },
-]
-`;
-
-exports[`PositionsManagerContract on withdrawCollateral from gateKeeper forwards message to the userPosition 1`] = `
-[
   {
     "$seq": 9,
     "events": [
       {
-        "$type": "received",
+        "$type": "received-bounced",
         "message": {
           "body": {
-            "cell": "x{6829D55E800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2A2E90EDD0000000000000000000000000000000000000000000000000000000000000000001}",
-            "type": "cell",
+            "type": "empty",
           },
-          "bounce": true,
-          "from": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
-          "to": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+          "bounce": false,
+          "from": "kQD-q_URnMcLNDmDEG6mn-oUsoeIHbzZCmHSBKok9925RPb1",
+          "to": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
           "type": "internal",
-          "value": 1000000000n,
+          "value": 91178000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 12187n,
-      },
-      {
-        "$type": "sent",
-        "messages": [
-          {
-            "body": {
-              "cell": "x{6829D55E800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2A2E90EDD0000000000000000000000000000000000000000000000000000000000000000001}",
-              "type": "cell",
-            },
-            "bounce": true,
-            "from": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
-            "to": "kQCCtoYa0CoPBJwPRSykM6QTesdKiuiuq72tx7CXdHH4xWLh",
-            "type": "internal",
-            "value": 98300000n,
-          },
-        ],
+        "gasUsed": 6330n,
       },
     ],
   },
@@ -317,35 +334,57 @@ exports[`PositionsManagerContract on withdrawStable from gateKeeper forwards mes
         "$type": "received",
         "message": {
           "body": {
-            "cell": "x{F3554CD7800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000002E90EDD0000000000000000003_}",
+            "cell": "x{6C3989BB800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000002E90EDD000000000020000000200000002000000020000000200000002935F1B401_}",
             "type": "cell",
           },
           "bounce": true,
           "from": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
-          "to": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+          "to": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 11505n,
+        "gasUsed": 21653n,
       },
       {
         "$type": "sent",
         "messages": [
           {
             "body": {
-              "cell": "x{F3554CD7800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000002E90EDD0000000000000000003_}",
+              "cell": "x{6C3989BB800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000002E90EDD000000000020000000200000002000000020000000200000002935F1B401_}",
               "type": "cell",
             },
             "bounce": true,
-            "from": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
-            "to": "kQCCtoYa0CoPBJwPRSykM6QTesdKiuiuq72tx7CXdHH4xWLh",
+            "from": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
+            "to": "kQD-q_URnMcLNDmDEG6mn-oUsoeIHbzZCmHSBKok9925RPb1",
             "type": "internal",
-            "value": 98473000n,
+            "value": 976656000n,
           },
         ],
+      },
+    ],
+  },
+  {
+    "$seq": 6,
+    "events": [
+      {
+        "$type": "received-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQD-q_URnMcLNDmDEG6mn-oUsoeIHbzZCmHSBKok9925RPb1",
+          "to": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
+          "type": "internal",
+          "value": 958770000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 6330n,
       },
     ],
   },
@@ -361,12 +400,12 @@ exports[`PositionsManagerContract revert depositCollateral if sent not from gate
         "$type": "received",
         "message": {
           "body": {
-            "cell": "x{11DFB138800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2A2E90EDD001_}",
+            "cell": "x{DDED1FE8800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2A2E90EDD000000000020000000200000002000000020000000200000002935F1B401_}",
             "type": "cell",
           },
           "bounce": true,
           "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-          "to": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+          "to": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
           "type": "internal",
           "value": 101000000000n,
         },
@@ -383,52 +422,10 @@ exports[`PositionsManagerContract revert depositCollateral if sent not from gate
             "type": "empty",
           },
           "bounce": false,
-          "from": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+          "from": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
           "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
           "type": "internal",
-          "value": 100996480000n,
-        },
-      },
-    ],
-  },
-]
-`;
-
-exports[`PositionsManagerContract revert if collateral less than 101 ton 1`] = `
-[
-  {
-    "$seq": 2,
-    "events": [
-      {
-        "$type": "received",
-        "message": {
-          "body": {
-            "cell": "x{11DFB138800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2A2E90EDD001_}",
-            "type": "cell",
-          },
-          "bounce": true,
-          "from": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
-          "to": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
-          "type": "internal",
-          "value": 100000000000n,
-        },
-      },
-      {
-        "$type": "failed",
-        "errorCode": 16059,
-        "errorMessage": "Invalid value",
-      },
-      {
-        "$type": "sent-bounced",
-        "message": {
-          "body": {
-            "type": "empty",
-          },
-          "bounce": false,
-          "from": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
-          "to": "kQBhDJZIy0_RS_IdyGG5GxdsC8eWb15DS9b3IL2p2-b0cUi8",
-          "type": "internal",
-          "value": 99995870000n,
+          "value": 100993705000n,
         },
       },
     ],
@@ -448,35 +445,19 @@ exports[`PositionsManagerContract should deploy correctly 1`] = `
         "$type": "received",
         "message": {
           "body": {
-            "cell": "x{946A98B60000000000000000}",
+            "cell": "x{23071186801075E834DF4F15E107E94B1EDF44C910774A333E3C6B7B2F37E39B16FED191AD9001843259232D3F452FC8772186E46C5DB02F1E59BD790D2F5BDC82F6A76F9BD1C6_}",
             "type": "cell",
           },
           "bounce": true,
           "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-          "to": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
+          "to": "kQDABUOp56Z0-s0ottjM90287XtNhXKPNbz9LlpHIqdmaNAq",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 7716n,
-      },
-      {
-        "$type": "sent",
-        "messages": [
-          {
-            "body": {
-              "cell": "x{AFF90F570000000000000000}",
-              "type": "cell",
-            },
-            "bounce": true,
-            "from": "kQBLxN4YqJF1p_jMCDFKgosqBHKnA4ZkcA-3mo7-jStpwmXt",
-            "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-            "type": "internal",
-            "value": 991088000n,
-          },
-        ],
+        "gasUsed": 9256n,
       },
     ],
   },

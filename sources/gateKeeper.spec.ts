@@ -1,127 +1,167 @@
-import { toNano } from "ton";
-import { ContractSystem } from "ton-emulator";
+import { OpenedContract, toNano } from "ton";
+import { ContractSystem, Logger, Tracker, Treasure } from "ton-emulator";
 import { GateKeeperContract } from "./output/stableton_GateKeeperContract";
 
 describe("GateKeeperContract", () => {
-    it("should deploy correctly", async () => {
-        // Create ContractSystem and deploy contract
-        let system = await ContractSystem.create();
-        let owner = system.treasure("owner");
-        let nonOwner = system.treasure("non-owner");
-        let user = system.treasure("user");
+    let system: ContractSystem;
+    let owner: Treasure;
+    let user: Treasure;
+    let positionsManager: Treasure;
+    let stablecoinMaster: Treasure;
+    let gateKeeperContract: OpenedContract<GateKeeperContract>;
+    let track: Tracker;
+    let logger: Logger;
 
-        let contract = system.open(await GateKeeperContract.fromInit(owner.address));
-        console.log("GateKeeper address", contract.address);
-        let track = system.track(contract.address);
-        await contract.send(owner, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
+    beforeAll(async () => {
+        system = await ContractSystem.create();
+        owner = system.treasure("owner");
+        user = system.treasure("user");
+        positionsManager = system.treasure("positionsManager");
+        stablecoinMaster = system.treasure("stablecoinMaster");
+
+        gateKeeperContract = system.open(await GateKeeperContract.fromInit());
+
+        track = system.track(gateKeeperContract.address);
+        logger = system.log(gateKeeperContract.address);
+    });
+
+    it("should deploy correctly", async () => {
+        await gateKeeperContract.send(
+            owner,
+            { value: toNano(1) },
+            {
+                $$type: "SetDeps",
+                stablecoinMasterAddress: stablecoinMaster.address,
+                positionsManagerAddress: positionsManager.address,
+            }
+        );
         await system.run();
-        // console.log("track.collect()", track.collect());
 
         expect(track.collect()).toMatchSnapshot();
 
-        // Check counter
-        console.log("contract.getPoolSettings()", await contract.getPoolSettings());
-
-        expect(await contract.getPoolSettings()).toEqual({
+        expect(await gateKeeperContract.getPoolSettings()).toEqual({
             $$type: "PoolSettings",
             closeFactorBps: 0n,
-            lastAccumulationTime: 0n,
             liquidationRatio: 0n,
             liquidatorIncentiveBps: 0n,
             stabilityFeeRate: 0n,
-            treasutyFeeBps: 0n,
         });
 
+        const deps = await gateKeeperContract.getGetDeps();
+
+        expect(deps.positionsManagerAddress.toString()).toEqual("EQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-LEr");
+        expect(deps.stablecoinMasterAddress.toString()).toEqual("EQCDr0Gm-nivCD9KWPb6JkiDulGZ8eNb2Xm_HNi39oyNbKeD");
+    });
+
+    it("on pool settings msg should store new settings ", async () => {
         // Set pool settings by owner
-        await contract.send(
+
+        const now = Math.round(new Date().getTime() / 1000);
+        await gateKeeperContract.send(
             owner,
             { value: toNano(1) },
             {
                 $$type: "PoolSettingsMsg",
-                liquidationRatio: 2n,
+                liquidationRatio: 1200000000n,
                 stabilityFeeRate: 2n,
-                lastAccumulationTime: 2n,
-                closeFactorBps: 2n,
-                liquidatorIncentiveBps: 2n,
-                treasutyFeeBps: 2n,
+                closeFactorBps: 2500n,
+                liquidatorIncentiveBps: 10500n,
             }
         );
         await system.run();
+
         expect(track.collect()).toMatchSnapshot();
 
-        // Check counter
-        console.log("contract.getPoolSettings()", await contract.getPoolSettings());
-        expect(await contract.getPoolSettings()).toEqual({
+        expect(await gateKeeperContract.getPoolSettings()).toEqual({
             $$type: "PoolSettings",
-            closeFactorBps: 2n,
-            lastAccumulationTime: 2n,
-            liquidationRatio: 2n,
-            liquidatorIncentiveBps: 2n,
+            liquidationRatio: 1200000000n,
             stabilityFeeRate: 2n,
-            treasutyFeeBps: 2n,
+            closeFactorBps: 2500n,
+            liquidatorIncentiveBps: 10500n,
         });
-
-        // set pool settings by Non - owner;
-        await contract.send(
-            nonOwner,
-            { value: toNano(1) },
-            {
-                $$type: "PoolSettingsMsg",
-                liquidationRatio: 2n,
-                stabilityFeeRate: 2n,
-                lastAccumulationTime: 2n,
-                closeFactorBps: 2n,
-                liquidatorIncentiveBps: 2n,
-                treasutyFeeBps: 2n,
-            }
-        );
-        await system.run();
-        expect(track.collect()).toMatchSnapshot();
     });
 
     it("should set ton price", async () => {
-        // Create ContractSystem and deploy contract
-        let system = await ContractSystem.create();
-        let owner = system.treasure("owner");
-        let nonOwner = system.treasure("non-owner");
-        let contract = system.open(await GateKeeperContract.fromInit(owner.address));
-        let track = system.track(contract.address);
-        await contract.send(owner, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
-        await system.run();
+        console.log("contract.getTonPrice()", await gateKeeperContract.getTonPrice());
 
-        // Check initial ton price
-        console.log("contract.getTonPrice()", await contract.getTonPrice());
-
-        expect(await contract.getTonPrice()).toEqual(0n);
+        expect(await gateKeeperContract.getTonPrice()).toEqual(0n);
+        expect(await gateKeeperContract.getTonPriceWithSafetyMargin()).toEqual(0n);
 
         // Set pool settings by owner
-        await contract.send(
+        await gateKeeperContract.send(
             owner,
             { value: toNano(1) },
             {
                 $$type: "UpdateTonPriceMsg",
-                price: 2n,
+                price: 3200000000n,
             }
         );
         await system.run();
-        expect(track.collect()[1]).toMatchSnapshot();
+        expect(track.collect()).toMatchSnapshot();
 
         // Check updated ton price
-        console.log("contract.getTonPrice()", await contract.getTonPrice());
+        console.log("contract.getTonPrice()", await gateKeeperContract.getTonPrice());
+        expect(await gateKeeperContract.getTonPrice()).toEqual(3200000000n);
 
-        expect(await contract.getTonPrice()).toEqual(2n);
+        // liquidation ratio = 120%, means if collateral volume is less than debt*1.2 then liquidation possible
+        console.log("tonPriceWithSafetyMargin", await gateKeeperContract.getTonPriceWithSafetyMargin());
+        expect(await gateKeeperContract.getTonPriceWithSafetyMargin()).toEqual(2666666666n);
+    });
 
-        // set price by Non - owner;
-        await contract.send(
-            nonOwner,
-            { value: toNano(1) },
+    it("on deposit collateral should forward message to positionsManager and have msg.amount left on gatekeeper balance", async () => {
+        console.log("gateKeeper balance before", await gateKeeperContract.getGetBalance());
+
+        // send collateral 100 ton plus 1 ton for messaging
+        await gateKeeperContract.send(
+            user,
+            { value: toNano(101) },
             {
-                $$type: "UpdateTonPriceMsg",
-                price: 2n,
+                $$type: "DepositCollateralUserMessage",
+                user: user.address,
+                amount: toNano(100),
             }
         );
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
 
+        // gatekeeper should store 100 ton collateral
+        console.log("gateKeeper balance after", await gateKeeperContract.getGetBalance());
+        expect(await gateKeeperContract.getGetBalance()).toBeGreaterThan(toNano(100));
+
+        // console.warn(logger.collect());
+    });
+
+    it("on withdrawstablecoins should forward message to positionsManager with current settings and price", async () => {
+        await gateKeeperContract.send(
+            user,
+            { value: toNano(1) },
+            {
+                $$type: "WithdrawStablecoinUserMessage",
+                user: user.address,
+                amount: toNano(100),
+            }
+        );
         await system.run();
         expect(track.collect()).toMatchSnapshot();
     });
+
+    it("on increase total stable should add total stables count", async () => {
+        const totalStablesIssuedBefore = await gateKeeperContract.getStablecoinsIssued();
+        await gateKeeperContract.send(
+            positionsManager,
+            { value: toNano(1) },
+            {
+                $$type: "IncreaseTotalStableMessage",
+                user: user.address,
+                amount: toNano(100),
+            }
+        );
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
+
+        const totalStablesIssuedAfter = await gateKeeperContract.getStablecoinsIssued();
+        expect(totalStablesIssuedAfter - totalStablesIssuedBefore).toEqual(toNano(100));
+    });
+
+    // todo test for WithdrawFeesMessage
 });

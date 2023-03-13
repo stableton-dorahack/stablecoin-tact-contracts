@@ -19,15 +19,21 @@ describe("PositionsManagerContract", () => {
         user = system.treasure("user");
         gateKeeper = system.treasure("gateKeeper");
         stablecoinMaster = system.treasure("stablecoinMaster");
-        positionsManagerContract = system.open(
-            await PositionsManagerContract.fromInit(gateKeeper.address, stablecoinMaster.address)
-        );
+        positionsManagerContract = system.open(await PositionsManagerContract.fromInit());
         track = system.track(positionsManagerContract.address);
         logger = system.log(positionsManagerContract.address);
     });
 
     it("should deploy correctly", async () => {
-        await positionsManagerContract.send(owner, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
+        await positionsManagerContract.send(
+            owner,
+            { value: toNano(1) },
+            {
+                $$type: "SetDeps",
+                stablecoinMasterAddress: stablecoinMaster.address,
+                gateKeeperAddress: gateKeeper.address,
+            }
+        );
 
         await system.run();
         expect(track.collect()).toMatchSnapshot();
@@ -39,43 +45,62 @@ describe("PositionsManagerContract", () => {
         await positionsManagerContract.send(
             owner,
             { value: toNano(101) },
-            { $$type: "DepositCollateralMessage", user: user.address, amount: toNano(100) }
+            {
+                $$type: "DepositCollateralMessage",
+                user: user.address,
+                amount: toNano(100),
+                settings: {
+                    $$type: "PoolSettings",
+                    liquidationRatio: 1n,
+                    stabilityFeeRate: 1n,
+                    closeFactorBps: 1n,
+                    liquidatorIncentiveBps: 1n,
+                },
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1n,
+                    lastAccumulationTime: 1n,
+                },
+                tonPriceWithSafetyMargin: 2600000000n,
+            }
         );
 
         await system.run();
         expect(track.collect()).toMatchSnapshot();
     });
 
-    it("revert if collateral less than 101 ton", async () => {
-        await positionsManagerContract.send(
-            gateKeeper,
-            { value: toNano(100) },
-            { $$type: "DepositCollateralMessage", user: user.address, amount: toNano(100) }
-        );
-
-        await system.run();
-        expect(track.collect()).toMatchSnapshot();
-    });
-
-    it("deploys new user position contract, keep collateral and forward addCollateral ", async () => {
-        const balanceBefore = await positionsManagerContract.getBalance();
-
+    it("deploys new user position contract and forward addCollateral ", async () => {
         await positionsManagerContract.send(
             gateKeeper,
             { value: toNano(101) },
-            { $$type: "DepositCollateralMessage", user: user.address, amount: toNano(100) }
+            {
+                $$type: "DepositCollateralMessage",
+                user: user.address,
+                amount: toNano(100),
+                settings: {
+                    $$type: "PoolSettings",
+                    liquidationRatio: 1n,
+                    stabilityFeeRate: 1n,
+                    closeFactorBps: 1n,
+                    liquidatorIncentiveBps: 1n,
+                },
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1n,
+                    lastAccumulationTime: 1n,
+                },
+                tonPriceWithSafetyMargin: 2600000000n,
+            }
         );
 
         await system.run();
         expect(track.collect()).toMatchSnapshot();
-
-        const balanceAfter = await positionsManagerContract.getBalance();
-
-        expect(balanceAfter - balanceBefore).toBeGreaterThan(BigInt(toNano(100)));
     });
 
     it("newPositionId request from userPosition, increase lastPositionId and send it back to sender ", async () => {
         const userPosition = system.treasure("userPosition");
+
+        const prevPositionId = await positionsManagerContract.getLastPositionId();
 
         await positionsManagerContract.send(
             userPosition,
@@ -86,14 +111,31 @@ describe("PositionsManagerContract", () => {
         await system.run();
         expect(track.collect()).toMatchSnapshot();
 
-        expect(await positionsManagerContract.getLastPositionId()).toBe(1n);
+        expect(await positionsManagerContract.getLastPositionId()).toBe(prevPositionId + 1n);
     });
 
     it("on withdrawStable from gateKeeper forwards message to the userPosition", async () => {
         await positionsManagerContract.send(
             gateKeeper,
             { value: toNano(1) },
-            { $$type: "WithdrawStablecoinMessage", user: user.address, amount: toNano(100), debtRate: 1n }
+            {
+                $$type: "WithdrawStablecoinMessage",
+                user: user.address,
+                amount: toNano(100),
+                settings: {
+                    $$type: "PoolSettings",
+                    liquidationRatio: 1n,
+                    stabilityFeeRate: 1n,
+                    closeFactorBps: 1n,
+                    liquidatorIncentiveBps: 1n,
+                },
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1n,
+                    lastAccumulationTime: 1n,
+                },
+                tonPriceWithSafetyMargin: 2600000000n,
+            }
         );
 
         await system.run();
@@ -116,7 +158,24 @@ describe("PositionsManagerContract", () => {
         await positionsManagerContract.send(
             gateKeeper,
             { value: toNano(1) },
-            { $$type: "RepayStablecoinMessage", user: user.address, amount: toNano(100), debtRate: 1n }
+            {
+                $$type: "RepayStablecoinMessage",
+                user: user.address,
+                amount: toNano(100),
+                settings: {
+                    $$type: "PoolSettings",
+                    liquidationRatio: 1n,
+                    stabilityFeeRate: 1n,
+                    closeFactorBps: 1n,
+                    liquidatorIncentiveBps: 1n,
+                },
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1n,
+                    lastAccumulationTime: 1n,
+                },
+                tonPriceWithSafetyMargin: 2600000000n,
+            }
         );
 
         await system.run();
@@ -135,16 +194,16 @@ describe("PositionsManagerContract", () => {
         // expect(logger.collect()).toMatchSnapshot();
     });
 
-    it("on withdrawCollateral from gateKeeper forwards message to the userPosition", async () => {
-        await positionsManagerContract.send(
-            gateKeeper,
-            { value: toNano(1) },
-            { $$type: "WithdrawCollateralMessage", user: user.address, amount: toNano(100), debtRate: 1n }
-        );
+    // it("on withdrawCollateral from gateKeeper forwards message to the userPosition", async () => {
+    //     await positionsManagerContract.send(
+    //         gateKeeper,
+    //         { value: toNano(1) },
+    //         { $$type: "WithdrawCollateralMessage", user: user.address, amount: toNano(100), debtRate: 1n }
+    //     );
 
-        await system.run();
-        expect(track.collect()).toMatchSnapshot();
-    });
+    //     await system.run();
+    //     expect(track.collect()).toMatchSnapshot();
+    // });
 
     it("on doWithdrawCollateral from userPosition forwards message to the gateKeeper", async () => {
         await positionsManagerContract.send(

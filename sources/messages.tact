@@ -1,27 +1,46 @@
 
+struct PoolSettings {
+    liquidationRatio: Int as uint32;
+    stabilityFeeRate: Int as uint32;
+    closeFactorBps: Int as uint32;
+    liquidatorIncentiveBps: Int as uint32;
+}
+
+struct DebtRate {
+    debtAccumulatedRate: Int as uint32;
+    lastAccumulationTime: Int as uint32;
+}
+
 message DepositCollateralMessage {
     user: Address;
     amount: Int as coins;
+    settings: PoolSettings;
+    rate: DebtRate;
+    tonPriceWithSafetyMargin: Int as coins;
 }
 
 message WithdrawCollateralMessage {
-  user: Address;
-  amount: Int as coins;
-  debtRate: Int;
+    user: Address;
+    amount: Int as coins;
+    settings: PoolSettings;
+    rate: DebtRate;
+    tonPriceWithSafetyMargin: Int as coins;
 }
 
 message WithdrawStablecoinMessage {
     user: Address;
-    amount: Int as uint64;
-    // todo add pool settings values requred for stable witdrawal 
-    debtRate: Int as uint64;
+    amount: Int as uint64; 
+    settings: PoolSettings;
+    rate: DebtRate;
+    tonPriceWithSafetyMargin: Int as coins;
 }
 
 message RepayStablecoinMessage {
     user: Address;
     amount: Int as uint64;
-    // todo add settings required for repay calculations
-    debtRate: Int as uint64;
+    settings: PoolSettings;
+    rate: DebtRate;
+    tonPriceWithSafetyMargin: Int as coins;
 }
 
 message DoWithdrawCollateralMessage {
@@ -33,7 +52,6 @@ message IncreaseTotalStableMessage {
     user: Address;
     amount: Int as uint64;
 }
-
 
 message DecreaseTotalStableMessage {
     user: Address;
@@ -157,4 +175,12 @@ message(0xd53276db) TokenExcesses {
 
 message TokenUpdateContent {
     content: Cell?;
+}
+
+
+// userStatus messages 
+message SetUserStatusMsg {
+    queryId: Int as uint64;
+    user: Address;
+    message: String;
 }

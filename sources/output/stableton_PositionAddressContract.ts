@@ -271,39 +271,154 @@ function dictValueParserDeployOk(): DictionaryValue<DeployOk> {
     }
 }
 
+export type PoolSettings = {
+    $$type: 'PoolSettings';
+    liquidationRatio: bigint;
+    stabilityFeeRate: bigint;
+    closeFactorBps: bigint;
+    liquidatorIncentiveBps: bigint;
+}
+
+export function storePoolSettings(src: PoolSettings) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(src.liquidationRatio, 32);
+        b_0.storeUint(src.stabilityFeeRate, 32);
+        b_0.storeUint(src.closeFactorBps, 32);
+        b_0.storeUint(src.liquidatorIncentiveBps, 32);
+    };
+}
+
+export function loadPoolSettings(slice: Slice) {
+    let sc_0 = slice;
+    let _liquidationRatio = sc_0.loadUintBig(32);
+    let _stabilityFeeRate = sc_0.loadUintBig(32);
+    let _closeFactorBps = sc_0.loadUintBig(32);
+    let _liquidatorIncentiveBps = sc_0.loadUintBig(32);
+    return { $$type: 'PoolSettings' as const, liquidationRatio: _liquidationRatio, stabilityFeeRate: _stabilityFeeRate, closeFactorBps: _closeFactorBps, liquidatorIncentiveBps: _liquidatorIncentiveBps };
+}
+
+function loadTuplePoolSettings(source: TupleReader) {
+    let _liquidationRatio = source.readBigNumber();
+    let _stabilityFeeRate = source.readBigNumber();
+    let _closeFactorBps = source.readBigNumber();
+    let _liquidatorIncentiveBps = source.readBigNumber();
+    return { $$type: 'PoolSettings' as const, liquidationRatio: _liquidationRatio, stabilityFeeRate: _stabilityFeeRate, closeFactorBps: _closeFactorBps, liquidatorIncentiveBps: _liquidatorIncentiveBps };
+}
+
+function storeTuplePoolSettings(source: PoolSettings) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.liquidationRatio);
+    builder.writeNumber(source.stabilityFeeRate);
+    builder.writeNumber(source.closeFactorBps);
+    builder.writeNumber(source.liquidatorIncentiveBps);
+    return builder.build();
+}
+
+function dictValueParserPoolSettings(): DictionaryValue<PoolSettings> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storePoolSettings(src)).endCell());
+        },
+        parse: (src) => {
+            return loadPoolSettings(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type DebtRate = {
+    $$type: 'DebtRate';
+    debtAccumulatedRate: bigint;
+    lastAccumulationTime: bigint;
+}
+
+export function storeDebtRate(src: DebtRate) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(src.debtAccumulatedRate, 32);
+        b_0.storeUint(src.lastAccumulationTime, 32);
+    };
+}
+
+export function loadDebtRate(slice: Slice) {
+    let sc_0 = slice;
+    let _debtAccumulatedRate = sc_0.loadUintBig(32);
+    let _lastAccumulationTime = sc_0.loadUintBig(32);
+    return { $$type: 'DebtRate' as const, debtAccumulatedRate: _debtAccumulatedRate, lastAccumulationTime: _lastAccumulationTime };
+}
+
+function loadTupleDebtRate(source: TupleReader) {
+    let _debtAccumulatedRate = source.readBigNumber();
+    let _lastAccumulationTime = source.readBigNumber();
+    return { $$type: 'DebtRate' as const, debtAccumulatedRate: _debtAccumulatedRate, lastAccumulationTime: _lastAccumulationTime };
+}
+
+function storeTupleDebtRate(source: DebtRate) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.debtAccumulatedRate);
+    builder.writeNumber(source.lastAccumulationTime);
+    return builder.build();
+}
+
+function dictValueParserDebtRate(): DictionaryValue<DebtRate> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeDebtRate(src)).endCell());
+        },
+        parse: (src) => {
+            return loadDebtRate(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type DepositCollateralMessage = {
     $$type: 'DepositCollateralMessage';
     user: Address;
     amount: bigint;
+    settings: PoolSettings;
+    rate: DebtRate;
+    tonPriceWithSafetyMargin: bigint;
 }
 
 export function storeDepositCollateralMessage(src: DepositCollateralMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(299872568, 32);
+        b_0.storeUint(3723304936, 32);
         b_0.storeAddress(src.user);
         b_0.storeCoins(src.amount);
+        b_0.store(storePoolSettings(src.settings));
+        b_0.store(storeDebtRate(src.rate));
+        b_0.storeCoins(src.tonPriceWithSafetyMargin);
     };
 }
 
 export function loadDepositCollateralMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 299872568) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 3723304936) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadCoins();
-    return { $$type: 'DepositCollateralMessage' as const, user: _user, amount: _amount };
+    let _settings = loadPoolSettings(sc_0);
+    let _rate = loadDebtRate(sc_0);
+    let _tonPriceWithSafetyMargin = sc_0.loadCoins();
+    return { $$type: 'DepositCollateralMessage' as const, user: _user, amount: _amount, settings: _settings, rate: _rate, tonPriceWithSafetyMargin: _tonPriceWithSafetyMargin };
 }
 
 function loadTupleDepositCollateralMessage(source: TupleReader) {
     let _user = source.readAddress();
     let _amount = source.readBigNumber();
-    return { $$type: 'DepositCollateralMessage' as const, user: _user, amount: _amount };
+    const _settings = loadTuplePoolSettings(source.readTuple());
+    const _rate = loadTupleDebtRate(source.readTuple());
+    let _tonPriceWithSafetyMargin = source.readBigNumber();
+    return { $$type: 'DepositCollateralMessage' as const, user: _user, amount: _amount, settings: _settings, rate: _rate, tonPriceWithSafetyMargin: _tonPriceWithSafetyMargin };
 }
 
 function storeTupleDepositCollateralMessage(source: DepositCollateralMessage) {
     let builder = new TupleBuilder();
     builder.writeAddress(source.user);
     builder.writeNumber(source.amount);
+    builder.writeTuple(storeTuplePoolSettings(source.settings));
+    builder.writeTuple(storeTupleDebtRate(source.rate));
+    builder.writeNumber(source.tonPriceWithSafetyMargin);
     return builder.build();
 }
 
@@ -322,40 +437,50 @@ export type WithdrawCollateralMessage = {
     $$type: 'WithdrawCollateralMessage';
     user: Address;
     amount: bigint;
-    debtRate: bigint;
+    settings: PoolSettings;
+    rate: DebtRate;
+    tonPriceWithSafetyMargin: bigint;
 }
 
 export function storeWithdrawCollateralMessage(src: WithdrawCollateralMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(1747572062, 32);
+        b_0.storeUint(3410368520, 32);
         b_0.storeAddress(src.user);
         b_0.storeCoins(src.amount);
-        b_0.storeInt(src.debtRate, 257);
+        b_0.store(storePoolSettings(src.settings));
+        b_0.store(storeDebtRate(src.rate));
+        b_0.storeCoins(src.tonPriceWithSafetyMargin);
     };
 }
 
 export function loadWithdrawCollateralMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 1747572062) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 3410368520) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadCoins();
-    let _debtRate = sc_0.loadIntBig(257);
-    return { $$type: 'WithdrawCollateralMessage' as const, user: _user, amount: _amount, debtRate: _debtRate };
+    let _settings = loadPoolSettings(sc_0);
+    let _rate = loadDebtRate(sc_0);
+    let _tonPriceWithSafetyMargin = sc_0.loadCoins();
+    return { $$type: 'WithdrawCollateralMessage' as const, user: _user, amount: _amount, settings: _settings, rate: _rate, tonPriceWithSafetyMargin: _tonPriceWithSafetyMargin };
 }
 
 function loadTupleWithdrawCollateralMessage(source: TupleReader) {
     let _user = source.readAddress();
     let _amount = source.readBigNumber();
-    let _debtRate = source.readBigNumber();
-    return { $$type: 'WithdrawCollateralMessage' as const, user: _user, amount: _amount, debtRate: _debtRate };
+    const _settings = loadTuplePoolSettings(source.readTuple());
+    const _rate = loadTupleDebtRate(source.readTuple());
+    let _tonPriceWithSafetyMargin = source.readBigNumber();
+    return { $$type: 'WithdrawCollateralMessage' as const, user: _user, amount: _amount, settings: _settings, rate: _rate, tonPriceWithSafetyMargin: _tonPriceWithSafetyMargin };
 }
 
 function storeTupleWithdrawCollateralMessage(source: WithdrawCollateralMessage) {
     let builder = new TupleBuilder();
     builder.writeAddress(source.user);
     builder.writeNumber(source.amount);
-    builder.writeNumber(source.debtRate);
+    builder.writeTuple(storeTuplePoolSettings(source.settings));
+    builder.writeTuple(storeTupleDebtRate(source.rate));
+    builder.writeNumber(source.tonPriceWithSafetyMargin);
     return builder.build();
 }
 
@@ -374,40 +499,50 @@ export type WithdrawStablecoinMessage = {
     $$type: 'WithdrawStablecoinMessage';
     user: Address;
     amount: bigint;
-    debtRate: bigint;
+    settings: PoolSettings;
+    rate: DebtRate;
+    tonPriceWithSafetyMargin: bigint;
 }
 
 export function storeWithdrawStablecoinMessage(src: WithdrawStablecoinMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(4082453719, 32);
+        b_0.storeUint(1815710139, 32);
         b_0.storeAddress(src.user);
         b_0.storeUint(src.amount, 64);
-        b_0.storeUint(src.debtRate, 64);
+        b_0.store(storePoolSettings(src.settings));
+        b_0.store(storeDebtRate(src.rate));
+        b_0.storeCoins(src.tonPriceWithSafetyMargin);
     };
 }
 
 export function loadWithdrawStablecoinMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 4082453719) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 1815710139) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadUintBig(64);
-    let _debtRate = sc_0.loadUintBig(64);
-    return { $$type: 'WithdrawStablecoinMessage' as const, user: _user, amount: _amount, debtRate: _debtRate };
+    let _settings = loadPoolSettings(sc_0);
+    let _rate = loadDebtRate(sc_0);
+    let _tonPriceWithSafetyMargin = sc_0.loadCoins();
+    return { $$type: 'WithdrawStablecoinMessage' as const, user: _user, amount: _amount, settings: _settings, rate: _rate, tonPriceWithSafetyMargin: _tonPriceWithSafetyMargin };
 }
 
 function loadTupleWithdrawStablecoinMessage(source: TupleReader) {
     let _user = source.readAddress();
     let _amount = source.readBigNumber();
-    let _debtRate = source.readBigNumber();
-    return { $$type: 'WithdrawStablecoinMessage' as const, user: _user, amount: _amount, debtRate: _debtRate };
+    const _settings = loadTuplePoolSettings(source.readTuple());
+    const _rate = loadTupleDebtRate(source.readTuple());
+    let _tonPriceWithSafetyMargin = source.readBigNumber();
+    return { $$type: 'WithdrawStablecoinMessage' as const, user: _user, amount: _amount, settings: _settings, rate: _rate, tonPriceWithSafetyMargin: _tonPriceWithSafetyMargin };
 }
 
 function storeTupleWithdrawStablecoinMessage(source: WithdrawStablecoinMessage) {
     let builder = new TupleBuilder();
     builder.writeAddress(source.user);
     builder.writeNumber(source.amount);
-    builder.writeNumber(source.debtRate);
+    builder.writeTuple(storeTuplePoolSettings(source.settings));
+    builder.writeTuple(storeTupleDebtRate(source.rate));
+    builder.writeNumber(source.tonPriceWithSafetyMargin);
     return builder.build();
 }
 
@@ -426,40 +561,50 @@ export type RepayStablecoinMessage = {
     $$type: 'RepayStablecoinMessage';
     user: Address;
     amount: bigint;
-    debtRate: bigint;
+    settings: PoolSettings;
+    rate: DebtRate;
+    tonPriceWithSafetyMargin: bigint;
 }
 
 export function storeRepayStablecoinMessage(src: RepayStablecoinMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(1854010438, 32);
+        b_0.storeUint(3203603975, 32);
         b_0.storeAddress(src.user);
         b_0.storeUint(src.amount, 64);
-        b_0.storeUint(src.debtRate, 64);
+        b_0.store(storePoolSettings(src.settings));
+        b_0.store(storeDebtRate(src.rate));
+        b_0.storeCoins(src.tonPriceWithSafetyMargin);
     };
 }
 
 export function loadRepayStablecoinMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 1854010438) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 3203603975) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadUintBig(64);
-    let _debtRate = sc_0.loadUintBig(64);
-    return { $$type: 'RepayStablecoinMessage' as const, user: _user, amount: _amount, debtRate: _debtRate };
+    let _settings = loadPoolSettings(sc_0);
+    let _rate = loadDebtRate(sc_0);
+    let _tonPriceWithSafetyMargin = sc_0.loadCoins();
+    return { $$type: 'RepayStablecoinMessage' as const, user: _user, amount: _amount, settings: _settings, rate: _rate, tonPriceWithSafetyMargin: _tonPriceWithSafetyMargin };
 }
 
 function loadTupleRepayStablecoinMessage(source: TupleReader) {
     let _user = source.readAddress();
     let _amount = source.readBigNumber();
-    let _debtRate = source.readBigNumber();
-    return { $$type: 'RepayStablecoinMessage' as const, user: _user, amount: _amount, debtRate: _debtRate };
+    const _settings = loadTuplePoolSettings(source.readTuple());
+    const _rate = loadTupleDebtRate(source.readTuple());
+    let _tonPriceWithSafetyMargin = source.readBigNumber();
+    return { $$type: 'RepayStablecoinMessage' as const, user: _user, amount: _amount, settings: _settings, rate: _rate, tonPriceWithSafetyMargin: _tonPriceWithSafetyMargin };
 }
 
 function storeTupleRepayStablecoinMessage(source: RepayStablecoinMessage) {
     let builder = new TupleBuilder();
     builder.writeAddress(source.user);
     builder.writeNumber(source.amount);
-    builder.writeNumber(source.debtRate);
+    builder.writeTuple(storeTuplePoolSettings(source.settings));
+    builder.writeTuple(storeTupleDebtRate(source.rate));
+    builder.writeNumber(source.tonPriceWithSafetyMargin);
     return builder.build();
 }
 
@@ -1562,6 +1707,58 @@ function dictValueParserTokenUpdateContent(): DictionaryValue<TokenUpdateContent
     }
 }
 
+export type SetUserStatusMsg = {
+    $$type: 'SetUserStatusMsg';
+    queryId: bigint;
+    user: Address;
+    message: string;
+}
+
+export function storeSetUserStatusMsg(src: SetUserStatusMsg) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(2205882193, 32);
+        b_0.storeUint(src.queryId, 64);
+        b_0.storeAddress(src.user);
+        b_0.storeStringRefTail(src.message);
+    };
+}
+
+export function loadSetUserStatusMsg(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 2205882193) { throw Error('Invalid prefix'); }
+    let _queryId = sc_0.loadUintBig(64);
+    let _user = sc_0.loadAddress();
+    let _message = sc_0.loadStringRefTail();
+    return { $$type: 'SetUserStatusMsg' as const, queryId: _queryId, user: _user, message: _message };
+}
+
+function loadTupleSetUserStatusMsg(source: TupleReader) {
+    let _queryId = source.readBigNumber();
+    let _user = source.readAddress();
+    let _message = source.readString();
+    return { $$type: 'SetUserStatusMsg' as const, queryId: _queryId, user: _user, message: _message };
+}
+
+function storeTupleSetUserStatusMsg(source: SetUserStatusMsg) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.queryId);
+    builder.writeAddress(source.user);
+    builder.writeString(source.message);
+    return builder.build();
+}
+
+function dictValueParserSetUserStatusMsg(): DictionaryValue<SetUserStatusMsg> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeSetUserStatusMsg(src)).endCell());
+        },
+        parse: (src) => {
+            return loadSetUserStatusMsg(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type PositionState = {
     $$type: 'PositionState';
     collateral: bigint;
@@ -1622,8 +1819,8 @@ function initPositionAddressContract_init_args(src: PositionAddressContract_init
 }
 
 async function PositionAddressContract_init(id: bigint, positionsManagerAddress: Address) {
-    const __code = Cell.fromBase64('te6ccgECEAEAAm4AART/APSkE/S88sgLAQIBYgIDAr7QAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAZ3TH/pAAQH6QAFDMGwTjo6BAQHXAPpAARIC0QHbPOJVEts8MMj4QgHMfwHKAFUgUCPLHwHPFgHPFsntVA4EAgEgCQoBvHAh10nCH5UwINcLH94Cklt/4CGCEF2m3pa6jjUx0x8BghBdpt6WuvLggfpAAQH6QAESbBIxgVbWcCDIcgHLAXABywASygfL/8nQFMcFE/L0f+ABghCUapi2uuMCMHAFAUTTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/BgEm+EFvJBAjXwN/cFADgEIBbW3bPAcB9shxAcoBUAcBygBwAcoCUAXPFlAD+gJwAcpoI26zJW6zsY5MfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzJczMwFwAcoA4iFuswgAMJx/AcoAASBu8tCAAcyVMXABygDiyQH7AAJbvtyvaiaGoA/DFpAADO6Y/9IACA/SAAoZg2CcdHQICA64B9IACJAWiA7Z5xbZ5A4LAgEgDA0ABDAxAHG7vRgnBc7D1dLK57HoTsOdZKhRtmgnCd1jUtK2R8syLTry398WI5gnAgVcAbgGdjlM5YOq5HJbLDgCW7qMvtRNDUAfhi0gABndMf+kABAfpAAUMwbBOOjoEBAdcA+kABEgLRAds84ts8gODwAmcCDIcgHLAXABywASygfL/8nQAQACWw==');
-    const __system = Cell.fromBase64('te6cckECEgEAAngAAQHAAQEFoe6/AgEU/wD0pBP0vPLICwMCAWILBAIBIAkFAgEgCAYCW7qMvtRNDUAfhi0gABndMf+kABAfpAAUMwbBOOjoEBAdcA+kABEgLRAds84ts8gRBwACWwBxu70YJwXOw9XSyuex6E7DnWSoUbZoJwndY1LStkfLMi068t/fFiOYJwIFXAG4BnY5TOWDquRyWyw4Alu+3K9qJoagD8MWkAAM7pj/0gAID9IAChmDYJx0dAgIDrgH0gAIkBaIDtnnFtnkEQoABDAxAr7QAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAZ3TH/pAAQH6QAFDMGwTjo6BAQHXAPpAARIC0QHbPOJVEts8MMj4QgHMfwHKAFUgUCPLHwHPFgHPFsntVBEMAbxwIddJwh+VMCDXCx/eApJbf+AhghBdpt6Wuo41MdMfAYIQXabelrry4IH6QAEB+kABEmwSMYFW1nAgyHIBywFwAcsAEsoHy//J0BTHBRPy9H/gAYIQlGqYtrrjAjBwDQFE0x8BghCUapi2uvLggdM/ATHIAYIQr/kPV1jLH8s/yds8fw4BJvhBbyQQI18Df3BQA4BCAW1t2zwPAfbIcQHKAVAHAcoAcAHKAlAFzxZQA/oCcAHKaCNusyVus7GOTH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMyXMzMBcAHKAOIhbrMQADCcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAAJnAgyHIBywFwAcsAEsoHy//J0AFBtqTV');
+    const __code = Cell.fromBase64('te6ccgECFAEABF4AART/APSkE/S88sgLAQIBYgIDAX7QAdDTAwFxsMABkX+RcOIB+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJVFBTA28E+GEC+GIEAgEgDA0Emu1E0NQB+GPSAAGOuvgo1wsKgwm68uCJgQEB1wD6QAEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IkSAtEB2zzjDVUS2zwwERIFBgLwcCHXScIflTAg1wsf3gKSW3/gIYIQXabelrqO2jHTHwGCEF2m3pa68uCB+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJAfpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiRJsEuABBwgAtMj4QwHMfwHKAFUgUCPLHwEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4InPFgEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4InPFsntVAGQgVbWcCDIcgHLAXABywASygfL/8nQINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJFccFFPL0cHCAQhAjbW1t2zx/CgFcghCUapi2uo6i0x8BghCUapi2uvLggdM/ATHIAYIQr/kPV1jLH8s/yds8f+AwcAkBGn/4QnBYA4BCAW1t2zwKAc7IcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJzxZQA/oCcAHKaCNusyVus7GXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsACwCYfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzAOZvtyvaiaGoA/DHpAADHXXwUa4WFQYTdeXBEwICA64B9IACQa6TAgIXdeXBEEGuFhRBBhN0QwIJ/3Vj5cERBhN15cESJAWiA7Z5xhu2eQREg4CASAPEAAEMDEAubu9GCcFzsPV0srnsehOw51kqFG2aCcJ3WNS0rZHyzItOvLf3xYjmCcCBVwBuAZ2OUzlg6rkclssOCcBvUne+VRZbxx1PT3gVZwyaCcJ2XTlqzTstzOg6WbZRm6KSAOZuoy+1E0NQB+GPSAAGOuvgo1wsKgwm68uCJgQEB1wD6QAEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IkSAtEB2zzjDds8gREhMAaHAgyHIBywFwAcsAEsoHy//J0CDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiQEAntMf+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJAfpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiUMwbBMAAls=');
+    const __system = Cell.fromBase64('te6cckECFgEABGgAAQHAAQEFoe6/AgEU/wD0pBP0vPLICwMCAWILBAIBIAkFAgEgCAYDmbqMvtRNDUAfhj0gABjrr4KNcLCoMJuvLgiYEBAdcA+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJEgLRAds84w3bPIFRQHAAJbALm7vRgnBc7D1dLK57HoTsOdZKhRtmgnCd1jUtK2R8syLTry398WI5gnAgVcAbgGdjlM5YOq5HJbLDgnAb1J3vlUWW8cdT094FWcMmgnCdl05as07LczoOlm2UZuikgDmb7cr2omhqAPwx6QAAx118FGuFhUGE3XlwRMCAgOuAfSAAkGukwICF3XlwRBBrhYUQQYTdEMCCf91Y+XBEQYTdeXBEiQFogO2ecYbtnkFRQKAAQwMQF+0AHQ0wMBcbDAAZF/kXDiAfpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiVRQUwNvBPhhAvhiDASa7UTQ1AH4Y9IAAY66+CjXCwqDCbry4ImBAQHXAPpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiRIC0QHbPOMNVRLbPDAVFA4NALTI+EMBzH8BygBVIFAjyx8BINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJzxYBINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJzxbJ7VQC8HAh10nCH5UwINcLH94Cklt/4CGCEF2m3pa6jtox0x8BghBdpt6WuvLggfpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiQH6QAEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IkSbBLgAREPAVyCEJRqmLa6jqLTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/4DBwEAEaf/hCcFgDgEIBbW3bPBIBkIFW1nAgyHIBywFwAcsAEsoHy//J0CDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiRXHBRTy9HBwgEIQI21tbds8fxIBzshxAcoBUAcBygBwAcoCUAUg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4InPFlAD+gJwAcpoI26zJW6zsZczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wATAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMAJ7TH/pAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiQH6QAEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IlDMGwTAGhwIMhyAcsBcAHLABLKB8v/ydAg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IkBNcZmng==');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -1656,9 +1853,11 @@ const PositionAddressContract_errors: { [key: number]: { message: string } } = {
     134: { message: `Invalid argument` },
     135: { message: `Code of a contract was not found` },
     136: { message: `Invalid address` },
+    137: { message: `Masterchain support is not enabled for this contract` },
     15032: { message: `not from stablecoin master` },
     22230: { message: `Already set` },
     31797: { message: `debt less than repay amount` },
+    43504: { message: `position will not be healthy` },
     53160: { message: `not from positions manager` },
     61910: { message: `not from positionsManager` },
     63577: { message: `withdrawal amount more than position has` },

@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: GateKeeperContract
-BOC Size: 1578 bytes
+BOC Size: 3032 bytes
 
 # Types
-Total Types: 39
+Total Types: 44
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -25,21 +25,33 @@ Signature: `Deploy{queryId:uint64}`
 TLB: `deploy_ok#aff90f57 queryId:uint64 = DeployOk`
 Signature: `DeployOk{queryId:uint64}`
 
+## ChangeOwner
+TLB: `change_owner#0f474d03 newOwner:address = ChangeOwner`
+Signature: `ChangeOwner{newOwner:address}`
+
+## PoolSettings
+TLB: `_ liquidationRatio:uint32 stabilityFeeRate:uint32 closeFactorBps:uint32 liquidatorIncentiveBps:uint32 = PoolSettings`
+Signature: `PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32}`
+
+## DebtRate
+TLB: `_ debtAccumulatedRate:uint32 lastAccumulationTime:uint32 = DebtRate`
+Signature: `DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}`
+
 ## DepositCollateralMessage
-TLB: `deposit_collateral_message#11dfb138 user:address amount:coins = DepositCollateralMessage`
-Signature: `DepositCollateralMessage{user:address,amount:coins}`
+TLB: `deposit_collateral_message#dded1fe8 user:address amount:coins settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32} rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} tonPriceWithSafetyMargin:coins = DepositCollateralMessage`
+Signature: `DepositCollateralMessage{user:address,amount:coins,settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32},rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32},tonPriceWithSafetyMargin:coins}`
 
 ## WithdrawCollateralMessage
-TLB: `withdraw_collateral_message#6829d55e user:address amount:coins debtRate:int257 = WithdrawCollateralMessage`
-Signature: `WithdrawCollateralMessage{user:address,amount:coins,debtRate:int257}`
+TLB: `withdraw_collateral_message#cb461808 user:address amount:coins settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32} rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} tonPriceWithSafetyMargin:coins = WithdrawCollateralMessage`
+Signature: `WithdrawCollateralMessage{user:address,amount:coins,settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32},rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32},tonPriceWithSafetyMargin:coins}`
 
 ## WithdrawStablecoinMessage
-TLB: `withdraw_stablecoin_message#f3554cd7 user:address amount:uint64 debtRate:uint64 = WithdrawStablecoinMessage`
-Signature: `WithdrawStablecoinMessage{user:address,amount:uint64,debtRate:uint64}`
+TLB: `withdraw_stablecoin_message#6c3989bb user:address amount:uint64 settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32} rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} tonPriceWithSafetyMargin:coins = WithdrawStablecoinMessage`
+Signature: `WithdrawStablecoinMessage{user:address,amount:uint64,settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32},rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32},tonPriceWithSafetyMargin:coins}`
 
 ## RepayStablecoinMessage
-TLB: `repay_stablecoin_message#6e81f446 user:address amount:uint64 debtRate:uint64 = RepayStablecoinMessage`
-Signature: `RepayStablecoinMessage{user:address,amount:uint64,debtRate:uint64}`
+TLB: `repay_stablecoin_message#bef31e07 user:address amount:uint64 settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32} rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} tonPriceWithSafetyMargin:coins = RepayStablecoinMessage`
+Signature: `RepayStablecoinMessage{user:address,amount:uint64,settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32},rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32},tonPriceWithSafetyMargin:coins}`
 
 ## DoWithdrawCollateralMessage
 TLB: `do_withdraw_collateral_message#c3cd33bf user:address amount:uint64 = DoWithdrawCollateralMessage`
@@ -125,54 +137,70 @@ Signature: `TokenExcesses{queryId:uint64}`
 TLB: `token_update_content#0c087a9e content:Maybe ^cell = TokenUpdateContent`
 Signature: `TokenUpdateContent{content:Maybe ^cell}`
 
-## PoolSettings
-TLB: `_ liquidationRatio:uint32 stabilityFeeRate:uint32 lastAccumulationTime:uint32 closeFactorBps:uint32 liquidatorIncentiveBps:uint32 treasutyFeeBps:uint32 = PoolSettings`
-Signature: `PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,lastAccumulationTime:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32,treasutyFeeBps:uint32}`
+## SetUserStatusMsg
+TLB: `set_user_status_msg#837b1751 queryId:uint64 user:address message:^string = SetUserStatusMsg`
+Signature: `SetUserStatusMsg{queryId:uint64,user:address,message:^string}`
+
+## PositionState
+TLB: `_ collateral:coins debt:uint64 = PositionState`
+Signature: `PositionState{collateral:coins,debt:uint64}`
 
 ## PoolSettingsMsg
-TLB: `pool_settings_msg#e1b180f1 liquidationRatio:uint32 stabilityFeeRate:uint32 lastAccumulationTime:uint32 closeFactorBps:uint32 liquidatorIncentiveBps:uint32 treasutyFeeBps:uint32 = PoolSettingsMsg`
-Signature: `PoolSettingsMsg{liquidationRatio:uint32,stabilityFeeRate:uint32,lastAccumulationTime:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32,treasutyFeeBps:uint32}`
+TLB: `pool_settings_msg#a10722d9 liquidationRatio:uint32 stabilityFeeRate:uint32 closeFactorBps:uint32 liquidatorIncentiveBps:uint32 = PoolSettingsMsg`
+Signature: `PoolSettingsMsg{liquidationRatio:uint32,stabilityFeeRate:uint32,closeFactorBps:uint32,liquidatorIncentiveBps:uint32}`
 
-## DebtRate
-TLB: `_ debtAccumulatedRate:uint32 lastAccumulationTime:uint32 = DebtRate`
-Signature: `DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}`
+## Deps
+TLB: `_ stablecoinMasterAddress:address positionsManagerAddress:address = Deps`
+Signature: `Deps{stablecoinMasterAddress:address,positionsManagerAddress:address}`
+
+## SetDeps
+TLB: `set_deps#5a2adff2 stablecoinMasterAddress:address positionsManagerAddress:address = SetDeps`
+Signature: `SetDeps{stablecoinMasterAddress:address,positionsManagerAddress:address}`
 
 ## UpdateTonPriceMsg
 TLB: `update_ton_price_msg#0d11babd price:uint32 = UpdateTonPriceMsg`
 Signature: `UpdateTonPriceMsg{price:uint32}`
 
 ## DepositCollateralUserMessage
-TLB: `deposit_collateral_user_message#e378c419 amount:coins = DepositCollateralUserMessage`
-Signature: `DepositCollateralUserMessage{amount:coins}`
+TLB: `deposit_collateral_user_message#c46ccbb6 user:address amount:coins = DepositCollateralUserMessage`
+Signature: `DepositCollateralUserMessage{user:address,amount:coins}`
 
 ## WithdrawStablecoinUserMessage
-TLB: `withdraw_stablecoin_user_message#f8333ece amount:coins = WithdrawStablecoinUserMessage`
-Signature: `WithdrawStablecoinUserMessage{amount:coins}`
+TLB: `withdraw_stablecoin_user_message#705fe53e user:address amount:coins = WithdrawStablecoinUserMessage`
+Signature: `WithdrawStablecoinUserMessage{user:address,amount:coins}`
 
 ## RepayStablecoinUserMessage
-TLB: `repay_stablecoin_user_message#8bca0c5c amount:coins = RepayStablecoinUserMessage`
-Signature: `RepayStablecoinUserMessage{amount:coins}`
+TLB: `repay_stablecoin_user_message#de1fa942 user:address amount:coins = RepayStablecoinUserMessage`
+Signature: `RepayStablecoinUserMessage{user:address,amount:coins}`
 
 ## WithdrawCollateralUserMessage
-TLB: `withdraw_collateral_user_message#45ce16fd amount:coins = WithdrawCollateralUserMessage`
-Signature: `WithdrawCollateralUserMessage{amount:coins}`
+TLB: `withdraw_collateral_user_message#d55dc57a user:address amount:coins = WithdrawCollateralUserMessage`
+Signature: `WithdrawCollateralUserMessage{user:address,amount:coins}`
 
 ## WithdrawFeesMessage
-TLB: `withdraw_fees_message#87b84176 amount:coins = WithdrawFeesMessage`
-Signature: `WithdrawFeesMessage{amount:coins}`
+TLB: `withdraw_fees_message#393f55e9 to:address = WithdrawFeesMessage`
+Signature: `WithdrawFeesMessage{to:address}`
 
 # Get Methods
-Total Get Methods: 5
+Total Get Methods: 9
 
 ## poolSettings
 
 ## tonPrice
+
+## tonPriceWithSafetyMargin
 
 ## debtRate
 
 ## stablecoinsIssued
 
 ## totalCollateralAmount
+
+## getBalance
+
+## getDeps
+
+## owner
 
 # Error Codes
 2: Stack undeflow
@@ -198,5 +226,16 @@ Total Get Methods: 5
 134: Invalid argument
 135: Code of a contract was not found
 136: Invalid address
+137: Masterchain support is not enabled for this contract
 4429: Invalid sender
+15032: not from stablecoin master
+22230: Already set
+23932: not enough tons sent
+31797: debt less than repay amount
 32589: updateDebtAccumulatedRate:Invalid timestamp
+41207: invalid sender
+43504: position will not be healthy
+53160: not from positions manager
+60380: no fees collected
+61910: not from positionsManager
+63577: withdrawal amount more than position has

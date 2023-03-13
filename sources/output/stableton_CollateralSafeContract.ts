@@ -271,72 +271,166 @@ function dictValueParserDeployOk(): DictionaryValue<DeployOk> {
     }
 }
 
-export type SetMessageMsg = {
-    $$type: 'SetMessageMsg';
-    message: string;
+export type ChangeOwner = {
+    $$type: 'ChangeOwner';
+    newOwner: Address;
 }
 
-export function storeSetMessageMsg(src: SetMessageMsg) {
+export function storeChangeOwner(src: ChangeOwner) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(184936124, 32);
-        b_0.storeStringRefTail(src.message);
+        b_0.storeUint(256331011, 32);
+        b_0.storeAddress(src.newOwner);
     };
 }
 
-export function loadSetMessageMsg(slice: Slice) {
+export function loadChangeOwner(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 184936124) { throw Error('Invalid prefix'); }
-    let _message = sc_0.loadStringRefTail();
-    return { $$type: 'SetMessageMsg' as const, message: _message };
+    if (sc_0.loadUint(32) !== 256331011) { throw Error('Invalid prefix'); }
+    let _newOwner = sc_0.loadAddress();
+    return { $$type: 'ChangeOwner' as const, newOwner: _newOwner };
 }
 
-function loadTupleSetMessageMsg(source: TupleReader) {
-    let _message = source.readString();
-    return { $$type: 'SetMessageMsg' as const, message: _message };
+function loadTupleChangeOwner(source: TupleReader) {
+    let _newOwner = source.readAddress();
+    return { $$type: 'ChangeOwner' as const, newOwner: _newOwner };
 }
 
-function storeTupleSetMessageMsg(source: SetMessageMsg) {
+function storeTupleChangeOwner(source: ChangeOwner) {
     let builder = new TupleBuilder();
-    builder.writeString(source.message);
+    builder.writeAddress(source.newOwner);
     return builder.build();
 }
 
-function dictValueParserSetMessageMsg(): DictionaryValue<SetMessageMsg> {
+function dictValueParserChangeOwner(): DictionaryValue<ChangeOwner> {
     return {
         serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeSetMessageMsg(src)).endCell());
+            buidler.storeRef(beginCell().store(storeChangeOwner(src)).endCell());
         },
         parse: (src) => {
-            return loadSetMessageMsg(src.loadRef().beginParse());
+            return loadChangeOwner(src.loadRef().beginParse());
         }
     }
 }
 
- type UserStatusContract_init_args = {
-    $$type: 'UserStatusContract_init_args';
-    owner: Address;
+export type DepositCollateralMessage = {
+    $$type: 'DepositCollateralMessage';
+    user: Address;
+    amount: bigint;
 }
 
-function initUserStatusContract_init_args(src: UserStatusContract_init_args) {
+export function storeDepositCollateralMessage(src: DepositCollateralMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeAddress(src.owner);
+        b_0.storeUint(299872568, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeCoins(src.amount);
     };
 }
 
-async function UserStatusContract_init(owner: Address) {
-    const __code = Cell.fromBase64('te6ccgECDwEAAxoAART/APSkE/S88sgLAQIBYgIDAX7QAdDTAwFxsMABkX+RcOIB+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJVFBTA28E+GEC+GIEAgEgCwwD4u1E0NQB+GPSAAGOK/pAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiQHUAdASbBKOs/go1wsKgwm68uCJ+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJAdHbPOJa2zwwDQUGAsJwIddJwh+VMCDXCx/eApJbf+AhghALBea8uo6VMdMfAYIQCwXmvLry4IHUAdAx2zx/4AGCEJRqmLa6jqLTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/4DBwBwgAcMj4QwHMfwHKAFlZINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJzxbIWM8WyQHMye1UAB4x+EFvJFuBEU0yI8cF8vQBGn/4QnBYA4BCAW1t2zwJAc7IcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJzxZQA/oCcAHKaCNusyVus7GXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsACgCYfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzALjv2iPaiaGoA/DHpAADHFf0gAJBrpMCAhd15cEQQa4WFEEGE3RDAgn/dWPlwREGE3XlwRIDqAOgJNglHWfwUa4WFQYTdeXBE/SAAkGukwICF3XlwRBBrhYUQQYTdEMCCf91Y+XBEQYTdeXBEgOjtnnFtnkDQ4Alb3ejBOC52Hq6WVz2PQnYc6yVCjbNBOE7rGpaVsj5ZkWnXlv74sRzBOBAq4A3AM7HKZywdVyOS2WHBOE7Lpy1Zp2W5nQdLNsozdFJAAWi5SGkgdGhlcmUhgAAjE=');
-    const __system = Cell.fromBase64('te6cckECEQEAAyQAAQHAAQEFobztAgEU/wD0pBP0vPLICwMCAWIIBAIBIAYFAJW93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwThOy6ctWadluZ0HSzbKM3RSQC479oj2omhqAPwx6QAAxxX9IACQa6TAgIXdeXBEEGuFhRBBhN0QwIJ/3Vj5cERBhN15cESA6gDoCTYJR1n8FGuFhUGE3XlwRP0gAJBrpMCAhd15cEQQa4WFEEGE3RDAgn/dWPlwREGE3XlwRIDo7Z5xbZ5BAHAAIxAX7QAdDTAwFxsMABkX+RcOIB+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJVFBTA28E+GEC+GIJA+LtRNDUAfhj0gABjiv6QAEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IkB1AHQEmwSjrP4KNcLCoMJuvLgifpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiQHR2zziWts8MBALCgBwyPhDAcx/AcoAWVkg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4InPFshYzxbJAczJ7VQCwnAh10nCH5UwINcLH94Cklt/4CGCEAsF5ry6jpUx0x8BghALBea8uvLggdQB0DHbPH/gAYIQlGqYtrqOotMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8nbPH/gMHAPDAEaf/hCcFgDgEIBbW3bPA0BzshxAcoBUAcBygBwAcoCUAUg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4InPFlAD+gJwAcpoI26zJW6zsZczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAOAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMAB4x+EFvJFuBEU0yI8cF8vQAFouUhpIHRoZXJlIYm0i0hQ==');
+export function loadDepositCollateralMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 299872568) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadCoins();
+    return { $$type: 'DepositCollateralMessage' as const, user: _user, amount: _amount };
+}
+
+function loadTupleDepositCollateralMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    return { $$type: 'DepositCollateralMessage' as const, user: _user, amount: _amount };
+}
+
+function storeTupleDepositCollateralMessage(source: DepositCollateralMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    return builder.build();
+}
+
+function dictValueParserDepositCollateralMessage(): DictionaryValue<DepositCollateralMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeDepositCollateralMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadDepositCollateralMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type WithdrawCollateralMessage = {
+    $$type: 'WithdrawCollateralMessage';
+    user: Address;
+    amount: bigint;
+}
+
+export function storeWithdrawCollateralMessage(src: WithdrawCollateralMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(2355751512, 32);
+        b_0.storeAddress(src.user);
+        b_0.storeCoins(src.amount);
+    };
+}
+
+export function loadWithdrawCollateralMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 2355751512) { throw Error('Invalid prefix'); }
+    let _user = sc_0.loadAddress();
+    let _amount = sc_0.loadCoins();
+    return { $$type: 'WithdrawCollateralMessage' as const, user: _user, amount: _amount };
+}
+
+function loadTupleWithdrawCollateralMessage(source: TupleReader) {
+    let _user = source.readAddress();
+    let _amount = source.readBigNumber();
+    return { $$type: 'WithdrawCollateralMessage' as const, user: _user, amount: _amount };
+}
+
+function storeTupleWithdrawCollateralMessage(source: WithdrawCollateralMessage) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.user);
+    builder.writeNumber(source.amount);
+    return builder.build();
+}
+
+function dictValueParserWithdrawCollateralMessage(): DictionaryValue<WithdrawCollateralMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeWithdrawCollateralMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadWithdrawCollateralMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+ type CollateralSafeContract_init_args = {
+    $$type: 'CollateralSafeContract_init_args';
+    gateKeeperAddress: Address;
+}
+
+function initCollateralSafeContract_init_args(src: CollateralSafeContract_init_args) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeAddress(src.gateKeeperAddress);
+    };
+}
+
+async function CollateralSafeContract_init(gateKeeperAddress: Address) {
+    const __code = Cell.fromBase64('te6ccgECEgEAAlsAART/APSkE/S88sgLAQIBYgIDArDQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAZ76QAEB+kABAfoAVSBsE46H+kABAdHbPOJVEts8MMj4QgHMfwHKAFUgWs8WWM8WAfoCye1UEAQCASAICQGCcCHXScIflTAg1wsf3gKSW3/gAYIQlGqYtrqOotMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8nbPH/gMHAFASb4QW8kECNfA39wUAOAQgFtbds8BgH2yHEBygFQBwHKAHABygJQBc8WUAP6AnABymgjbrMlbrOxjkx/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMlzMzAXABygDiIW6zBwAwnH8BygABIG7y0IABzJUxcAHKAOLJAfsAAgEgCgsCAUgODwJPu5Ku1E0NQB+GLSAAGe+kABAfpAAQH6AFUgbBOOh/pAAQHR2zzi2zyBAMAk+4Ud7UTQ1AH4YtIAAZ76QAEB+kABAfoAVSBsE46H+kABAdHbPOLbPIEA0ABGwhAAJbAk+36n2omhqAPwxaQAAz30gAID9IACA/QAqkDYJx0P9IACA6O2ecW2eQEBEAlbd6ME4LnYerpZXPY9CdhzrJUKNs0E4TusalpWyPlmRadeW/vixHME4ECrgDcAzscpnLB1XI5LZYcE4IGc6tPOK/OkoWA6wtxMj2UAAUbfhBbyQQI18DWQAMXwP4J28Q');
+    const __system = Cell.fromBase64('te6cckECFAEAAmUAAQHAAQEFoRwrAgEU/wD0pBP0vPLICwMCAWIOBAIBIAkFAgFIBwYAlbd6ME4LnYerpZXPY9CdhzrJUKNs0E4TusalpWyPlmRadeW/vixHME4ECrgDcAzscpnLB1XI5LZYcE4IGc6tPOK/OkoWA6wtxMj2UAJPt+p9qJoagD8MWkAAM99IACA/SAAgP0AKpA2CcdD/SAAgOjtnnFtnkBMIAAxfA/gnbxACASAMCgJPuFHe1E0NQB+GLSAAGe+kABAfpAAQH6AFUgbBOOh/pAAQHR2zzi2zyBMLAAJbAk+7kq7UTQ1AH4YtIAAZ76QAEB+kABAfoAVSBsE46H+kABAdHbPOLbPIEw0ABGwhArDQAdDTAwFxsMABkX+RcOIB+kAiUFVvBPhh7UTQ1AH4YtIAAZ76QAEB+kABAfoAVSBsE46H+kABAdHbPOJVEts8MMj4QgHMfwHKAFUgWs8WWM8WAfoCye1UEw8BgnAh10nCH5UwINcLH94Cklt/4AGCEJRqmLa6jqLTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/4DBwEAEm+EFvJBAjXwN/cFADgEIBbW3bPBEB9shxAcoBUAcBygBwAcoCUAXPFlAD+gJwAcpoI26zJW6zsY5MfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzJczMwFwAcoA4iFusxIAMJx/AcoAASBu8tCAAcyVMXABygDiyQH7AAAUbfhBbyQQI18DWfj2jtQ=');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
-    initUserStatusContract_init_args({ $$type: 'UserStatusContract_init_args', owner })(builder);
+    initCollateralSafeContract_init_args({ $$type: 'CollateralSafeContract_init_args', gateKeeperAddress })(builder);
     const __data = builder.endCell();
     return { code: __code, data: __data };
 }
 
-const UserStatusContract_errors: { [key: number]: { message: string } } = {
+const CollateralSafeContract_errors: { [key: number]: { message: string } } = {
     2: { message: `Stack undeflow` },
     3: { message: `Stack overflow` },
     4: { message: `Integer overflow` },
@@ -360,30 +454,28 @@ const UserStatusContract_errors: { [key: number]: { message: string } } = {
     134: { message: `Invalid argument` },
     135: { message: `Code of a contract was not found` },
     136: { message: `Invalid address` },
-    137: { message: `Masterchain support is not enabled for this contract` },
-    4429: { message: `Invalid sender` },
 }
 
-export class UserStatusContract implements Contract {
+export class CollateralSafeContract implements Contract {
     
-    static async init(owner: Address) {
-        return await UserStatusContract_init(owner);
+    static async init(gateKeeperAddress: Address) {
+        return await CollateralSafeContract_init(gateKeeperAddress);
     }
     
-    static async fromInit(owner: Address) {
-        const init = await UserStatusContract_init(owner);
+    static async fromInit(gateKeeperAddress: Address) {
+        const init = await CollateralSafeContract_init(gateKeeperAddress);
         const address = contractAddress(0, init);
-        return new UserStatusContract(address, init);
+        return new CollateralSafeContract(address, init);
     }
     
     static fromAddress(address: Address) {
-        return new UserStatusContract(address);
+        return new CollateralSafeContract(address);
     }
     
     readonly address: Address; 
     readonly init?: { code: Cell, data: Cell };
     readonly abi: ContractABI = {
-        errors: UserStatusContract_errors
+        errors: CollateralSafeContract_errors
     };
     
     private constructor(address: Address, init?: { code: Cell, data: Cell }) {
@@ -391,12 +483,9 @@ export class UserStatusContract implements Contract {
         this.init = init;
     }
     
-    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: SetMessageMsg | Deploy) {
+    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: Deploy) {
         
         let body: Cell | null = null;
-        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'SetMessageMsg') {
-            body = beginCell().store(storeSetMessageMsg(message)).endCell();
-        }
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'Deploy') {
             body = beginCell().store(storeDeploy(message)).endCell();
         }
@@ -406,10 +495,24 @@ export class UserStatusContract implements Contract {
         
     }
     
-    async getMessage(provider: ContractProvider) {
+    async getCollateralAmount(provider: ContractProvider) {
         let builder = new TupleBuilder();
-        let source = (await provider.get('message', builder.build())).stack;
-        let result = source.readString();
+        let source = (await provider.get('collateralAmount', builder.build())).stack;
+        let result = source.readBigNumber();
+        return result;
+    }
+    
+    async getGetBalance(provider: ContractProvider) {
+        let builder = new TupleBuilder();
+        let source = (await provider.get('getBalance', builder.build())).stack;
+        let result = source.readBigNumber();
+        return result;
+    }
+    
+    async getOwner(provider: ContractProvider) {
+        let builder = new TupleBuilder();
+        let source = (await provider.get('owner', builder.build())).stack;
+        let result = source.readAddress();
         return result;
     }
     

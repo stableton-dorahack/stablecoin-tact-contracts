@@ -1,0 +1,259 @@
+#pragma version =0.4.1;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+int __tact_my_balance() inline {
+    return pair_first(get_balance());
+}
+
+forall X -> X __tact_not_null(X x) inline { throw_if(128, null?(x)); return x; }
+
+global (int, slice, int, slice) __tact_context;
+global cell __tact_context_sys;
+
+(int, slice, int, slice) __tact_context_get() inline { return __tact_context; }
+
+() __tact_verify_address(slice address) inline {
+    throw_unless(136, address.slice_bits() != 267);
+}
+
+builder __tact_store_bool(builder b, int v) inline {
+    b = b.store_int(v, 1);
+    return b;
+}
+
+(slice, slice) __tact_load_address(slice cs) inline {
+    slice raw = cs~load_msg_addr();
+    __tact_verify_address(raw);
+    return (cs, raw);
+}
+
+builder __tact_store_address(builder b, slice address) inline {
+    __tact_verify_address(address);
+    b = b.store_slice(address);
+    return b;
+}
+
+(slice, ((int))) __gen_read_Deploy(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2490013878);
+    var v'queryId = sc_0~load_uint(64);
+    return (sc_0, (v'queryId));
+}
+
+builder __gen_write_DeployOk(builder build_0, (int) v) inline {
+    var (v'queryId) = v;
+    build_0 = store_uint(build_0, 2952335191, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    return build_0;
+}
+
+cell __gen_writecell_DeployOk((int) v) inline {
+    return __gen_write_DeployOk(begin_cell(), v).end_cell();
+}
+
+builder __gen_write_CollateralSafeContract(builder build_0, (slice, slice, int) v) inline {
+    var (v'owner, v'gateKeeperAddress, v'collateralAmount) = v;
+    build_0 = __tact_store_address(build_0, v'owner);
+    build_0 = __tact_store_address(build_0, v'gateKeeperAddress);
+    build_0 = build_0.store_coins(v'collateralAmount);
+    return build_0;
+}
+
+(slice, ((slice, slice, int))) __gen_read_CollateralSafeContract(slice sc_0) inline {
+    var v'owner = sc_0~__tact_load_address();
+    var v'gateKeeperAddress = sc_0~__tact_load_address();
+    var v'collateralAmount = sc_0~load_coins();
+    return (sc_0, (v'owner, v'gateKeeperAddress, v'collateralAmount));
+}
+
+(slice, ((slice))) __gen_read_$init$CollateralSafeContract(slice sc_0) inline {
+    var v'gateKeeperAddress = sc_0~__tact_load_address();
+    return (sc_0, (v'gateKeeperAddress));
+}
+
+(slice, slice, int) $__gen_CollateralSafeContract_init(slice $gateKeeperAddress) impure inline_ref {
+    var (($self'owner, $self'gateKeeperAddress, $self'collateralAmount)) = (null(), null(), null());
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    $self'owner = $ctx'sender;
+    $self'gateKeeperAddress = $gateKeeperAddress;
+    return ($self'owner, $self'gateKeeperAddress, $self'collateralAmount);
+}
+
+(slice, slice, int) __gen_load_CollateralSafeContract() impure inline {
+    slice $sc = get_data().begin_parse();
+    __tact_context_sys = $sc~load_ref();
+    int $loaded = $sc~load_int(1);
+    if ($loaded) {
+        return $sc~__gen_read_CollateralSafeContract();
+    } else {
+        (slice gateKeeperAddress) = $sc~__gen_read_$init$CollateralSafeContract();
+        $sc.end_parse();
+        return $__gen_CollateralSafeContract_init(gateKeeperAddress);
+    }
+}
+
+() __gen_store_CollateralSafeContract((slice, slice, int) v) impure inline {
+    builder b = begin_cell();
+    b = b.store_ref(__tact_context_sys);
+    b = b.store_int(true, 1);
+    b = __gen_write_CollateralSafeContract(b, v);
+    set_data(b.end_cell());
+}
+
+() $send((int, slice, int, int, cell, cell, cell) $params) impure inline_ref {
+    var (($params'bounce, $params'to, $params'value, $params'mode, $params'body, $params'code, $params'data)) = $params;
+    builder $b = begin_cell();
+    $b = store_int($b, 1, 2);
+    $b = __tact_store_bool($b, $params'bounce);
+    $b = store_int($b, 0, 3);
+    $b = __tact_store_address($b, $params'to);
+    $b = store_coins($b, $params'value);
+    $b = store_int($b, 0, ((((1 + 4) + 4) + 64) + 32));
+    if (((~ null?($params'code)) | (~ null?($params'data)))) {
+        $b = __tact_store_bool($b, true);
+        builder $bc = begin_cell();
+        $bc = __tact_store_bool($bc, false);
+        $bc = __tact_store_bool($bc, false);
+        if ((~ null?($params'code))) {
+            $bc = __tact_store_bool($bc, true);
+            $bc = store_ref($bc, __tact_not_null($params'code));
+        } else {
+            $bc = __tact_store_bool($bc, false);
+        }
+        if ((~ null?($params'data))) {
+            $bc = __tact_store_bool($bc, true);
+            $bc = store_ref($bc, __tact_not_null($params'data));
+        } else {
+            $bc = __tact_store_bool($bc, false);
+        }
+        $bc = __tact_store_bool($bc, false);
+        $b = __tact_store_bool($b, true);
+        $b = store_ref($b, end_cell($bc));
+    } else {
+        $b = __tact_store_bool($b, false);
+    }
+    cell $body = $params'body;
+    if ((~ null?($body))) {
+        $b = __tact_store_bool($b, true);
+        $b = store_ref($b, __tact_not_null($body));
+    } else {
+        $b = __tact_store_bool($b, false);
+    }
+    cell $c = end_cell($b);
+    send_raw_message($c, $params'mode);
+}
+
+((int, slice, int, int, cell, cell, cell)) __gen_constructor_SendParameters$bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline {
+    return (bounce, to, value, mode, body, null(), null());
+}
+
+() $reply(cell $body) impure inline_ref {
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    $send(__gen_constructor_SendParameters$bounce_to_value_mode_body(true, $ctx'sender, 0, (64 + 2), $body));
+}
+
+int $__gen_CollateralSafeContract_collateralAmount((slice, slice, int) $self) impure inline_ref {
+    var (($self'owner, $self'gateKeeperAddress, $self'collateralAmount)) = $self;
+    return $self'collateralAmount;
+}
+
+_ $__gen_get_collateralAmount() method_id(80170) {
+    var self = __gen_load_CollateralSafeContract();
+    var res = $__gen_CollateralSafeContract_collateralAmount(self);
+    return res;
+}
+
+int $__gen_CollateralSafeContract_getBalance((slice, slice, int) $self) impure inline_ref {
+    var (($self'owner, $self'gateKeeperAddress, $self'collateralAmount)) = $self;
+    return __tact_my_balance();
+}
+
+_ $__gen_get_getBalance() method_id(106323) {
+    var self = __gen_load_CollateralSafeContract();
+    var res = $__gen_CollateralSafeContract_getBalance(self);
+    return res;
+}
+
+slice $__gen_CollateralSafeContract_owner((slice, slice, int) $self) impure inline_ref {
+    var (($self'owner, $self'gateKeeperAddress, $self'collateralAmount)) = $self;
+    return $self'owner;
+}
+
+_ $__gen_get_owner() method_id(83229) {
+    var self = __gen_load_CollateralSafeContract();
+    var res = $__gen_CollateralSafeContract_owner(self);
+    return res;
+}
+
+((int)) __gen_constructor_DeployOk$queryId(int queryId) inline {
+    return (queryId);
+}
+
+(((slice, slice, int)), ()) $__gen_CollateralSafeContract_receive_Deploy((slice, slice, int) $self, (int) $deploy) impure inline {
+    var ($self'owner, $self'gateKeeperAddress, $self'collateralAmount) = $self;
+    var ($deploy'queryId) = $deploy;
+    $reply(__gen_writecell_DeployOk(__gen_constructor_DeployOk$queryId($deploy'queryId)));
+    return (($self'owner, $self'gateKeeperAddress, $self'collateralAmount), ());
+}
+
+((slice, slice, int), int) __gen_router_CollateralSafeContract((slice, slice, int) self, int msg_bounced, slice in_msg) impure inline_ref {
+    
+    ;; Parse incoming message
+    int op = 0;
+    if (slice_bits(in_msg) >= 32) {
+        op = in_msg.preload_uint(32);
+    }
+    
+    ;; Handle bounced messages
+    if (msg_bounced) {
+        return (self, true);
+    }
+    
+    ;; Receive Deploy message
+    if (op == 2490013878) {
+        var msg = in_msg~__gen_read_Deploy();
+        self~$__gen_CollateralSafeContract_receive_Deploy(msg);
+        return (self, true);
+    }
+    
+    return (self, false);
+}
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    var msg_flags = cs~load_uint(4);
+    var msg_bounced = ((msg_flags & 1) == 1 ? true : false);
+    slice msg_sender_addr = cs~load_msg_addr();
+    __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    
+    ;; Load contract data
+    var self = __gen_load_CollateralSafeContract();
+    
+    ;; Handle operation
+    int handled = self~__gen_router_CollateralSafeContract(msg_bounced, in_msg);
+    
+    ;; Throw if not handled
+    throw_unless(handled, 130);
+    
+    ;; Persist state
+    __gen_store_CollateralSafeContract(self);
+}
+
+_ supported_interfaces() method_id {
+    return (
+        "org.ton.introspection.v0"H >> 128,
+        "org.ton.abi.ipfs.v0"H >> 128,
+        "org.ton.deploy.lazy.v0"H >> 128,
+        "org.ton.ownable"H >> 128
+    );
+}
+
+_ get_abi_ipfs() {
+    return "ipfs://QmbgdQjYSDLVj2NSCRykc3Wm6cUGkg566aB71tr6q4ZbVn";
+}
+
+_ lazy_deployment_completed() {
+    return get_data().begin_parse().load_int(1);
+}

@@ -2,8 +2,8 @@ import "./messages";
 
 contract StablecoinJettonContract {
 
-    const minTonsForStorage: Int = ton("0.01");
-    const gasConsumption: Int = ton("0.01");
+    const MinTonsForStorage: Int = ton("0.01");
+    const GasConsumption: Int = ton("0.01");
    
     balance: Int as coins;
     owner: Address;
@@ -33,7 +33,7 @@ contract StablecoinJettonContract {
         if (msg.forwardTonAmount > 0) {
             fwdCount = 2;
         }
-        require(ctx.value > fwdCount * fwdFee + 2 * self.gasConsumption + self.minTonsForStorage, "Invalid value");
+        require(ctx.value > fwdCount * fwdFee + 2 * self.GasConsumption + self.MinTonsForStorage, "Invalid value");
   
         // Send tokens
         let init: StateInit = initOf StablecoinJettonContract(self.master, msg.destination);
@@ -71,8 +71,8 @@ contract StablecoinJettonContract {
         // Adjust value for gas
         let msgValue: Int = ctx.value;
         let tonBalanceBeforeMsg: Int = myBalance() - msgValue;
-        let storageFee: Int = self.minTonsForStorage - min(tonBalanceBeforeMsg, self.minTonsForStorage);
-        msgValue = msgValue - (storageFee + self.gasConsumption);
+        let storageFee: Int = self.MinTonsForStorage - min(tonBalanceBeforeMsg, self.MinTonsForStorage);
+        msgValue = msgValue - (storageFee + self.GasConsumption);
 
         // Forward ton
         if (msg.forwardTonAmount > 0) {
@@ -115,7 +115,7 @@ contract StablecoinJettonContract {
 
         // Gas checks
         let fwdFee: Int = ctx.readForwardFee();
-        require(ctx.value > fwdFee + 2 * self.gasConsumption + self.minTonsForStorage, "Invalid value");
+        require(ctx.value > fwdFee + 2 * self.GasConsumption + self.MinTonsForStorage, "Invalid value");
 
         // Burn tokens
         send(SendParameters{
@@ -166,7 +166,7 @@ contract StablecoinJettonContract {
         // Gas checks
         let fwdFee: Int = ctx.readForwardFee();
         // todo error on this check
-        // require(ctx.value > fwdFee + 2 * self.gasConsumption + self.minTonsForStorage, "Invalid value");
+        // require(ctx.value > fwdFee + 2 * self.GasConsumption + self.MinTonsForStorage, "Invalid value");
 
         // Burn tokens
         send(SendParameters{

@@ -1,33 +1,22 @@
-#pragma version =0.4.1;
+#pragma version =0.4.2;
 #pragma allow-post-modification;
 #pragma compute-asm-ltr;
 
-forall X -> X __tact_not_null(X x) inline { throw_if(128, null?(x)); return x; }
-
-global (int, slice, int, slice) __tact_context;
-global cell __tact_context_sys;
-
-(int, slice, int, slice) __tact_context_get() inline { return __tact_context; }
-
-() __tact_verify_address(slice address) inline {
-    throw_unless(136, address.slice_bits() != 267);
-}
-
-builder __tact_store_bool(builder b, int v) inline {
-    b = b.store_int(v, 1);
-    return b;
+slice __tact_verify_address(slice address) inline {
+    throw_unless(136, address.slice_bits() == 267);
+    var h = address.preload_uint(11);
+    throw_unless(136, (h == 1024) | (h == 1279));
+    throw_unless(137, h == 1024);
+    return address;
 }
 
 (slice, slice) __tact_load_address(slice cs) inline {
     slice raw = cs~load_msg_addr();
-    __tact_verify_address(raw);
-    return (cs, raw);
+    return (cs, __tact_verify_address(raw));
 }
 
 builder __tact_store_address(builder b, slice address) inline {
-    __tact_verify_address(address);
-    b = b.store_slice(address);
-    return b;
+    return b.store_slice(__tact_verify_address(address));
 }
 
 slice __tact_create_address(int chain, int hash) inline {
@@ -36,7 +25,21 @@ slice __tact_create_address(int chain, int hash) inline {
     b = b.store_uint(0, 1);
     b = b.store_int(chain, 8);
     b = b.store_uint(hash, 256);
-    return b.end_cell().begin_parse();
+    var addr = b.end_cell().begin_parse();
+    return __tact_verify_address(addr);
+}
+
+forall X -> X __tact_not_null(X x) inline { throw_if(128, null?(x)); return x; }
+
+global (int, slice, int, slice) __tact_context;
+global slice __tact_context_sender;
+global cell __tact_context_sys;
+
+slice __tact_context_get_sender() inline { return __tact_context_sender; }
+
+builder __tact_store_bool(builder b, int v) inline {
+    b = b.store_int(v, 1);
+    return b;
 }
 
 int __tact_address_eq(slice a, slice b) inline {
@@ -103,6 +106,8 @@ builder __gen_write_PositionAddressContract(builder build_0, (int, slice, slice)
     if ($loaded) {
         return $sc~__gen_read_PositionAddressContract();
     } else {
+        ;; Allow only workchain deployments
+        throw_unless(137, my_address().preload_uint(11) == 1024);
         (int id, slice positionsManagerAddress) = $sc~__gen_read_$init$PositionAddressContract();
         $sc.end_parse();
         return $__gen_PositionAddressContract_init(id, positionsManagerAddress);
@@ -165,8 +170,11 @@ builder __gen_write_PositionAddressContract(builder build_0, (int, slice, slice)
 }
 
 () $reply(cell $body) impure inline_ref {
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    $send(__gen_constructor_SendParameters$bounce_to_value_mode_body(true, $ctx'sender, 0, (64 + 2), $body));
+    $send(__gen_constructor_SendParameters$bounce_to_value_mode_body(true, __tact_context_get_sender(), 0, (64 + 2), $body));
+}
+
+((int, slice, int, int, cell, cell, cell)) __gen_constructor_SendParameters$to_bounce_value_mode(slice to, int bounce, int value, int mode) inline {
+    return (bounce, to, value, mode, null(), null(), null());
 }
 
 ((int)) __gen_constructor_DeployOk$queryId(int queryId) inline {
@@ -198,9 +206,9 @@ _ $__gen_get_getPositionAddress() method_id(88981) {
 (((int, slice, slice)), ()) $__gen_PositionAddressContract_receive_SetPositionAddressMessage((int, slice, slice) $self, (slice, slice) $msg) impure inline {
     var ($self'id, $self'positionAddress, $self'positionsManagerAddress) = $self;
     var ($msg'user, $msg'position) = $msg;
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
     throw_unless(22230, __tact_address_eq($self'positionAddress, __tact_create_address(0, 0)));
     $self'positionAddress = $msg'position;
+    $send(__gen_constructor_SendParameters$to_bounce_value_mode($msg'user, false, 0, (64 + 2)));
     return (($self'id, $self'positionAddress, $self'positionsManagerAddress), ());
 }
 
@@ -247,8 +255,9 @@ _ $__gen_get_getPositionAddress() method_id(88981) {
     var cs = in_msg_cell.begin_parse();
     var msg_flags = cs~load_uint(4);
     var msg_bounced = ((msg_flags & 1) == 1 ? true : false);
-    slice msg_sender_addr = cs~load_msg_addr();
+    slice msg_sender_addr = __tact_verify_address(cs~load_msg_addr());
     __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
     
     ;; Load contract data
     var self = __gen_load_PositionAddressContract();
@@ -267,12 +276,14 @@ _ supported_interfaces() method_id {
     return (
         "org.ton.introspection.v0"H >> 128,
         "org.ton.abi.ipfs.v0"H >> 128,
-        "org.ton.deploy.lazy.v0"H >> 128
+        "org.ton.deploy.lazy.v0"H >> 128,
+        "org.ton.debug.v0"H >> 128,
+        "org.ton.chain.workchain.v0"H >> 128
     );
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmZPUgqftHpL1CyVMrcFrxy2DZNZHU5sJSGprzTqR1kHVy";
+    return "ipfs://QmRYfmhpavsooqmURn4phiWkQKMPL2wviCZcjzQtg7sSN5";
 }
 
 _ lazy_deployment_completed() {

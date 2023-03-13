@@ -37,7 +37,7 @@ describe("PositionAddressContract", () => {
     it("on setPositionAddress from userPosition", async () => {
         await positionAddressContract.send(
             owner,
-            { value: toNano(101) },
+            { value: toNano(1) },
             { $$type: "SetPositionAddressMessage", user: user.address, position: position.address }
         );
 

@@ -3,24 +3,34 @@ import "@stdlib/ownable";
 import "./messages";
 import "./UserPosition";
 
-contract PositionsManagerContract with Deployable {
+message SetDeps {
+    stablecoinMasterAddress: Address;
+    gateKeeperAddress: Address;
+}
 
-    const minTonsForStorage: Int = ton("0.01");
-    const gasConsumption: Int = ton("0.01");
+contract PositionsManagerContract with Deployable, Ownable {
 
-    owner: Address;
-    lastPositionId: Int as uint32 = 0;
+    const MinTonsForStorage: Int = ton("0.01");
+    const GasConsumption: Int = ton("0.01");
+
+    // deps
     stablecoinMasterAddress: Address;
     gateKeeperAddress: Address;
 
-    init(gateKeeperAddress: Address, stablecoinMasterAddress: Address) {
-        let ctx: Context = context();
-        self.owner = ctx.sender;
+    owner: Address;
+    lastPositionId: Int as uint32 = 0;
 
-        self.gateKeeperAddress = gateKeeperAddress;
-        self.stablecoinMasterAddress = stablecoinMasterAddress;
+    init() {
+        self.owner = sender();
+        self.gateKeeperAddress = newAddress(0, 0);
+        self.stablecoinMasterAddress = newAddress(0, 0);
     }
 
+    receive(msg: SetDeps) {
+        self.requireOwner();
+        self.stablecoinMasterAddress = msg.stablecoinMasterAddress;
+        self.gateKeeperAddress = msg.gateKeeperAddress;
+    }
 
     /*
         message came from gateKeeper
@@ -32,13 +42,12 @@ contract PositionsManagerContract with Deployable {
         and send userStatus.message('adding collateral')
     */
     receive(msg: DepositCollateralMessage) {
+        require(sender() == self.gateKeeperAddress, "not from gateKeeper");
+
         let ctx: Context = context();
-        require(ctx.sender == self.gateKeeperAddress, "not from gateKeeper");
 
-        let fwdFee: Int = ctx.readForwardFee();  
-
-        // require(ctx.value > msg.amount + fwdFee + 2 * self.gasConsumption + self.minTonsForStorage, "Invalid value");
-        require(ctx.value > msg.amount + ton("0.5"), "Invalid value");
+        // require(ctx.value > msg.amount + fwdFee + 2 * self.GasConsumption + self.MinTonsForStorage, "Invalid value");
+        
         let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
         let userPositionAddress: Address = contractAddress(init);
 
@@ -46,13 +55,10 @@ contract PositionsManagerContract with Deployable {
 
         send(SendParameters{
             to: userPositionAddress, 
-            value: ton("0.5"),
-            mode: SendIgnoreErrors, 
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
-            body: DepositCollateralMessage{
-                amount: msg.amount,
-                user: msg.user
-            }.toCell(),
+            body: msg.toCell(),
             code: init.code,
             data: init.data
         });
@@ -101,8 +107,8 @@ contract PositionsManagerContract with Deployable {
 
         send(SendParameters{
             to: userPositionAddress, 
-            value: ton("0.1"),
-            mode: SendIgnoreErrors, 
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
             body: msg.toCell()
         });
@@ -117,13 +123,13 @@ contract PositionsManagerContract with Deployable {
 
         let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
         let userPositionAddress: Address = contractAddress(init);
-
         // todo check if message from userPosition
+        // require(sender() == userPositionAddress, "invalid sender");
 
         send(SendParameters{
             to: self.gateKeeperAddress, 
-            value: ton("0.1"),
-            mode: SendIgnoreErrors, 
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
             body: msg.toCell()
         });
@@ -217,7 +223,6 @@ contract PositionsManagerContract with Deployable {
 
     }
    
-   
 
     get fun lastPositionId(): Int {
         return self.lastPositionId;
@@ -226,6 +231,5 @@ contract PositionsManagerContract with Deployable {
     get fun balance(): Int {
         return myBalance();
     }
-
 
 }

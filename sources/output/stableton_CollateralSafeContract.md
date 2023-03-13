@@ -1,9 +1,9 @@
 # TACT Compilation Report
-Contract: UserStatusContract
-BOC Size: 806 bytes
+Contract: CollateralSafeContract
+BOC Size: 615 bytes
 
 # Types
-Total Types: 6
+Total Types: 8
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -25,14 +25,26 @@ Signature: `Deploy{queryId:uint64}`
 TLB: `deploy_ok#aff90f57 queryId:uint64 = DeployOk`
 Signature: `DeployOk{queryId:uint64}`
 
-## SetMessageMsg
-TLB: `set_message_msg#0b05e6bc message:^string = SetMessageMsg`
-Signature: `SetMessageMsg{message:^string}`
+## ChangeOwner
+TLB: `change_owner#0f474d03 newOwner:address = ChangeOwner`
+Signature: `ChangeOwner{newOwner:address}`
+
+## DepositCollateralMessage
+TLB: `deposit_collateral_message#11dfb138 user:address amount:coins = DepositCollateralMessage`
+Signature: `DepositCollateralMessage{user:address,amount:coins}`
+
+## WithdrawCollateralMessage
+TLB: `withdraw_collateral_message#8c69ea58 user:address amount:coins = WithdrawCollateralMessage`
+Signature: `WithdrawCollateralMessage{user:address,amount:coins}`
 
 # Get Methods
-Total Get Methods: 1
+Total Get Methods: 3
 
-## message
+## collateralAmount
+
+## getBalance
+
+## owner
 
 # Error Codes
 2: Stack undeflow
@@ -58,5 +70,3 @@ Total Get Methods: 1
 134: Invalid argument
 135: Code of a contract was not found
 136: Invalid address
-137: Masterchain support is not enabled for this contract
-4429: Invalid sender

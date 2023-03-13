@@ -1,28 +1,29 @@
 import "@stdlib/deploy";
 import "./messages";
 
-
 struct PositionState {
     collateral: Int as coins;
     debt: Int as uint64;
 }
 
-
 contract UserPositionContract with Deployable {
 
-    owner: Address;
+    const MinTonsForStorage: Int = ton("0.01");
+    const GasConsumption: Int = ton("0.01");
+
     user: Address; // who owns this position
     stablecoinMasterAddress: Address;
     positionsManagerAddress: Address;
     positionId: Int as uint32 = 0;
     collateral: Int as coins = 0;
     debt: Int as uint64 = 0;
-
+    message: String;
 
     init(user: Address, stablecoinMasterAddress: Address, positionsManagerAddress: Address) {
         self.user = user; 
         self.stablecoinMasterAddress = stablecoinMasterAddress;
         self.positionsManagerAddress = positionsManagerAddress;
+        self.message = "Position created";
         // todo call positionsManager.newPositionId(user)
         send(SendParameters{
             to: self.positionsManagerAddress, 
@@ -42,12 +43,21 @@ contract UserPositionContract with Deployable {
         add collateral
     */
     receive(msg: DepositCollateralMessage) {
-        let ctx: Context = context();
-        require(ctx.sender == self.positionsManagerAddress, "not from positionsManager");
+        require(sender() == self.positionsManagerAddress, "not from positionsManager");
 
         // todo check if position healthy
-
+        // todo if unhealthy - need to pay collateral back from gatekeeper to sender 
         self.collateral = self.collateral + msg.amount;
+
+        // pay excess to user
+        send(SendParameters{
+            to: msg.user,
+            bounce: false,
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors
+        });
+
+        self.message = "Collateral added";
     }
 
     /*
@@ -57,9 +67,7 @@ contract UserPositionContract with Deployable {
         register positionId:address in positionAddress.setPositionAddress
     */
     receive(msg: SetPositionIdMessage) {
-
-        let ctx: Context = context();
-        require(ctx.sender == self.positionsManagerAddress, "not from positionsManager");
+        require(sender() == self.positionsManagerAddress, "not from positionsManager");
 
         self.positionId = msg.positionId; 
 
@@ -70,8 +78,8 @@ contract UserPositionContract with Deployable {
 
         send(SendParameters{
             to: positionAddress, 
-            value: ton("0.5"),
-            mode: SendIgnoreErrors, 
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
             body: SetPositionAddressMessage{
                 user: msg.user,
@@ -83,6 +91,20 @@ contract UserPositionContract with Deployable {
         
     }
 
+
+    fun isPositionHealthy(collateral: Int, debt: Int, tonPriceWithSafetyMargin: Int): Bool {
+        // todo rewrite healh calculation to loanToValue ratio
+        dump("collateral");
+        dump(collateral);
+        dump("collateral * tonPriceWithSafetyMargin");
+        dump(collateral * tonPriceWithSafetyMargin);
+        dump("debt");
+        dump(debt);
+
+        return collateral * tonPriceWithSafetyMargin / 1000000000 >= debt;
+    }
+
+
     /*
         message came from positionsManager
         check if position healthy after withdraw
@@ -93,40 +115,43 @@ contract UserPositionContract with Deployable {
         call stablecoinMaster.mint(user, amount)
     */
     receive(msg: WithdrawStablecoinMessage) {
-        let ctx: Context = context();
-        require(ctx.sender == self.positionsManagerAddress, "not from positionsManager");
+        require(sender() == self.positionsManagerAddress, "not from positionsManager");
 
         // todo check if position healthy
 
-
-
-        // todo calculate from debtShare
-        let amountToMint: Int = msg.amount; 
+        let debtAfterWithdraw: Int = self.debt * msg.rate.debtAccumulatedRate + msg.amount;
+        // dump("debtAfterWithdraw");
+        // dump(debtAfterWithdraw);
         
+        require(self.isPositionHealthy(self.collateral, debtAfterWithdraw, msg.tonPriceWithSafetyMargin), "position will not be healthy");
+        
+        // dump("position healthy");
+
         send(SendParameters{
             to: self.stablecoinMasterAddress, 
-            value: ton("0.5"),
+            value: ton("0.1"),
             mode: SendIgnoreErrors, 
             bounce: true,
             body: MintMessage{
                 user: msg.user,
-                amount: amountToMint
+                amount: msg.amount
             }.toCell()
         });
 
+        // todo move this send after successfull stable mint notification
         send(SendParameters{
             to: self.positionsManagerAddress, 
-            value: ton("0.4"),
-            mode: SendIgnoreErrors, 
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
             body: IncreaseTotalStableMessage{
                 user: msg.user,
-                amount: amountToMint
+                amount: msg.amount
             }.toCell()
         });
 
-        self.debt = self.debt + msg.amount;
-      
+        self.debt = self.debt + msg.amount * 1000000000 / msg.rate.debtAccumulatedRate;
+        self.message = "Stablecoins sent";
     }
 
     /*
@@ -140,8 +165,7 @@ contract UserPositionContract with Deployable {
     */
     receive(msg: RepayStablecoinMessage) {
 
-        let ctx: Context = context();
-        require(ctx.sender == self.positionsManagerAddress, "not from positionsManager");
+        require(sender() == self.positionsManagerAddress, "not from positionsManager");
 
         require(self.debt >= msg.amount, "debt less than repay amount");
 
@@ -168,11 +192,9 @@ contract UserPositionContract with Deployable {
         decrease position debt
     */
     receive(msg: StablecoinBurnedMessage) {
-        let ctx: Context = context();
-        require(ctx.sender == self.stablecoinMasterAddress, "not from stablecoin master");
+        require(sender() == self.stablecoinMasterAddress, "not from stablecoin master");
 
         // require(self.debt >= msg.amount, "debt less than repay amount");
-
 
         send(SendParameters{
             to: self.positionsManagerAddress, 
@@ -201,9 +223,7 @@ contract UserPositionContract with Deployable {
             positionsManager.doWithdrawCollateral(user, amount)
     */
     receive(msg: WithdrawCollateralMessage) {
-
-        let ctx: Context = context();
-        require(ctx.sender == self.positionsManagerAddress, "not from positions manager");
+        require(sender() == self.positionsManagerAddress, "not from positions manager");
 
         require(msg.amount <= self.collateral, "withdrawal amount more than position has");
 
@@ -222,7 +242,7 @@ contract UserPositionContract with Deployable {
             }.toCell()
         });
     }
-   
+
 
     get fun getPositionUser(): Address {
         return self.user;
@@ -237,6 +257,10 @@ contract UserPositionContract with Deployable {
             collateral: self.collateral,
             debt: self.debt
         };
+    }
+
+    get fun getMessage(): String {
+        return self.message;
     }
     
 }
@@ -260,14 +284,21 @@ contract PositionAddressContract with Deployable {
         and get positionAddress by getter
     */
     receive(msg: SetPositionAddressMessage) {
-        let ctx: Context = context();
 
         // todo enable access check below
         // let init: StateInit = initOf UserPositionContract(user, self.positionsManagerAddress);
-        // require(contractAddress(init) == ctx.sender, "Invalid sender");
+        // require(contractAddress(init) == sender(), "Invalid sender");
 
         require(self.positionAddress == newAddress(0,0), "Already set");
         self.positionAddress = msg.position; //msg.positionAddress;
+
+        // pay excess to user
+        send(SendParameters{
+            to: msg.user,
+            bounce: false,
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors
+        });
     }
 
 

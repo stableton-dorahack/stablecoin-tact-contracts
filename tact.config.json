@@ -3,7 +3,8 @@
         {
             "name": "stableton",
             "path": "./sources/gateKeeper.tact",
-            "output": "./sources/output"
+            "output": "./sources/output",
+            "options": { "debug": true }
         },
         {
             "name": "stableton",
@@ -23,12 +24,8 @@
         {
             "name": "stableton",
             "path": "./sources/userPosition.tact",
-            "output": "./sources/output"
-        },
-        {
-            "name": "stableton",
-            "path": "./sources/userStatus.tact",
-            "output": "./sources/output"
+            "output": "./sources/output",
+            "options": { "debug": true }
         }
     ]
 }

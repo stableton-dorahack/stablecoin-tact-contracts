@@ -4,6 +4,10 @@ import "./messages";
 import "./StablecoinJetton";
 import "./UserPosition";
 
+message SetDeps {
+    positionsManagerAddress: Address;
+    gateKeeperAddress: Address;
+}
 
 contract StablecoinMasterContract with Deployable, Ownable {
    
@@ -14,20 +18,22 @@ contract StablecoinMasterContract with Deployable, Ownable {
     gateKeeperAddress: Address;
     content: Cell?;
 
-    init(positionsManagerAddress: Address, gateKeeperAddress: Address) {
-        let ctx: Context = context();
-        self.owner = ctx.sender;
-        self.positionsManagerAddress = positionsManagerAddress;
-        self.gateKeeperAddress = gateKeeperAddress;
+    init() {
+        self.owner = sender();
+        self.positionsManagerAddress = newAddress(0, 0);
+        self.gateKeeperAddress = newAddress(0, 0);
+    }
+
+    receive (msg: SetDeps) {
+        self.requireOwner();
+        self.positionsManagerAddress = msg.positionsManagerAddress;
+        self.gateKeeperAddress = msg.gateKeeperAddress;
     }
 
     // -----  standard jetton master functions
 
     receive(msg: TokenUpdateContent) {
-
-        // Allow changing content only by owner
         self.requireOwner();
-        
         // Update content
         self.content = msg.content;
     }

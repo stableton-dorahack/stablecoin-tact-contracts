@@ -1,43 +1,31 @@
-#pragma version =0.4.1;
+#pragma version =0.4.2;
 #pragma allow-post-modification;
 #pragma compute-asm-ltr;
 
-forall X -> X __tact_not_null(X x) inline { throw_if(128, null?(x)); return x; }
-
-global (int, slice, int, slice) __tact_context;
-global cell __tact_context_sys;
-
-(int, slice, int, slice) __tact_context_get() inline { return __tact_context; }
-
-() __tact_verify_address(slice address) inline {
-    throw_unless(136, address.slice_bits() != 267);
-}
-
-builder __tact_store_bool(builder b, int v) inline {
-    b = b.store_int(v, 1);
-    return b;
+slice __tact_verify_address(slice address) inline {
+    throw_unless(136, address.slice_bits() == 267);
+    var h = address.preload_uint(11);
+    throw_unless(136, (h == 1024) | (h == 1279));
+    throw_unless(137, h == 1024);
+    return address;
 }
 
 (slice, slice) __tact_load_address(slice cs) inline {
     slice raw = cs~load_msg_addr();
-    __tact_verify_address(raw);
-    return (cs, raw);
+    return (cs, __tact_verify_address(raw));
 }
 
 (slice, slice) __tact_load_address_opt(slice cs) inline {
     slice raw = cs~load_msg_addr();
     if (raw.preload_uint(2) != 0) {
-        __tact_verify_address(raw);
-        return (cs, raw);
+        return (cs, __tact_verify_address(raw));
     } else {
         return (cs, null());
     }
 }
 
 builder __tact_store_address(builder b, slice address) inline {
-    __tact_verify_address(address);
-    b = b.store_slice(address);
-    return b;
+    return b.store_slice(__tact_verify_address(address));
 }
 
 builder __tact_store_address_opt(builder b, slice address) inline {
@@ -55,7 +43,8 @@ slice __tact_create_address(int chain, int hash) inline {
     b = b.store_uint(0, 1);
     b = b.store_int(chain, 8);
     b = b.store_uint(hash, 256);
-    return b.end_cell().begin_parse();
+    var addr = b.end_cell().begin_parse();
+    return __tact_verify_address(addr);
 }
 
 slice __tact_compute_contract_address(int chain, cell code, cell data) inline {
@@ -67,6 +56,21 @@ slice __tact_compute_contract_address(int chain, cell code, cell data) inline {
     b = b.store_ref(data);
     var hash = cell_hash(b.end_cell());
     return __tact_create_address(chain, hash);
+}
+
+forall X -> X __tact_not_null(X x) inline { throw_if(128, null?(x)); return x; }
+
+global (int, slice, int, slice) __tact_context;
+global slice __tact_context_sender;
+global cell __tact_context_sys;
+
+(int, slice, int, slice) __tact_context_get() inline { return __tact_context; }
+
+slice __tact_context_get_sender() inline { return __tact_context_sender; }
+
+builder __tact_store_bool(builder b, int v) inline {
+    b = b.store_int(v, 1);
+    return b;
 }
 
 int __tact_address_eq(slice a, slice b) inline {
@@ -198,6 +202,13 @@ cell __gen_writecell_TokenExcesses((int) v) inline {
     return (sc_0, (v'content));
 }
 
+(slice, ((slice, slice))) __gen_read_SetDeps(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3201686968);
+    var v'positionsManagerAddress = sc_0~__tact_load_address();
+    var v'gateKeeperAddress = sc_0~__tact_load_address();
+    return (sc_0, (v'positionsManagerAddress, v'gateKeeperAddress));
+}
+
 builder __gen_write_StablecoinMasterContract(builder build_0, (int, int, slice, slice, slice, cell) v) inline {
     var (v'totalSupply, v'mintable, v'owner, v'positionsManagerAddress, v'gateKeeperAddress, v'content) = v;
     build_0 = build_0.store_coins(v'totalSupply);
@@ -224,11 +235,6 @@ _ __gen_StateInit_get_code((cell, cell) v) inline {
     return v'code;
 }
 
-_ __gen_Context_get_sender((int, slice, int, slice) v) inline {
-    var (v'bounced, v'sender, v'value, v'raw) = v;
-    return v'sender;
-}
-
 (int, int, slice, cell, cell) __gen_JettonData_to_external(((int, int, slice, cell, cell)) v) inline {
     var (v'totalSupply, v'mintable, v'owner, v'content, v'walletCode) = v; 
     return (v'totalSupply, v'mintable, v'owner, v'content, v'walletCode);
@@ -249,18 +255,11 @@ builder __gen_write_$init$UserPositionContract(builder build_0, (slice, slice, s
     return build_0;
 }
 
-(slice, ((slice, slice))) __gen_read_$init$StablecoinMasterContract(slice sc_0) inline {
-    var v'positionsManagerAddress = sc_0~__tact_load_address();
-    var v'gateKeeperAddress = sc_0~__tact_load_address();
-    return (sc_0, (v'positionsManagerAddress, v'gateKeeperAddress));
-}
-
-(int, int, slice, slice, slice, cell) $__gen_StablecoinMasterContract_init(slice $positionsManagerAddress, slice $gateKeeperAddress) impure inline_ref {
+(int, int, slice, slice, slice, cell) $__gen_StablecoinMasterContract_init() impure inline_ref {
     var (($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content)) = (0, true, null(), null(), null(), null());
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    $self'owner = $ctx'sender;
-    $self'positionsManagerAddress = $positionsManagerAddress;
-    $self'gateKeeperAddress = $gateKeeperAddress;
+    $self'owner = __tact_context_get_sender();
+    $self'positionsManagerAddress = __tact_create_address(0, 0);
+    $self'gateKeeperAddress = __tact_create_address(0, 0);
     return ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content);
 }
 
@@ -271,9 +270,9 @@ builder __gen_write_$init$UserPositionContract(builder build_0, (slice, slice, s
     if ($loaded) {
         return $sc~__gen_read_StablecoinMasterContract();
     } else {
-        (slice positionsManagerAddress, slice gateKeeperAddress) = $sc~__gen_read_$init$StablecoinMasterContract();
-        $sc.end_parse();
-        return $__gen_StablecoinMasterContract_init(positionsManagerAddress, gateKeeperAddress);
+        ;; Allow only workchain deployments
+        throw_unless(137, my_address().preload_uint(11) == 1024);
+        return $__gen_StablecoinMasterContract_init();
     }
 }
 
@@ -351,8 +350,7 @@ slice $contractAddress((cell, cell) $s) impure inline_ref {
 }
 
 () $reply(cell $body) impure inline_ref {
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    $send(__gen_constructor_SendParameters$bounce_to_value_mode_body(true, $ctx'sender, 0, (64 + 2), $body));
+    $send(__gen_constructor_SendParameters$bounce_to_value_mode_body(true, __tact_context_get_sender(), 0, (64 + 2), $body));
 }
 
 (cell, cell) $__gen_StablecoinJettonContract_init_child(cell sys', slice $master, slice $owner) {
@@ -438,7 +436,7 @@ slice $__gen_StablecoinMasterContract_get_wallet_address((int, int, slice, slice
 }
 
 _ $__gen_get_get_wallet_address(slice $$owner) method_id(103289) {
-    slice $owner = $$owner;
+    slice $owner = __tact_verify_address($$owner);
     var self = __gen_load_StablecoinMasterContract();
     var res = $__gen_StablecoinMasterContract_get_wallet_address(self, $owner);
     return res;
@@ -473,7 +471,7 @@ _ $__gen_get_totalSupply() method_id(86140) {
 
 ((int, int, slice, slice, slice, cell), ()) $__gen_StablecoinMasterContract_requireOwner((int, int, slice, slice, slice, cell) $self) impure inline_ref {
     var (($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content)) = $self;
-    throw_unless(132, __tact_address_eq(__gen_Context_get_sender(__tact_context_get()), $self'owner));
+    throw_unless(132, __tact_address_eq(__tact_context_get_sender(), $self'owner));
     return (($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content), ());
 }
 
@@ -486,6 +484,15 @@ _ $__gen_get_owner() method_id(83229) {
     var self = __gen_load_StablecoinMasterContract();
     var res = $__gen_StablecoinMasterContract_owner(self);
     return res;
+}
+
+(((int, int, slice, slice, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_SetDeps((int, int, slice, slice, slice, cell) $self, (slice, slice) $msg) impure inline {
+    var ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content) = $self;
+    var ($msg'positionsManagerAddress, $msg'gateKeeperAddress) = $msg;
+    ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content)~$__gen_StablecoinMasterContract_requireOwner();
+    $self'positionsManagerAddress = $msg'positionsManagerAddress;
+    $self'gateKeeperAddress = $msg'gateKeeperAddress;
+    return (($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content), ());
 }
 
 (((int, int, slice, slice, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_TokenUpdateContent((int, int, slice, slice, slice, cell) $self, (cell) $msg) impure inline {
@@ -577,6 +584,13 @@ _ $__gen_get_owner() method_id(83229) {
         return (self, true);
     }
     
+    ;; Receive SetDeps message
+    if (op == 3201686968) {
+        var msg = in_msg~__gen_read_SetDeps();
+        self~$__gen_StablecoinMasterContract_receive_SetDeps(msg);
+        return (self, true);
+    }
+    
     ;; Receive TokenUpdateContent message
     if (op == 201882270) {
         var msg = in_msg~__gen_read_TokenUpdateContent();
@@ -635,8 +649,9 @@ _ $__gen_get_owner() method_id(83229) {
     var cs = in_msg_cell.begin_parse();
     var msg_flags = cs~load_uint(4);
     var msg_bounced = ((msg_flags & 1) == 1 ? true : false);
-    slice msg_sender_addr = cs~load_msg_addr();
+    slice msg_sender_addr = __tact_verify_address(cs~load_msg_addr());
     __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
     
     ;; Load contract data
     var self = __gen_load_StablecoinMasterContract();
@@ -656,12 +671,13 @@ _ supported_interfaces() method_id {
         "org.ton.introspection.v0"H >> 128,
         "org.ton.abi.ipfs.v0"H >> 128,
         "org.ton.deploy.lazy.v0"H >> 128,
+        "org.ton.chain.workchain.v0"H >> 128,
         "org.ton.ownable"H >> 128
     );
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmdrLqDHrSHmQ9LYdRYMx4XHfyFeaKoeQZ8PS2JsQLYFi3";
+    return "ipfs://QmQdLjVj42ec9QULt5nAWodSQwBjvsaXVAA77Q4848UrSS";
 }
 
 _ lazy_deployment_completed() {

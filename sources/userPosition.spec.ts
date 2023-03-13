@@ -37,7 +37,8 @@ describe("PositionsManagerContract", () => {
         await system.run();
         expect(track.collect()).toMatchSnapshot();
 
-        // expect(await positionsManagerContract.getLastPositionId()).toEqual(0n);
+        expect(await userPositionContract.getGetPositionId()).toEqual(0n);
+        expect(await userPositionContract.getGetMessage()).toEqual("Position created");
     });
 
     it("on setPositionId from positionsManager should set positionId and deploy positionAddress contract", async () => {
@@ -67,11 +68,28 @@ describe("PositionsManagerContract", () => {
     });
 
     // todo add actions to init healthy position
-    it("on addCollateral from positionsManager with healthy position", async () => {
+    it("on addCollateral from positionsManager", async () => {
         await userPositionContract.send(
             positionsManager,
             { value: toNano(1) },
-            { $$type: "DepositCollateralMessage", user: user.address, amount: 100n }
+            {
+                $$type: "DepositCollateralMessage",
+                user: user.address,
+                amount: toNano(100),
+                settings: {
+                    $$type: "PoolSettings",
+                    liquidationRatio: 1n,
+                    stabilityFeeRate: 1n,
+                    closeFactorBps: 1n,
+                    liquidatorIncentiveBps: 1n,
+                },
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1n,
+                    lastAccumulationTime: 1n,
+                },
+                tonPriceWithSafetyMargin: 2600000000n,
+            }
         );
 
         await system.run();
@@ -80,31 +98,100 @@ describe("PositionsManagerContract", () => {
         const postitionState = await userPositionContract.getGetPositionState();
         console.log({ postitionState });
 
-        expect(postitionState).toEqual({ $$type: "PositionState", collateral: 100n, debt: 0n });
+        expect(postitionState).toEqual({ $$type: "PositionState", collateral: toNano(100), debt: 0n });
+        expect(await userPositionContract.getGetMessage()).toEqual("Collateral added");
     });
 
-    // todo add actions to init healthy position
+    it("on withdrawStablecoin from positionsManager with unhealthy position", async () => {
+        await userPositionContract.send(
+            positionsManager,
+            { value: toNano(1) },
+            {
+                $$type: "WithdrawStablecoinMessage",
+                user: user.address,
+                amount: toNano(1000),
+                settings: {
+                    $$type: "PoolSettings",
+                    liquidationRatio: 1n,
+                    stabilityFeeRate: 1n,
+                    closeFactorBps: 1n,
+                    liquidatorIncentiveBps: 1n,
+                },
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1000000000n,
+                    lastAccumulationTime: 1n,
+                },
+                tonPriceWithSafetyMargin: 2600000000n,
+            }
+        );
+
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
+        // console.warn(logger.collect());
+
+        const postitionState = await userPositionContract.getGetPositionState();
+        console.log({ postitionState });
+
+        expect(postitionState).toEqual({ $$type: "PositionState", collateral: toNano(100), debt: 0n });
+    });
+
     it("on withdrawStablecoin from positionsManager with healthy position", async () => {
         await userPositionContract.send(
             positionsManager,
             { value: toNano(1) },
-            { $$type: "WithdrawStablecoinMessage", user: user.address, amount: 100n, debtRate: 1000n }
+            {
+                $$type: "WithdrawStablecoinMessage",
+                user: user.address,
+                amount: toNano(10),
+                settings: {
+                    $$type: "PoolSettings",
+                    liquidationRatio: 1n,
+                    stabilityFeeRate: 1n,
+                    closeFactorBps: 1n,
+                    liquidatorIncentiveBps: 1n,
+                },
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1000000000n,
+                    lastAccumulationTime: 1n,
+                },
+                tonPriceWithSafetyMargin: 2600000000n,
+            }
         );
 
         await system.run();
         expect(track.collect()).toMatchSnapshot();
 
         const postitionState = await userPositionContract.getGetPositionState();
-        console.log({ postitionState });
+        console.log("healthy", { postitionState });
 
-        expect(postitionState).toEqual({ $$type: "PositionState", collateral: 100n, debt: 100n });
+        expect(postitionState).toEqual({ $$type: "PositionState", collateral: toNano(100), debt: toNano(10) });
+        expect(await userPositionContract.getGetMessage()).toEqual("Stablecoins sent");
     });
 
     it("on repayStablecoin from positionsManager with healthy position revert if debt less than amount", async () => {
         await userPositionContract.send(
             positionsManager,
             { value: toNano(1) },
-            { $$type: "RepayStablecoinMessage", user: user.address, amount: 150n, debtRate: 1000n }
+            {
+                $$type: "RepayStablecoinMessage",
+                user: user.address,
+                amount: 150n,
+                settings: {
+                    $$type: "PoolSettings",
+                    liquidationRatio: 1n,
+                    stabilityFeeRate: 1n,
+                    closeFactorBps: 1n,
+                    liquidatorIncentiveBps: 1n,
+                },
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1n,
+                    lastAccumulationTime: 1n,
+                },
+                tonPriceWithSafetyMargin: 2600000000n,
+            }
         );
 
         await system.run();
@@ -118,7 +205,24 @@ describe("PositionsManagerContract", () => {
         await userPositionContract.send(
             positionsManager,
             { value: toNano(1) },
-            { $$type: "RepayStablecoinMessage", user: user.address, amount: 100n, debtRate: 1000n }
+            {
+                $$type: "RepayStablecoinMessage",
+                user: user.address,
+                amount: 100n,
+                settings: {
+                    $$type: "PoolSettings",
+                    liquidationRatio: 1n,
+                    stabilityFeeRate: 1n,
+                    closeFactorBps: 1n,
+                    liquidatorIncentiveBps: 1n,
+                },
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1n,
+                    lastAccumulationTime: 1n,
+                },
+                tonPriceWithSafetyMargin: 2600000000n,
+            }
         );
 
         await system.run();
@@ -148,7 +252,24 @@ describe("PositionsManagerContract", () => {
         await userPositionContract.send(
             positionsManager,
             { value: toNano(1) },
-            { $$type: "WithdrawCollateralMessage", user: user.address, amount: 150n, debtRate: 1000n }
+            {
+                $$type: "WithdrawCollateralMessage",
+                user: user.address,
+                amount: 150n,
+                settings: {
+                    $$type: "PoolSettings",
+                    liquidationRatio: 1n,
+                    stabilityFeeRate: 1n,
+                    closeFactorBps: 1n,
+                    liquidatorIncentiveBps: 1n,
+                },
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1n,
+                    lastAccumulationTime: 1n,
+                },
+                tonPriceWithSafetyMargin: 2600000000n,
+            }
         );
 
         await system.run();
@@ -164,7 +285,24 @@ describe("PositionsManagerContract", () => {
         await userPositionContract.send(
             positionsManager,
             { value: toNano(1) },
-            { $$type: "WithdrawCollateralMessage", user: user.address, amount: 100n, debtRate: 1000n }
+            {
+                $$type: "WithdrawCollateralMessage",
+                user: user.address,
+                amount: 100n,
+                settings: {
+                    $$type: "PoolSettings",
+                    liquidationRatio: 1n,
+                    stabilityFeeRate: 1n,
+                    closeFactorBps: 1n,
+                    liquidatorIncentiveBps: 1n,
+                },
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1n,
+                    lastAccumulationTime: 1n,
+                },
+                tonPriceWithSafetyMargin: 2600000000n,
+            }
         );
 
         await system.run();
