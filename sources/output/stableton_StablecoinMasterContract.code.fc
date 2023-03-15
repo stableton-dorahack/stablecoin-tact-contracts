@@ -104,6 +104,19 @@ cell __gen_writecell_DeployOk((int) v) inline {
     return __gen_write_DeployOk(begin_cell(), v).end_cell();
 }
 
+builder __gen_write_DebtRate(builder build_0, (int, int) v) inline {
+    var (v'debtAccumulatedRate, v'lastAccumulationTime) = v;
+    build_0 = build_0.store_uint(v'debtAccumulatedRate, 32);
+    build_0 = build_0.store_uint(v'lastAccumulationTime, 32);
+    return build_0;
+}
+
+(slice, ((int, int))) __gen_read_DebtRate(slice sc_0) inline {
+    var v'debtAccumulatedRate = sc_0~load_uint(32);
+    var v'lastAccumulationTime = sc_0~load_uint(32);
+    return (sc_0, (v'debtAccumulatedRate, v'lastAccumulationTime));
+}
+
 (slice, ((slice, int))) __gen_read_MintFeesMessage(slice sc_0) inline {
     throw_unless(129, sc_0~load_uint(32) == 2638369821);
     var v'to = sc_0~__tact_load_address();
@@ -118,45 +131,45 @@ cell __gen_writecell_DeployOk((int) v) inline {
     return (sc_0, (v'user, v'amount));
 }
 
-builder __gen_write_RepayBurnMessage(builder build_0, (slice, int, int) v) inline {
-    var (v'user, v'amount, v'fees) = v;
-    build_0 = store_uint(build_0, 2959459244, 32);
+builder __gen_write_RepayBurnMessage(builder build_0, (slice, int, (int, int)) v) inline {
+    var (v'user, v'amount, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime)) = v;
+    build_0 = store_uint(build_0, 2032846846, 32);
     build_0 = __tact_store_address(build_0, v'user);
     build_0 = build_0.store_coins(v'amount);
-    build_0 = build_0.store_coins(v'fees);
+    build_0 = __gen_write_DebtRate(build_0, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime));
     return build_0;
 }
 
-cell __gen_writecell_RepayBurnMessage((slice, int, int) v) inline {
+cell __gen_writecell_RepayBurnMessage((slice, int, (int, int)) v) inline {
     return __gen_write_RepayBurnMessage(begin_cell(), v).end_cell();
 }
 
-(slice, ((slice, int, int))) __gen_read_RepayBurnMessage(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 2959459244);
+(slice, ((slice, int, (int, int)))) __gen_read_RepayBurnMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2032846846);
     var v'user = sc_0~__tact_load_address();
     var v'amount = sc_0~load_coins();
-    var v'fees = sc_0~load_coins();
-    return (sc_0, (v'user, v'amount, v'fees));
+    var v'rate = sc_0~__gen_read_DebtRate();
+    return (sc_0, (v'user, v'amount, v'rate));
 }
 
-(slice, ((slice, int, int))) __gen_read_RepayBurnNotification(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 2355055729);
+(slice, ((slice, int, (int, int)))) __gen_read_RepayBurnNotification(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3290364212);
     var v'user = sc_0~__tact_load_address();
     var v'amount = sc_0~load_coins();
-    var v'fees = sc_0~load_coins();
-    return (sc_0, (v'user, v'amount, v'fees));
+    var v'rate = sc_0~__gen_read_DebtRate();
+    return (sc_0, (v'user, v'amount, v'rate));
 }
 
-builder __gen_write_StablecoinBurnedMessage(builder build_0, (slice, int, int) v) inline {
-    var (v'user, v'amount, v'fees) = v;
-    build_0 = store_uint(build_0, 3929120156, 32);
+builder __gen_write_StablecoinBurnedMessage(builder build_0, (slice, int, (int, int)) v) inline {
+    var (v'user, v'amount, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime)) = v;
+    build_0 = store_uint(build_0, 3203474459, 32);
     build_0 = __tact_store_address(build_0, v'user);
     build_0 = build_0.store_coins(v'amount);
-    build_0 = build_0.store_coins(v'fees);
+    build_0 = __gen_write_DebtRate(build_0, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime));
     return build_0;
 }
 
-cell __gen_writecell_StablecoinBurnedMessage((slice, int, int) v) inline {
+cell __gen_writecell_StablecoinBurnedMessage((slice, int, (int, int)) v) inline {
     return __gen_write_StablecoinBurnedMessage(begin_cell(), v).end_cell();
 }
 
@@ -387,10 +400,6 @@ slice $contractAddress((cell, cell) $s) impure inline_ref {
     cell mine = __tact_dict_get_code(source, 33846);
     contracts = __tact_dict_set_code(contracts, 33846, mine);
     
-    ;; Contract Code: PositionAddressContract
-    cell code_63327 = __tact_dict_get_code(source, 63327);
-    contracts = __tact_dict_set_code(contracts, 63327, code_63327);
-    
     ;; Build cell
     builder b = begin_cell();
     b = b.store_ref(begin_cell().store_dict(contracts).end_cell());
@@ -527,30 +536,28 @@ _ $__gen_get_owner() method_id(83229) {
     return (($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content), ());
 }
 
-(((int, int, slice, slice, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_RepayBurnMessage((int, int, slice, slice, slice, cell) $self, (slice, int, int) $msg) impure inline {
+(((int, int, slice, slice, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_RepayBurnMessage((int, int, slice, slice, slice, cell) $self, (slice, int, (int, int)) $msg) impure inline {
     var ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content) = $self;
-    var ($msg'user, $msg'amount, $msg'fees) = $msg;
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    var ($msg'user, $msg'amount, ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime)) = $msg;
     var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user, my_address(), $self'positionsManagerAddress);
     slice $userPositionAddress = $contractAddress(($init'code, $init'data));
     var ($winit'code, $winit'data) = ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content)~$__gen_StablecoinMasterContract_getJettonWalletInit($msg'user);
     slice $walletAddress = $contractAddress(($winit'code, $winit'data));
-    $send(__gen_constructor_SendParameters$to_value_bounce_mode_body($walletAddress, 0, false, 64, __gen_writecell_RepayBurnMessage(($msg'user, $msg'amount, $msg'fees))));
+    $send(__gen_constructor_SendParameters$to_value_bounce_mode_body($walletAddress, 0, false, (64 + 2), __gen_writecell_RepayBurnMessage(($msg'user, $msg'amount, ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime)))));
     return (($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content), ());
 }
 
-((slice, int, int)) __gen_constructor_StablecoinBurnedMessage$amount_user_fees(int amount, slice user, int fees) inline {
-    return (user, amount, fees);
+((slice, int, (int, int))) __gen_constructor_StablecoinBurnedMessage$amount_user_rate(int amount, slice user, (int, int) rate) inline {
+    return (user, amount, rate);
 }
 
-(((int, int, slice, slice, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_RepayBurnNotification((int, int, slice, slice, slice, cell) $self, (slice, int, int) $msg) impure inline {
+(((int, int, slice, slice, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_RepayBurnNotification((int, int, slice, slice, slice, cell) $self, (slice, int, (int, int)) $msg) impure inline {
     var ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content) = $self;
-    var ($msg'user, $msg'amount, $msg'fees) = $msg;
+    var ($msg'user, $msg'amount, ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime)) = $msg;
     ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content)~$__gen_StablecoinMasterContract_requireWallet($msg'user);
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
     var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user, my_address(), $self'positionsManagerAddress);
     slice $userPositionAddress = $contractAddress(($init'code, $init'data));
-    $send(__gen_constructor_SendParameters$to_value_bounce_mode_body($userPositionAddress, 0, false, 64, __gen_writecell_StablecoinBurnedMessage(__gen_constructor_StablecoinBurnedMessage$amount_user_fees($msg'amount, $msg'user, $msg'fees))));
+    $send(__gen_constructor_SendParameters$to_value_bounce_mode_body($userPositionAddress, 0, false, (64 + 2), __gen_writecell_StablecoinBurnedMessage(__gen_constructor_StablecoinBurnedMessage$amount_user_rate($msg'amount, $msg'user, ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime)))));
     return (($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content), ());
 }
 
@@ -612,14 +619,14 @@ _ $__gen_get_owner() method_id(83229) {
     }
     
     ;; Receive RepayBurnMessage message
-    if (op == 2959459244) {
+    if (op == 2032846846) {
         var msg = in_msg~__gen_read_RepayBurnMessage();
         self~$__gen_StablecoinMasterContract_receive_RepayBurnMessage(msg);
         return (self, true);
     }
     
     ;; Receive RepayBurnNotification message
-    if (op == 2355055729) {
+    if (op == 3290364212) {
         var msg = in_msg~__gen_read_RepayBurnNotification();
         self~$__gen_StablecoinMasterContract_receive_RepayBurnNotification(msg);
         return (self, true);
@@ -676,7 +683,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmQdLjVj42ec9QULt5nAWodSQwBjvsaXVAA77Q4848UrSS";
+    return "ipfs://QmdKVL1Rn6bhEYuZmyzpZFum8XRFAHhcwXyK9JhMzvDqFd";
 }
 
 _ lazy_deployment_completed() {

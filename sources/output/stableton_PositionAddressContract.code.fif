@@ -22,8 +22,6 @@ PROGRAM{
   DECLPROC $reply
   DECLPROC __gen_constructor_SendParameters$to_bounce_value_mode
   DECLPROC __gen_constructor_DeployOk$queryId
-  DECLPROC $__gen_PositionAddressContract_getPositionId
-  125131 DECLMETHOD $__gen_get_getPositionId
   DECLPROC $__gen_PositionAddressContract_getPositionAddress
   88981 DECLMETHOD $__gen_get_getPositionAddress
   DECLPROC $__gen_PositionAddressContract_receive_SetPositionAddressMessage
@@ -145,14 +143,13 @@ PROGRAM{
   __gen_read_$init$PositionAddressContract PROCINLINE:<{
     257 PUSHINT
     LDIX
-    __tact_load_address INLINECALLDICT
-    s1 s2 XCHG
+    SWAP
   }>
   $__gen_PositionAddressContract_init PROCREF:<{
     0 PUSHINT
     DUP
     __tact_create_address INLINECALLDICT
-    SWAP
+    __tact_context_get_sender INLINECALLDICT
   }>
   __gen_load_PositionAddressContract PROCINLINE:<{
     c4 PUSH
@@ -172,9 +169,8 @@ PROGRAM{
       EQUAL
       137 THROWIFNOT
       __gen_read_$init$PositionAddressContract INLINECALLDICT
-      s0 s2 XCHG
-      ENDS
       SWAP
+      ENDS
       $__gen_PositionAddressContract_init INLINECALLDICT
     }>
   }>
@@ -313,13 +309,6 @@ PROGRAM{
   }>
   __gen_constructor_DeployOk$queryId PROCINLINE:<{
   }>
-  $__gen_PositionAddressContract_getPositionId PROCREF:<{
-    2DROP
-  }>
-  $__gen_get_getPositionId PROC:<{
-    __gen_load_PositionAddressContract INLINECALLDICT
-    $__gen_PositionAddressContract_getPositionId INLINECALLDICT
-  }>
   $__gen_PositionAddressContract_getPositionAddress PROCREF:<{
     DROP
     NIP
@@ -329,6 +318,11 @@ PROGRAM{
     $__gen_PositionAddressContract_getPositionAddress INLINECALLDICT
   }>
   $__gen_PositionAddressContract_receive_SetPositionAddressMessage PROCINLINE:<{
+    4429 PUSHINT
+    __tact_context_get_sender INLINECALLDICT
+    s4 PUSH
+    __tact_address_eq INLINECALLDICT
+    THROWANYIFNOT
     22230 PUSHINT
     0 PUSHINT
     DUP
@@ -418,11 +412,10 @@ PROGRAM{
     123515602279859691144772641439386770278 PUSHINT
     209801025412363888721030803524359905849 PUSHINT
     42980537499636128163026532310500881091 PUSHINT
-    36993126140238121407019133875791708966 PUSHINT
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d5259666d68706176736f6f716d55526e34706869576b514b4d504c32777669435a636a7a5174673773534e35} PUSHSLICE
+    x{697066733a2f2f516d5035596b613231546a483563324278587065484a746942655733726d776641326a7248366942625550375265} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

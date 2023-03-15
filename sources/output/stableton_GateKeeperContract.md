@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: GateKeeperContract
-BOC Size: 3032 bytes
+BOC Size: 3185 bytes
 
 # Types
-Total Types: 44
+Total Types: 45
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -62,8 +62,8 @@ TLB: `increase_total_stable_message#96096519 user:address amount:uint64 = Increa
 Signature: `IncreaseTotalStableMessage{user:address,amount:uint64}`
 
 ## DecreaseTotalStableMessage
-TLB: `decrease_total_stable_message#ed81304a user:address amount:uint64 fees:uint64 = DecreaseTotalStableMessage`
-Signature: `DecreaseTotalStableMessage{user:address,amount:uint64,fees:uint64}`
+TLB: `decrease_total_stable_message#10cda82c user:address amount:uint64 = DecreaseTotalStableMessage`
+Signature: `DecreaseTotalStableMessage{user:address,amount:uint64}`
 
 ## MintFeesMessage
 TLB: `mint_fees_message#9d42541d to:address amount:coins = MintFeesMessage`
@@ -98,16 +98,16 @@ TLB: `mint_message#903559b2 user:address amount:coins = MintMessage`
 Signature: `MintMessage{user:address,amount:coins}`
 
 ## RepayBurnMessage
-TLB: `repay_burn_message#b065c3ac user:address amount:coins fees:coins = RepayBurnMessage`
-Signature: `RepayBurnMessage{user:address,amount:coins,fees:coins}`
+TLB: `repay_burn_message#792ac7fe user:address amount:coins rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} = RepayBurnMessage`
+Signature: `RepayBurnMessage{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}}`
 
 ## RepayBurnNotification
-TLB: `repay_burn_notification#8c5f4c71 user:address amount:coins fees:coins = RepayBurnNotification`
-Signature: `RepayBurnNotification{user:address,amount:coins,fees:coins}`
+TLB: `repay_burn_notification#c41ef934 user:address amount:coins rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} = RepayBurnNotification`
+Signature: `RepayBurnNotification{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}}`
 
 ## StablecoinBurnedMessage
-TLB: `stablecoin_burned_message#ea319d9c user:address amount:coins fees:coins = StablecoinBurnedMessage`
-Signature: `StablecoinBurnedMessage{user:address,amount:coins,fees:coins}`
+TLB: `stablecoin_burned_message#bef1241b user:address amount:coins rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} = StablecoinBurnedMessage`
+Signature: `StablecoinBurnedMessage{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}}`
 
 ## TokenTransfer
 TLB: `token_transfer#0f8a7ea5 queryId:uint64 amount:coins destination:address responseDestination:Maybe address customPayload:Maybe ^cell forwardTonAmount:coins forwardPayload:remainder<slice> = TokenTransfer`
@@ -144,6 +144,10 @@ Signature: `SetUserStatusMsg{queryId:uint64,user:address,message:^string}`
 ## PositionState
 TLB: `_ collateral:coins debt:uint64 = PositionState`
 Signature: `PositionState{collateral:coins,debt:uint64}`
+
+## Message
+TLB: `_ timestamp:uint64 message:^string = Message`
+Signature: `Message{timestamp:uint64,message:^string}`
 
 ## PoolSettingsMsg
 TLB: `pool_settings_msg#a10722d9 liquidationRatio:uint32 stabilityFeeRate:uint32 closeFactorBps:uint32 liquidatorIncentiveBps:uint32 = PoolSettingsMsg`
@@ -229,13 +233,10 @@ Total Get Methods: 9
 137: Masterchain support is not enabled for this contract
 4429: Invalid sender
 15032: not from stablecoin master
-22230: Already set
 23932: not enough tons sent
-31797: debt less than repay amount
 32589: updateDebtAccumulatedRate:Invalid timestamp
 41207: invalid sender
-43504: position will not be healthy
+47204: not enough collateral on contract
 53160: not from positions manager
 60380: no fees collected
 61910: not from positionsManager
-63577: withdrawal amount more than position has

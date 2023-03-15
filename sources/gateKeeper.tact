@@ -7,7 +7,7 @@ import "./math/math.tact";
 
 message PoolSettingsMsg {
     liquidationRatio: Int as uint32;
-    stabilityFeeRate: Int as uint32;
+    stabilityFeeRate: Int as uint32; // 100 = 1%
     closeFactorBps: Int as uint32;
     liquidatorIncentiveBps: Int as uint32;
 }
@@ -216,7 +216,19 @@ contract GateKeeperContract with Deployable, Ownable {
         call positionsManager.repayStablecoin(RepayStablecoinMessage)
     */
     receive(msg: RepayStablecoinUserMessage) {
-
+        send(SendParameters{
+            to: self.deps.positionsManagerAddress, 
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors, 
+            bounce: true,
+            body: WithdrawStablecoinMessage{
+                user: msg.user,
+                amount: msg.amount,
+                settings: self.poolSettings,
+                rate: self.debtRate,
+                tonPriceWithSafetyMargin: self.tonPriceWithSafetyMargin
+            }.toCell()
+        });
     }
 
     /*
@@ -224,6 +236,22 @@ contract GateKeeperContract with Deployable, Ownable {
         call positionsManager.withdrawCollateral(RepayStablecoinMessage)
     */
     receive(msg: WithdrawCollateralUserMessage) {
+        require(sender() == msg.user, "invalid sender");
+
+         send(SendParameters{
+            to: self.deps.positionsManagerAddress, 
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors, 
+            bounce: true,
+            body: WithdrawCollateralMessage{
+                user: msg.user,
+                amount: msg.amount,
+                settings: self.poolSettings,
+                rate: self.debtRate,
+                tonPriceWithSafetyMargin: self.tonPriceWithSafetyMargin
+            }.toCell()
+        });
+
 
     }
 
@@ -232,9 +260,21 @@ contract GateKeeperContract with Deployable, Ownable {
     /*
         called by positionsManager
         transfer ton to user wallet
-        userStatus.message('ton withdrawal ok')
     */
-    receive(msg: WithdrawCollateralMessage) {
+    receive(msg: DoWithdrawCollateralMessage) {
+        require(sender() == self.deps.positionsManagerAddress, "invalid sender");
+
+        require(self.totalCollateralAmount - msg.amount >= 0, "not enough collateral on contract");
+
+        self.totalCollateralAmount = self.totalCollateralAmount - msg.amount;
+
+        // pay ton collateral to user and send excess
+        send(SendParameters{
+            to: msg.user,
+            bounce: false,
+            value: msg.amount,
+            mode: SendRemainingValue + SendIgnoreErrors
+        });
 
     }
 
@@ -243,9 +283,19 @@ contract GateKeeperContract with Deployable, Ownable {
         decrease stablecoinsIssued
         increase totalFeesCollected
         send excess to user
-        userStatus.message('stable paid back ok')
+
     */
     receive(msg: DecreaseTotalStableMessage) {
+        require(sender() == self.deps.positionsManagerAddress, "invalid sender");
+        self.stablecoinsIssued = self.stablecoinsIssued - msg.amount;
+
+        // pay excess
+        send(SendParameters{
+            to: msg.user,
+            bounce: false,
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors
+        });
 
     }
 
@@ -261,8 +311,6 @@ contract GateKeeperContract with Deployable, Ownable {
         self.stablecoinsIssued = self.stablecoinsIssued + msg.amount;
 
         // pay excess back to user
-        
-
         send(SendParameters{
             to: msg.user,
             bounce: false,
@@ -270,6 +318,19 @@ contract GateKeeperContract with Deployable, Ownable {
             mode: SendRemainingValue + SendIgnoreErrors
         });
 
+    }
+
+
+    // send all balance to the owner, should be removed later
+    receive("EmergencyExit") {
+        require(sender() == self.owner, "invalid sender");
+
+        send(SendParameters{
+            to: sender(),
+            bounce: false,
+            value: myBalance() - context().value - self.MinTonForStorage,
+            mode: SendRemainingValue + SendIgnoreErrors
+        });
     }
 
     fun getUserPositionAddress(user: Address): Address {

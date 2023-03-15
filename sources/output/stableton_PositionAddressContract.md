@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: PositionAddressContract
-BOC Size: 1130 bytes
+BOC Size: 1036 bytes
 
 # Types
-Total Types: 34
+Total Types: 37
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -24,6 +24,10 @@ Signature: `Deploy{queryId:uint64}`
 ## DeployOk
 TLB: `deploy_ok#aff90f57 queryId:uint64 = DeployOk`
 Signature: `DeployOk{queryId:uint64}`
+
+## ChangeOwner
+TLB: `change_owner#0f474d03 newOwner:address = ChangeOwner`
+Signature: `ChangeOwner{newOwner:address}`
 
 ## PoolSettings
 TLB: `_ liquidationRatio:uint32 stabilityFeeRate:uint32 closeFactorBps:uint32 liquidatorIncentiveBps:uint32 = PoolSettings`
@@ -58,8 +62,8 @@ TLB: `increase_total_stable_message#96096519 user:address amount:uint64 = Increa
 Signature: `IncreaseTotalStableMessage{user:address,amount:uint64}`
 
 ## DecreaseTotalStableMessage
-TLB: `decrease_total_stable_message#ed81304a user:address amount:uint64 fees:uint64 = DecreaseTotalStableMessage`
-Signature: `DecreaseTotalStableMessage{user:address,amount:uint64,fees:uint64}`
+TLB: `decrease_total_stable_message#10cda82c user:address amount:uint64 = DecreaseTotalStableMessage`
+Signature: `DecreaseTotalStableMessage{user:address,amount:uint64}`
 
 ## MintFeesMessage
 TLB: `mint_fees_message#9d42541d to:address amount:coins = MintFeesMessage`
@@ -94,16 +98,16 @@ TLB: `mint_message#903559b2 user:address amount:coins = MintMessage`
 Signature: `MintMessage{user:address,amount:coins}`
 
 ## RepayBurnMessage
-TLB: `repay_burn_message#b065c3ac user:address amount:coins fees:coins = RepayBurnMessage`
-Signature: `RepayBurnMessage{user:address,amount:coins,fees:coins}`
+TLB: `repay_burn_message#792ac7fe user:address amount:coins rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} = RepayBurnMessage`
+Signature: `RepayBurnMessage{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}}`
 
 ## RepayBurnNotification
-TLB: `repay_burn_notification#8c5f4c71 user:address amount:coins fees:coins = RepayBurnNotification`
-Signature: `RepayBurnNotification{user:address,amount:coins,fees:coins}`
+TLB: `repay_burn_notification#c41ef934 user:address amount:coins rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} = RepayBurnNotification`
+Signature: `RepayBurnNotification{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}}`
 
 ## StablecoinBurnedMessage
-TLB: `stablecoin_burned_message#ea319d9c user:address amount:coins fees:coins = StablecoinBurnedMessage`
-Signature: `StablecoinBurnedMessage{user:address,amount:coins,fees:coins}`
+TLB: `stablecoin_burned_message#bef1241b user:address amount:coins rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} = StablecoinBurnedMessage`
+Signature: `StablecoinBurnedMessage{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}}`
 
 ## TokenTransfer
 TLB: `token_transfer#0f8a7ea5 queryId:uint64 amount:coins destination:address responseDestination:Maybe address customPayload:Maybe ^cell forwardTonAmount:coins forwardPayload:remainder<slice> = TokenTransfer`
@@ -141,10 +145,16 @@ Signature: `SetUserStatusMsg{queryId:uint64,user:address,message:^string}`
 TLB: `_ collateral:coins debt:uint64 = PositionState`
 Signature: `PositionState{collateral:coins,debt:uint64}`
 
-# Get Methods
-Total Get Methods: 2
+## Message
+TLB: `_ timestamp:uint64 message:^string = Message`
+Signature: `Message{timestamp:uint64,message:^string}`
 
-## getPositionId
+## SetDeps
+TLB: `set_deps#23071186 stablecoinMasterAddress:address gateKeeperAddress:address = SetDeps`
+Signature: `SetDeps{stablecoinMasterAddress:address,gateKeeperAddress:address}`
+
+# Get Methods
+Total Get Methods: 1
 
 ## getPositionAddress
 
@@ -173,10 +183,9 @@ Total Get Methods: 2
 135: Code of a contract was not found
 136: Invalid address
 137: Masterchain support is not enabled for this contract
+4429: Invalid sender
+5576: not from gateKeeper
 15032: not from stablecoin master
 22230: Already set
-31797: debt less than repay amount
-43504: position will not be healthy
 53160: not from positions manager
 61910: not from positionsManager
-63577: withdrawal amount more than position has

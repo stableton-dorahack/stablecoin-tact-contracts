@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: StablecoinJettonContract
-BOC Size: 2382 bytes
+BOC Size: 2389 bytes
 
 # Types
-Total Types: 36
+Total Types: 37
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -62,8 +62,8 @@ TLB: `increase_total_stable_message#96096519 user:address amount:uint64 = Increa
 Signature: `IncreaseTotalStableMessage{user:address,amount:uint64}`
 
 ## DecreaseTotalStableMessage
-TLB: `decrease_total_stable_message#ed81304a user:address amount:uint64 fees:uint64 = DecreaseTotalStableMessage`
-Signature: `DecreaseTotalStableMessage{user:address,amount:uint64,fees:uint64}`
+TLB: `decrease_total_stable_message#10cda82c user:address amount:uint64 = DecreaseTotalStableMessage`
+Signature: `DecreaseTotalStableMessage{user:address,amount:uint64}`
 
 ## MintFeesMessage
 TLB: `mint_fees_message#9d42541d to:address amount:coins = MintFeesMessage`
@@ -98,16 +98,16 @@ TLB: `mint_message#903559b2 user:address amount:coins = MintMessage`
 Signature: `MintMessage{user:address,amount:coins}`
 
 ## RepayBurnMessage
-TLB: `repay_burn_message#b065c3ac user:address amount:coins fees:coins = RepayBurnMessage`
-Signature: `RepayBurnMessage{user:address,amount:coins,fees:coins}`
+TLB: `repay_burn_message#792ac7fe user:address amount:coins rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} = RepayBurnMessage`
+Signature: `RepayBurnMessage{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}}`
 
 ## RepayBurnNotification
-TLB: `repay_burn_notification#8c5f4c71 user:address amount:coins fees:coins = RepayBurnNotification`
-Signature: `RepayBurnNotification{user:address,amount:coins,fees:coins}`
+TLB: `repay_burn_notification#c41ef934 user:address amount:coins rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} = RepayBurnNotification`
+Signature: `RepayBurnNotification{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}}`
 
 ## StablecoinBurnedMessage
-TLB: `stablecoin_burned_message#ea319d9c user:address amount:coins fees:coins = StablecoinBurnedMessage`
-Signature: `StablecoinBurnedMessage{user:address,amount:coins,fees:coins}`
+TLB: `stablecoin_burned_message#bef1241b user:address amount:coins rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} = StablecoinBurnedMessage`
+Signature: `StablecoinBurnedMessage{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}}`
 
 ## TokenTransfer
 TLB: `token_transfer#0f8a7ea5 queryId:uint64 amount:coins destination:address responseDestination:Maybe address customPayload:Maybe ^cell forwardTonAmount:coins forwardPayload:remainder<slice> = TokenTransfer`
@@ -144,6 +144,10 @@ Signature: `SetUserStatusMsg{queryId:uint64,user:address,message:^string}`
 ## PositionState
 TLB: `_ collateral:coins debt:uint64 = PositionState`
 Signature: `PositionState{collateral:coins,debt:uint64}`
+
+## Message
+TLB: `_ timestamp:uint64 message:^string = Message`
+Signature: `Message{timestamp:uint64,message:^string}`
 
 ## SetDeps
 TLB: `set_deps#bed5ddb8 positionsManagerAddress:address gateKeeperAddress:address = SetDeps`
@@ -185,11 +189,7 @@ Total Get Methods: 2
 13650: Invalid bounced message
 15032: not from stablecoin master
 16059: Invalid value
-22230: Already set
-31797: debt less than repay amount
 33545: not from gatekeeper
-43504: position will not be healthy
 53160: not from positions manager
 61910: not from positionsManager
 62972: Invalid balance
-63577: withdrawal amount more than position has

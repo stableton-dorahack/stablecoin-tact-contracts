@@ -56,7 +56,6 @@ message IncreaseTotalStableMessage {
 message DecreaseTotalStableMessage {
     user: Address;
     amount: Int as uint64;
-    fees: Int as uint64;
 }
 
 // stablecoinMaster messages
@@ -112,19 +111,19 @@ message MintMessage {
 message RepayBurnMessage {
     user: Address;
     amount: Int as coins;
-    fees: Int as coins;
+    rate: DebtRate;
 }
 
 message RepayBurnNotification {
     user: Address;
     amount: Int as coins;
-    fees: Int as coins;
+    rate: DebtRate;
 }
 
 message StablecoinBurnedMessage {
     user: Address;
     amount: Int as coins;
-    fees: Int as coins;
+    rate: DebtRate;
 }
 
 // jetton messages
@@ -175,12 +174,4 @@ message(0xd53276db) TokenExcesses {
 
 message TokenUpdateContent {
     content: Cell?;
-}
-
-
-// userStatus messages 
-message SetUserStatusMsg {
-    queryId: Int as uint64;
-    user: Address;
-    message: String;
 }

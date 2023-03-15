@@ -19,27 +19,6 @@ builder __tact_store_address(builder b, slice address) inline {
     return b.store_slice(__tact_verify_address(address));
 }
 
-slice __tact_create_address(int chain, int hash) inline {
-    var b = begin_cell();
-    b = b.store_uint(2, 2);
-    b = b.store_uint(0, 1);
-    b = b.store_int(chain, 8);
-    b = b.store_uint(hash, 256);
-    var addr = b.end_cell().begin_parse();
-    return __tact_verify_address(addr);
-}
-
-slice __tact_compute_contract_address(int chain, cell code, cell data) inline {
-    var b = begin_cell();
-    b = b.store_uint(0, 2);
-    b = b.store_uint(3, 2);
-    b = b.store_uint(0, 1);
-    b = b.store_ref(code);
-    b = b.store_ref(data);
-    var hash = cell_hash(b.end_cell());
-    return __tact_create_address(chain, hash);
-}
-
 forall X -> X __tact_not_null(X x) inline { throw_if(128, null?(x)); return x; }
 
 () __tact_debug_str(slice value) impure asm "STRDUMP" "DROP";
@@ -57,16 +36,6 @@ builder __tact_store_bool(builder b, int v) inline {
 
 int __tact_address_eq(slice a, slice b) inline {
     return equal_slice_bits(a, b);
-}
-
-cell __tact_dict_set_code(cell dict, int id, cell code) inline {
-    return udict_set_ref(dict, 16, id, code);
-}
-
-cell __tact_dict_get_code(cell dict, int id) inline {
-    var (data, ok) = udict_get_ref?(dict, 16, id);
-    throw_unless(135, ok);
-    return data;
 }
 
 slice __tact_int_to_string(int src) inline_ref {
@@ -131,6 +100,13 @@ cell __gen_writecell_DeployOk((int) v) inline {
     var v'closeFactorBps = sc_0~load_uint(32);
     var v'liquidatorIncentiveBps = sc_0~load_uint(32);
     return (sc_0, (v'liquidationRatio, v'stabilityFeeRate, v'closeFactorBps, v'liquidatorIncentiveBps));
+}
+
+builder __gen_write_DebtRate(builder build_0, (int, int) v) inline {
+    var (v'debtAccumulatedRate, v'lastAccumulationTime) = v;
+    build_0 = build_0.store_uint(v'debtAccumulatedRate, 32);
+    build_0 = build_0.store_uint(v'lastAccumulationTime, 32);
+    return build_0;
 }
 
 (slice, ((int, int))) __gen_read_DebtRate(slice sc_0) inline {
@@ -203,24 +179,16 @@ cell __gen_writecell_IncreaseTotalStableMessage((slice, int) v) inline {
     return __gen_write_IncreaseTotalStableMessage(begin_cell(), v).end_cell();
 }
 
-builder __gen_write_DecreaseTotalStableMessage(builder build_0, (slice, int, int) v) inline {
-    var (v'user, v'amount, v'fees) = v;
-    build_0 = store_uint(build_0, 3984666698, 32);
+builder __gen_write_DecreaseTotalStableMessage(builder build_0, (slice, int) v) inline {
+    var (v'user, v'amount) = v;
+    build_0 = store_uint(build_0, 281913388, 32);
     build_0 = __tact_store_address(build_0, v'user);
     build_0 = build_0.store_uint(v'amount, 64);
-    build_0 = build_0.store_uint(v'fees, 64);
     return build_0;
 }
 
-cell __gen_writecell_DecreaseTotalStableMessage((slice, int, int) v) inline {
+cell __gen_writecell_DecreaseTotalStableMessage((slice, int) v) inline {
     return __gen_write_DecreaseTotalStableMessage(begin_cell(), v).end_cell();
-}
-
-(slice, ((slice, int))) __gen_read_SetPositionIdMessage(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1245051344);
-    var v'user = sc_0~__tact_load_address();
-    var v'positionId = sc_0~load_int(257);
-    return (sc_0, (v'user, v'positionId));
 }
 
 builder __gen_write_NewPositionIdMessage(builder build_0, (slice) v) inline {
@@ -232,18 +200,6 @@ builder __gen_write_NewPositionIdMessage(builder build_0, (slice) v) inline {
 
 cell __gen_writecell_NewPositionIdMessage((slice) v) inline {
     return __gen_write_NewPositionIdMessage(begin_cell(), v).end_cell();
-}
-
-builder __gen_write_SetPositionAddressMessage(builder build_0, (slice, slice) v) inline {
-    var (v'user, v'position) = v;
-    build_0 = store_uint(build_0, 1571217046, 32);
-    build_0 = __tact_store_address(build_0, v'user);
-    build_0 = __tact_store_address(build_0, v'position);
-    return build_0;
-}
-
-cell __gen_writecell_SetPositionAddressMessage((slice, slice) v) inline {
-    return __gen_write_SetPositionAddressMessage(begin_cell(), v).end_cell();
 }
 
 builder __gen_write_MintMessage(builder build_0, (slice, int) v) inline {
@@ -258,53 +214,72 @@ cell __gen_writecell_MintMessage((slice, int) v) inline {
     return __gen_write_MintMessage(begin_cell(), v).end_cell();
 }
 
-builder __gen_write_RepayBurnMessage(builder build_0, (slice, int, int) v) inline {
-    var (v'user, v'amount, v'fees) = v;
-    build_0 = store_uint(build_0, 2959459244, 32);
+builder __gen_write_RepayBurnMessage(builder build_0, (slice, int, (int, int)) v) inline {
+    var (v'user, v'amount, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime)) = v;
+    build_0 = store_uint(build_0, 2032846846, 32);
     build_0 = __tact_store_address(build_0, v'user);
     build_0 = build_0.store_coins(v'amount);
-    build_0 = build_0.store_coins(v'fees);
+    build_0 = __gen_write_DebtRate(build_0, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime));
     return build_0;
 }
 
-cell __gen_writecell_RepayBurnMessage((slice, int, int) v) inline {
+cell __gen_writecell_RepayBurnMessage((slice, int, (int, int)) v) inline {
     return __gen_write_RepayBurnMessage(begin_cell(), v).end_cell();
 }
 
-(slice, ((slice, int, int))) __gen_read_StablecoinBurnedMessage(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3929120156);
+(slice, ((slice, int, (int, int)))) __gen_read_StablecoinBurnedMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3203474459);
     var v'user = sc_0~__tact_load_address();
     var v'amount = sc_0~load_coins();
-    var v'fees = sc_0~load_coins();
-    return (sc_0, (v'user, v'amount, v'fees));
+    var v'rate = sc_0~__gen_read_DebtRate();
+    return (sc_0, (v'user, v'amount, v'rate));
 }
 
-builder __gen_write_UserPositionContract(builder build_0, (slice, slice, slice, int, int, int, slice) v) inline {
-    var (v'user, v'stablecoinMasterAddress, v'positionsManagerAddress, v'positionId, v'collateral, v'debt, v'message) = v;
-    build_0 = __tact_store_address(build_0, v'user);
-    build_0 = __tact_store_address(build_0, v'stablecoinMasterAddress);
-    build_0 = __tact_store_address(build_0, v'positionsManagerAddress);
-    build_0 = build_0.store_uint(v'positionId, 32);
-    build_0 = build_0.store_coins(v'collateral);
-    build_0 = build_0.store_uint(v'debt, 64);
+builder __gen_write_Message(builder build_0, (int, slice) v) inline {
+    var (v'timestamp, v'message) = v;
+    build_0 = build_0.store_uint(v'timestamp, 64);
     build_0 = build_0.store_ref(begin_cell().store_slice(v'message).end_cell());
     return build_0;
 }
 
-(slice, ((slice, slice, slice, int, int, int, slice))) __gen_read_UserPositionContract(slice sc_0) inline {
+(slice, ((int, slice))) __gen_read_Message(slice sc_0) inline {
+    var v'timestamp = sc_0~load_uint(64);
+    var v'message = sc_0~load_ref().begin_parse();
+    return (sc_0, (v'timestamp, v'message));
+}
+
+builder __gen_write_UserPositionContract(builder build_0, (slice, slice, slice, int, int, (int, slice)) v) inline {
+    var (v'user, v'stablecoinMasterAddress, v'positionsManagerAddress, v'collateral, v'debt, (v'message'timestamp, v'message'message)) = v;
+    build_0 = __tact_store_address(build_0, v'user);
+    build_0 = __tact_store_address(build_0, v'stablecoinMasterAddress);
+    build_0 = __tact_store_address(build_0, v'positionsManagerAddress);
+    build_0 = build_0.store_coins(v'collateral);
+    build_0 = build_0.store_uint(v'debt, 64);
+    var build_1 = begin_cell();
+    build_1 = __gen_write_Message(build_1, (v'message'timestamp, v'message'message));
+    build_0 = store_ref(build_0, build_1.end_cell());
+    return build_0;
+}
+
+(slice, ((slice, slice, slice, int, int, (int, slice)))) __gen_read_UserPositionContract(slice sc_0) inline {
     var v'user = sc_0~__tact_load_address();
     var v'stablecoinMasterAddress = sc_0~__tact_load_address();
     var v'positionsManagerAddress = sc_0~__tact_load_address();
-    var v'positionId = sc_0~load_uint(32);
     var v'collateral = sc_0~load_coins();
     var v'debt = sc_0~load_uint(64);
-    var v'message = sc_0~load_ref().begin_parse();
-    return (sc_0, (v'user, v'stablecoinMasterAddress, v'positionsManagerAddress, v'positionId, v'collateral, v'debt, v'message));
+    slice sc_1 = sc_0~load_ref().begin_parse();
+    var v'message = sc_1~__gen_read_Message();
+    return (sc_0, (v'user, v'stablecoinMasterAddress, v'positionsManagerAddress, v'collateral, v'debt, v'message));
 }
 
 (int, int) __gen_PositionState_to_external(((int, int)) v) inline {
     var (v'collateral, v'debt) = v; 
     return (v'collateral, v'debt);
+}
+
+(int, slice) __gen_Message_to_external(((int, slice)) v) inline {
+    var (v'timestamp, v'message) = v; 
+    return (v'timestamp, v'message);
 }
 
 (slice, ((slice, slice, slice))) __gen_read_$init$UserPositionContract(slice sc_0) inline {
@@ -314,15 +289,12 @@ builder __gen_write_UserPositionContract(builder build_0, (slice, slice, slice, 
     return (sc_0, (v'user, v'stablecoinMasterAddress, v'positionsManagerAddress));
 }
 
-builder __gen_write_$init$PositionAddressContract(builder build_0, (int, slice) v) inline {
-    var (v'id, v'positionsManagerAddress) = v;
-    build_0 = build_0.store_int(v'id, 257);
-    build_0 = __tact_store_address(build_0, v'positionsManagerAddress);
-    return build_0;
+((int, slice)) __gen_constructor_Message$timestamp_message(int timestamp, slice message) inline {
+    return (timestamp, message);
 }
 
-;; String "Position created"
-slice __gen_str_3995992330() asm "B{b5ee9c72410101010012000020506f736974696f6e20637265617465643b4db9f3} B>boc <s PUSHSLICE";
+;; String "Position Created"
+slice __gen_str_315180364() asm "B{b5ee9c72410101010012000020506f736974696f6e204372656174656486cee2ce} B>boc <s PUSHSLICE";
 
 () $send((int, slice, int, int, cell, cell, cell) $params) impure inline_ref {
     var (($params'bounce, $params'to, $params'value, $params'mode, $params'body, $params'code, $params'data)) = $params;
@@ -367,7 +339,7 @@ slice __gen_str_3995992330() asm "B{b5ee9c72410101010012000020506f736974696f6e20
     send_raw_message($c, $params'mode);
 }
 
-((int, slice, int, int, cell, cell, cell)) __gen_constructor_SendParameters$to_value_mode_bounce_body(slice to, int value, int mode, int bounce, cell body) inline {
+((int, slice, int, int, cell, cell, cell)) __gen_constructor_SendParameters$to_mode_value_bounce_body(slice to, int mode, int value, int bounce, cell body) inline {
     return (bounce, to, value, mode, body, null(), null());
 }
 
@@ -375,17 +347,17 @@ slice __gen_str_3995992330() asm "B{b5ee9c72410101010012000020506f736974696f6e20
     return (user);
 }
 
-(slice, slice, slice, int, int, int, slice) $__gen_UserPositionContract_init(slice $user, slice $stablecoinMasterAddress, slice $positionsManagerAddress) impure inline_ref {
-    var (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message)) = (null(), null(), null(), 0, 0, 0, null());
+(slice, slice, slice, int, int, (int, slice)) $__gen_UserPositionContract_init(slice $user, slice $stablecoinMasterAddress, slice $positionsManagerAddress) impure inline_ref {
+    var (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))) = (null(), null(), null(), 0, 0, null());
     $self'user = $user;
     $self'stablecoinMasterAddress = $stablecoinMasterAddress;
     $self'positionsManagerAddress = $positionsManagerAddress;
-    $self'message = __gen_str_3995992330();
-    $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'positionsManagerAddress, 100000000, 2, true, __gen_writecell_NewPositionIdMessage(__gen_constructor_NewPositionIdMessage$user($user))));
-    return ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message);
+    ($self'message'timestamp, $self'message'message) = __gen_constructor_Message$timestamp_message(now(), __gen_str_315180364());
+    $send(__gen_constructor_SendParameters$to_mode_value_bounce_body($self'positionsManagerAddress, 2, 100000000, true, __gen_writecell_NewPositionIdMessage(__gen_constructor_NewPositionIdMessage$user($user))));
+    return ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message));
 }
 
-(slice, slice, slice, int, int, int, slice) __gen_load_UserPositionContract() impure inline {
+(slice, slice, slice, int, int, (int, slice)) __gen_load_UserPositionContract() impure inline {
     slice $sc = get_data().begin_parse();
     __tact_context_sys = $sc~load_ref();
     int $loaded = $sc~load_int(1);
@@ -400,7 +372,7 @@ slice __gen_str_3995992330() asm "B{b5ee9c72410101010012000020506f736974696f6e20
     }
 }
 
-() __gen_store_UserPositionContract((slice, slice, slice, int, int, int, slice) v) impure inline {
+() __gen_store_UserPositionContract((slice, slice, slice, int, int, (int, slice)) v) impure inline {
     builder b = begin_cell();
     b = b.store_ref(__tact_context_sys);
     b = b.store_int(true, 1);
@@ -411,22 +383,44 @@ slice __gen_str_3995992330() asm "B{b5ee9c72410101010012000020506f736974696f6e20
 ;; String "Collateral added"
 slice __gen_str_1813105158() asm "B{b5ee9c72410101010012000020436f6c6c61746572616c206164646564255e4d6d} B>boc <s PUSHSLICE";
 
+;; String "position will not be healthy"
+slice __gen_str_1843863504() asm "B{b5ee9c7241010101001e000038706f736974696f6e2077696c6c206e6f74206265206865616c7468799929feee} B>boc <s PUSHSLICE";
+
 ;; String "Stablecoins sent"
 slice __gen_str_3523040537() asm "B{b5ee9c72410101010012000020537461626c65636f696e732073656e74e8a66862} B>boc <s PUSHSLICE";
+
+;; String "Your debt is less than you want to repay, charge sent back"
+slice __gen_str_1465769715() asm "B{b5ee9c7241010101003c000074596f75722064656274206973206c657373207468616e20796f752077616e7420746f2072657061792c206368617267652073656e74206261636b0dedde20} B>boc <s PUSHSLICE";
+
+;; String "stables are going to WithdrawCollateralMessageburn..."
+slice __gen_str_2800984162() asm "B{b5ee9c7241010101003700006a737461626c65732061726520676f696e6720746f205769746864726177436f6c6c61746572616c4d6573736167656275726e2e2e2e452e30b1} B>boc <s PUSHSLICE";
+
+;; String "you've paid stables back"
+slice __gen_str_889235150() asm "B{b5ee9c7241010101001a000030796f75277665207061696420737461626c6573206261636bf2782f91} B>boc <s PUSHSLICE";
+
+;; String "withdrawal amount more than position has"
+slice __gen_str_1734956577() asm "B{b5ee9c7241010101002a0000507769746864726177616c20616d6f756e74206d6f7265207468616e20706f736974696f6e20686173b8580d88} B>boc <s PUSHSLICE";
+
+;; String "collateral sent back to yor wallet"
+slice __gen_str_1266154668() asm "B{b5ee9c72410101010024000044636f6c6c61746572616c2073656e74206261636b20746f20796f722077616c6c6574cf7a0dbb} B>boc <s PUSHSLICE";
 
 ;; String "collateral"
 slice __gen_str_1427729246() asm "B{b5ee9c7241010101000c000014636f6c6c61746572616c2076e1ca} B>boc <s PUSHSLICE";
 
-;; String "collateral * tonPriceWithSafetyMargin"
-slice __gen_str_1844202114() asm "B{b5ee9c7241010101002700004a636f6c6c61746572616c202a20746f6e5072696365576974685361666574794d617267696e3cbc85a5} B>boc <s PUSHSLICE";
-
 ;; String "debt"
 slice __gen_str_1697478137() asm "B{b5ee9c72410101010006000008646562742fe16b04} B>boc <s PUSHSLICE";
 
-slice $contractAddress((cell, cell) $s) impure inline_ref {
-    var (($s'code, $s'data)) = $s;
-    return __tact_compute_contract_address(0, $s'code, $s'data);
-}
+;; String "tonPriceWithSafetyMargin"
+slice __gen_str_1328957298() asm "B{b5ee9c7241010101001a000030746f6e5072696365576974685361666574794d617267696e1b28c3bc} B>boc <s PUSHSLICE";
+
+;; String "debtRate"
+slice __gen_str_1259501162() asm "B{b5ee9c7241010101000a00001064656274526174659c3348cb} B>boc <s PUSHSLICE";
+
+;; String "isPositionHealthy.normalizedDebt"
+slice __gen_str_480053773() asm "B{b5ee9c724101010100220000406973506f736974696f6e4865616c7468792e6e6f726d616c697a6564446562748e3f2024} B>boc <s PUSHSLICE";
+
+;; String "isPositionHealthy.collateralPriceWithSafetyMargin"
+slice __gen_str_2349069309() asm "B{b5ee9c724101010100330000626973506f736974696f6e4865616c7468792e636f6c6c61746572616c5072696365576974685361666574794d617267696eefc7ebdb} B>boc <s PUSHSLICE";
 
 ((int, slice, int, int, cell, cell, cell)) __gen_constructor_SendParameters$bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline {
     return (bounce, to, value, mode, body, null(), null());
@@ -436,19 +430,34 @@ slice $contractAddress((cell, cell) $s) impure inline_ref {
     $send(__gen_constructor_SendParameters$bounce_to_value_mode_body(true, __tact_context_get_sender(), 0, (64 + 2), $body));
 }
 
-((slice, slice, slice, int, int, int, slice), int) $__gen_UserPositionContract_isPositionHealthy((slice, slice, slice, int, int, int, slice) $self, int $collateral, int $debt, int $tonPriceWithSafetyMargin) impure inline_ref {
-    var (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message)) = $self;
-    __tact_debug_str(__gen_str_1427729246());
-    __tact_debug_str(__tact_int_to_string($collateral));
-    __tact_debug_str(__gen_str_1844202114());
-    __tact_debug_str(__tact_int_to_string(($collateral * $tonPriceWithSafetyMargin)));
-    __tact_debug_str(__gen_str_1697478137());
-    __tact_debug_str(__tact_int_to_string($debt));
-    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message), ((($collateral * $tonPriceWithSafetyMargin) / 1000000000) >= $debt));
+((slice, slice, slice, int, int, (int, slice)), ()) $__gen_UserPositionContract_setMessage((slice, slice, slice, int, int, (int, slice)) $self, slice $msg) impure inline_ref {
+    var (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))) = $self;
+    var ($updatedMessage'timestamp, $updatedMessage'message) = __gen_constructor_Message$timestamp_message(now(), $msg);
+    ($self'message'timestamp, $self'message'message) = ($updatedMessage'timestamp, $updatedMessage'message);
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)), ());
 }
 
-slice $__gen_UserPositionContract_getPositionUser((slice, slice, slice, int, int, int, slice) $self) impure inline_ref {
-    var (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message)) = $self;
+((slice, slice, slice, int, int, (int, slice)), int) $__gen_UserPositionContract_isPositionHealthy((slice, slice, slice, int, int, (int, slice)) $self, int $collateral, int $debt, int $tonPriceWithSafetyMargin, int $debtRate) impure inline_ref {
+    var (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))) = $self;
+    __tact_debug_str(__gen_str_1427729246());
+    __tact_debug_str(__tact_int_to_string($collateral));
+    __tact_debug_str(__gen_str_1697478137());
+    __tact_debug_str(__tact_int_to_string($debt));
+    __tact_debug_str(__gen_str_1328957298());
+    __tact_debug_str(__tact_int_to_string($tonPriceWithSafetyMargin));
+    __tact_debug_str(__gen_str_1259501162());
+    __tact_debug_str(__tact_int_to_string($debtRate));
+    int $normalizedDebt = (($debt * 1000000000) / $debtRate);
+    __tact_debug_str(__gen_str_480053773());
+    __tact_debug_str(__tact_int_to_string($normalizedDebt));
+    int $collateralPriceWithSafetyMargin = (($collateral * $tonPriceWithSafetyMargin) / 1000000000);
+    __tact_debug_str(__gen_str_2349069309());
+    __tact_debug_str(__tact_int_to_string($collateralPriceWithSafetyMargin));
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)), ($collateralPriceWithSafetyMargin >= $debt));
+}
+
+slice $__gen_UserPositionContract_getPositionUser((slice, slice, slice, int, int, (int, slice)) $self) impure inline_ref {
+    var (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))) = $self;
     return $self'user;
 }
 
@@ -458,23 +467,12 @@ _ $__gen_get_getPositionUser() method_id(117072) {
     return res;
 }
 
-int $__gen_UserPositionContract_getPositionId((slice, slice, slice, int, int, int, slice) $self) impure inline_ref {
-    var (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message)) = $self;
-    return $self'positionId;
-}
-
-_ $__gen_get_getPositionId() method_id(125131) {
-    var self = __gen_load_UserPositionContract();
-    var res = $__gen_UserPositionContract_getPositionId(self);
-    return res;
-}
-
 ((int, int)) __gen_constructor_PositionState$collateral_debt(int collateral, int debt) inline {
     return (collateral, debt);
 }
 
-(int, int) $__gen_UserPositionContract_getPositionState((slice, slice, slice, int, int, int, slice) $self) impure inline_ref {
-    var (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message)) = $self;
+(int, int) $__gen_UserPositionContract_getPositionState((slice, slice, slice, int, int, (int, slice)) $self) impure inline_ref {
+    var (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))) = $self;
     return __gen_constructor_PositionState$collateral_debt($self'collateral, $self'debt);
 }
 
@@ -484,65 +482,33 @@ _ $__gen_get_getPositionState() method_id(118440) {
     return __gen_PositionState_to_external(res);
 }
 
-slice $__gen_UserPositionContract_getMessage((slice, slice, slice, int, int, int, slice) $self) impure inline_ref {
-    var (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message)) = $self;
-    return $self'message;
+(int, slice) $__gen_UserPositionContract_getMessage((slice, slice, slice, int, int, (int, slice)) $self) impure inline_ref {
+    var (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))) = $self;
+    return ($self'message'timestamp, $self'message'message);
 }
 
 _ $__gen_get_getMessage() method_id(91266) {
     var self = __gen_load_UserPositionContract();
     var res = $__gen_UserPositionContract_getMessage(self);
-    return res;
+    return __gen_Message_to_external(res);
 }
 
 ((int, slice, int, int, cell, cell, cell)) __gen_constructor_SendParameters$to_bounce_value_mode(slice to, int bounce, int value, int mode) inline {
     return (bounce, to, value, mode, null(), null(), null());
 }
 
-(((slice, slice, slice, int, int, int, slice)), ()) $__gen_UserPositionContract_receive_DepositCollateralMessage((slice, slice, slice, int, int, int, slice) $self, (slice, int, (int, int, int, int), (int, int), int) $msg) impure inline {
-    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message) = $self;
+(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_DepositCollateralMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int, int, int), (int, int), int) $msg) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)) = $self;
     var ($msg'user, $msg'amount, ($msg'settings'liquidationRatio, $msg'settings'stabilityFeeRate, $msg'settings'closeFactorBps, $msg'settings'liquidatorIncentiveBps), ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime), $msg'tonPriceWithSafetyMargin) = $msg;
     throw_unless(61910, __tact_address_eq(__tact_context_get_sender(), $self'positionsManagerAddress));
     $self'collateral = ($self'collateral + $msg'amount);
     $send(__gen_constructor_SendParameters$to_bounce_value_mode($msg'user, false, 0, (64 + 2)));
-    $self'message = __gen_str_1813105158();
-    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message), ());
+    ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_setMessage(__gen_str_1813105158());
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)), ());
 }
 
-((int, slice, int, int, cell, cell, cell)) __gen_constructor_SendParameters$to_value_mode_bounce_body_code_data(slice to, int value, int mode, int bounce, cell body, cell code, cell data) inline {
-    return (bounce, to, value, mode, body, code, data);
-}
-
-((slice, slice)) __gen_constructor_SetPositionAddressMessage$user_position(slice user, slice position) inline {
-    return (user, position);
-}
-
-(cell, cell) $__gen_PositionAddressContract_init_child(cell sys', int $id, slice $positionsManagerAddress) {
-    slice sc' = sys'.begin_parse();
-    cell source = sc'~load_dict();
-    cell contracts = new_dict();
-    
-    ;; Contract Code: PositionAddressContract
-    cell mine = __tact_dict_get_code(source, 63327);
-    contracts = __tact_dict_set_code(contracts, 63327, mine);
-    
-    ;; Build cell
-    builder b = begin_cell();
-    b = b.store_ref(begin_cell().store_dict(contracts).end_cell());
-    b = b.store_int(false, 1);
-    b = __gen_write_$init$PositionAddressContract(b, ($id, $positionsManagerAddress));
-    return (mine, b.end_cell());
-}
-
-(((slice, slice, slice, int, int, int, slice)), ()) $__gen_UserPositionContract_receive_SetPositionIdMessage((slice, slice, slice, int, int, int, slice) $self, (slice, int) $msg) impure inline {
-    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message) = $self;
-    var ($msg'user, $msg'positionId) = $msg;
-    throw_unless(61910, __tact_address_eq(__tact_context_get_sender(), $self'positionsManagerAddress));
-    $self'positionId = $msg'positionId;
-    var ($init'code, $init'data) = $__gen_PositionAddressContract_init_child(__tact_context_sys, $self'positionId, $self'positionsManagerAddress);
-    slice $positionAddress = $contractAddress(($init'code, $init'data));
-    $send(__gen_constructor_SendParameters$to_value_mode_bounce_body_code_data($positionAddress, 0, (64 + 2), true, __gen_writecell_SetPositionAddressMessage(__gen_constructor_SetPositionAddressMessage$user_position($msg'user, my_address())), $init'code, $init'data));
-    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message), ());
+((int, slice, int, int, cell, cell, cell)) __gen_constructor_SendParameters$to_value_mode_bounce_body(slice to, int value, int mode, int bounce, cell body) inline {
+    return (bounce, to, value, mode, body, null(), null());
 }
 
 ((slice, int)) __gen_constructor_MintMessage$user_amount(slice user, int amount) inline {
@@ -553,72 +519,93 @@ _ $__gen_get_getMessage() method_id(91266) {
     return (user, amount);
 }
 
-(((slice, slice, slice, int, int, int, slice)), ()) $__gen_UserPositionContract_receive_WithdrawStablecoinMessage((slice, slice, slice, int, int, int, slice) $self, (slice, int, (int, int, int, int), (int, int), int) $msg) impure inline {
-    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message) = $self;
+(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_WithdrawStablecoinMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int, int, int), (int, int), int) $msg) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)) = $self;
     var ($msg'user, $msg'amount, ($msg'settings'liquidationRatio, $msg'settings'stabilityFeeRate, $msg'settings'closeFactorBps, $msg'settings'liquidatorIncentiveBps), ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime), $msg'tonPriceWithSafetyMargin) = $msg;
     throw_unless(61910, __tact_address_eq(__tact_context_get_sender(), $self'positionsManagerAddress));
     int $debtAfterWithdraw = (($self'debt * $msg'rate'debtAccumulatedRate) + $msg'amount);
-    throw_unless(43504, ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message)~$__gen_UserPositionContract_isPositionHealthy($self'collateral, $debtAfterWithdraw, $msg'tonPriceWithSafetyMargin));
+    if ((~ ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_isPositionHealthy($self'collateral, $debtAfterWithdraw, $msg'tonPriceWithSafetyMargin, $msg'rate'debtAccumulatedRate))) {
+        ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_setMessage(__gen_str_1843863504());
+        $send(__gen_constructor_SendParameters$to_bounce_value_mode($msg'user, false, 0, (64 + 2)));
+        return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)), ());
+    }
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'stablecoinMasterAddress, 100000000, 2, true, __gen_writecell_MintMessage(__gen_constructor_MintMessage$user_amount($msg'user, $msg'amount))));
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'positionsManagerAddress, 0, (64 + 2), true, __gen_writecell_IncreaseTotalStableMessage(__gen_constructor_IncreaseTotalStableMessage$user_amount($msg'user, $msg'amount))));
     $self'debt = ($self'debt + (($msg'amount * 1000000000) / $msg'rate'debtAccumulatedRate));
-    $self'message = __gen_str_3523040537();
-    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message), ());
+    ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_setMessage(__gen_str_3523040537());
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)), ());
 }
 
-((slice, int, int)) __gen_constructor_RepayBurnMessage$user_amount_fees(slice user, int amount, int fees) inline {
-    return (user, amount, fees);
+((slice, int, (int, int))) __gen_constructor_RepayBurnMessage$user_amount_rate(slice user, int amount, (int, int) rate) inline {
+    return (user, amount, rate);
 }
 
-(((slice, slice, slice, int, int, int, slice)), ()) $__gen_UserPositionContract_receive_RepayStablecoinMessage((slice, slice, slice, int, int, int, slice) $self, (slice, int, (int, int, int, int), (int, int), int) $msg) impure inline {
-    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message) = $self;
+(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_RepayStablecoinMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int, int, int), (int, int), int) $msg) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)) = $self;
     var ($msg'user, $msg'amount, ($msg'settings'liquidationRatio, $msg'settings'stabilityFeeRate, $msg'settings'closeFactorBps, $msg'settings'liquidatorIncentiveBps), ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime), $msg'tonPriceWithSafetyMargin) = $msg;
     throw_unless(61910, __tact_address_eq(__tact_context_get_sender(), $self'positionsManagerAddress));
-    throw_unless(31797, ($self'debt >= $msg'amount));
     int $amountToBurn = $msg'amount;
-    $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'stablecoinMasterAddress, 500000000, 2, true, __gen_writecell_RepayBurnMessage(__gen_constructor_RepayBurnMessage$user_amount_fees($msg'user, $amountToBurn, 1))));
-    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message), ());
+    int $factDebt = (($self'debt * $msg'rate'debtAccumulatedRate) / 1000000000);
+    if (($factDebt < $msg'amount)) {
+        ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_setMessage(__gen_str_1465769715());
+        $amountToBurn = $factDebt;
+    }
+    $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'stablecoinMasterAddress, 0, (64 + 2), true, __gen_writecell_RepayBurnMessage(__gen_constructor_RepayBurnMessage$user_amount_rate($msg'user, $amountToBurn, ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime)))));
+    ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_setMessage(__gen_str_2800984162());
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)), ());
 }
 
-((slice, int, int)) __gen_constructor_DecreaseTotalStableMessage$user_amount_fees(slice user, int amount, int fees) inline {
-    return (user, amount, fees);
+((slice, int)) __gen_constructor_DecreaseTotalStableMessage$user_amount(slice user, int amount) inline {
+    return (user, amount);
 }
 
-(((slice, slice, slice, int, int, int, slice)), ()) $__gen_UserPositionContract_receive_StablecoinBurnedMessage((slice, slice, slice, int, int, int, slice) $self, (slice, int, int) $msg) impure inline {
-    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message) = $self;
-    var ($msg'user, $msg'amount, $msg'fees) = $msg;
+(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_StablecoinBurnedMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int)) $msg) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)) = $self;
+    var ($msg'user, $msg'amount, ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime)) = $msg;
     throw_unless(15032, __tact_address_eq(__tact_context_get_sender(), $self'stablecoinMasterAddress));
-    $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'positionsManagerAddress, 400000000, 2, true, __gen_writecell_DecreaseTotalStableMessage(__gen_constructor_DecreaseTotalStableMessage$user_amount_fees($msg'user, $msg'amount, $msg'fees))));
-    $self'debt = ($self'debt - $msg'amount);
-    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message), ());
+    $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'positionsManagerAddress, 0, (64 + 2), true, __gen_writecell_DecreaseTotalStableMessage(__gen_constructor_DecreaseTotalStableMessage$user_amount($msg'user, $msg'amount))));
+    $self'debt = ($self'debt - (($msg'amount * 1000000000) / $msg'rate'debtAccumulatedRate));
+    ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_setMessage(__gen_str_889235150());
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)), ());
 }
 
 ((slice, int)) __gen_constructor_DoWithdrawCollateralMessage$user_amount(slice user, int amount) inline {
     return (user, amount);
 }
 
-(((slice, slice, slice, int, int, int, slice)), ()) $__gen_UserPositionContract_receive_WithdrawCollateralMessage((slice, slice, slice, int, int, int, slice) $self, (slice, int, (int, int, int, int), (int, int), int) $msg) impure inline {
-    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message) = $self;
+(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_WithdrawCollateralMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int, int, int), (int, int), int) $msg) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)) = $self;
     var ($msg'user, $msg'amount, ($msg'settings'liquidationRatio, $msg'settings'stabilityFeeRate, $msg'settings'closeFactorBps, $msg'settings'liquidatorIncentiveBps), ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime), $msg'tonPriceWithSafetyMargin) = $msg;
     throw_unless(53160, __tact_address_eq(__tact_context_get_sender(), $self'positionsManagerAddress));
-    throw_unless(63577, ($msg'amount <= $self'collateral));
-    $self'collateral = ($self'collateral - $msg'amount);
-    $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'positionsManagerAddress, 100000000, 2, true, __gen_writecell_DoWithdrawCollateralMessage(__gen_constructor_DoWithdrawCollateralMessage$user_amount($msg'user, $msg'amount))));
-    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message), ());
+    if (($msg'amount > $self'collateral)) {
+        ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_setMessage(__gen_str_1734956577());
+        $send(__gen_constructor_SendParameters$to_bounce_value_mode($msg'user, false, 0, (64 + 2)));
+        return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)), ());
+    }
+    int $collateralAfterWithdraw = ($self'collateral - $msg'amount);
+    if ((~ ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_isPositionHealthy($collateralAfterWithdraw, $self'debt, $msg'tonPriceWithSafetyMargin, $msg'rate'debtAccumulatedRate))) {
+        ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_setMessage(__gen_str_1843863504());
+        $send(__gen_constructor_SendParameters$to_bounce_value_mode($msg'user, false, 0, (64 + 2)));
+        return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)), ());
+    }
+    $self'collateral = $collateralAfterWithdraw;
+    $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'positionsManagerAddress, 0, (64 + 2), true, __gen_writecell_DoWithdrawCollateralMessage(__gen_constructor_DoWithdrawCollateralMessage$user_amount($msg'user, $msg'amount))));
+    ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_setMessage(__gen_str_1266154668());
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)), ());
 }
 
 ((int)) __gen_constructor_DeployOk$queryId(int queryId) inline {
     return (queryId);
 }
 
-(((slice, slice, slice, int, int, int, slice)), ()) $__gen_UserPositionContract_receive_Deploy((slice, slice, slice, int, int, int, slice) $self, (int) $deploy) impure inline {
-    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message) = $self;
+(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_Deploy((slice, slice, slice, int, int, (int, slice)) $self, (int) $deploy) impure inline {
+    var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)) = $self;
     var ($deploy'queryId) = $deploy;
     $reply(__gen_writecell_DeployOk(__gen_constructor_DeployOk$queryId($deploy'queryId)));
-    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'positionId, $self'collateral, $self'debt, $self'message), ());
+    return (($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)), ());
 }
 
-((slice, slice, slice, int, int, int, slice), int) __gen_router_UserPositionContract((slice, slice, slice, int, int, int, slice) self, int msg_bounced, slice in_msg) impure inline_ref {
+((slice, slice, slice, int, int, (int, slice)), int) __gen_router_UserPositionContract((slice, slice, slice, int, int, (int, slice)) self, int msg_bounced, slice in_msg) impure inline_ref {
     
     ;; Parse incoming message
     int op = 0;
@@ -638,13 +625,6 @@ _ $__gen_get_getMessage() method_id(91266) {
         return (self, true);
     }
     
-    ;; Receive SetPositionIdMessage message
-    if (op == 1245051344) {
-        var msg = in_msg~__gen_read_SetPositionIdMessage();
-        self~$__gen_UserPositionContract_receive_SetPositionIdMessage(msg);
-        return (self, true);
-    }
-    
     ;; Receive WithdrawStablecoinMessage message
     if (op == 1815710139) {
         var msg = in_msg~__gen_read_WithdrawStablecoinMessage();
@@ -660,7 +640,7 @@ _ $__gen_get_getMessage() method_id(91266) {
     }
     
     ;; Receive StablecoinBurnedMessage message
-    if (op == 3929120156) {
+    if (op == 3203474459) {
         var msg = in_msg~__gen_read_StablecoinBurnedMessage();
         self~$__gen_UserPositionContract_receive_StablecoinBurnedMessage(msg);
         return (self, true);
@@ -717,7 +697,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmPYVFyKZSMfFo3Bke96ZQxPiHajendB7D9nZ9i2hcgRL7";
+    return "ipfs://QmVcG3QV9NKmkefH31W7W1yuo1QF4jz1yQjyKPmaCL17YP";
 }
 
 _ lazy_deployment_completed() {

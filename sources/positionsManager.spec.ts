@@ -97,10 +97,11 @@ describe("PositionsManagerContract", () => {
         expect(track.collect()).toMatchSnapshot();
     });
 
-    it("newPositionId request from userPosition, increase lastPositionId and send it back to sender ", async () => {
+    it("newPositionId request from userPosition, increase lastPositionId and deploy positionAddress contract ", async () => {
         const userPosition = system.treasure("userPosition");
 
         const prevPositionId = await positionsManagerContract.getLastPositionId();
+        console.log({ prevPositionId });
 
         await positionsManagerContract.send(
             userPosition,
@@ -111,7 +112,9 @@ describe("PositionsManagerContract", () => {
         await system.run();
         expect(track.collect()).toMatchSnapshot();
 
-        expect(await positionsManagerContract.getLastPositionId()).toBe(prevPositionId + 1n);
+        const currentPositionId = await positionsManagerContract.getLastPositionId();
+        console.log({ currentPositionId });
+        expect(currentPositionId).toBe(prevPositionId + 1n);
     });
 
     it("on withdrawStable from gateKeeper forwards message to the userPosition", async () => {

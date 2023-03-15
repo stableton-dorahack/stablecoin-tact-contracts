@@ -163,5 +163,19 @@ describe("GateKeeperContract", () => {
         expect(totalStablesIssuedAfter - totalStablesIssuedBefore).toEqual(toNano(100));
     });
 
+    it("on repayStablecoinUserMessage should send enhanced message to positionsAddressManager", async () => {
+        await gateKeeperContract.send(
+            user,
+            { value: toNano(1) },
+            {
+                $$type: "RepayStablecoinUserMessage",
+                user: user.address,
+                amount: toNano(100),
+            }
+        );
+        await system.run();
+        expect(track.collect()).toMatchSnapshot();
+    });
+
     // todo test for WithdrawFeesMessage
 });

@@ -9,11 +9,14 @@ PROGRAM{
   DECLPROC __tact_my_balance
   DECLPROC __tact_not_null
   DECLPROC __tact_context_get
+  DECLPROC __tact_context_get_sender
   DECLPROC __tact_store_bool
   DECLPROC __tact_address_eq
   DECLPROC __tact_address_neq
   DECLPROC __tact_dict_set_code
   DECLPROC __tact_dict_get_code
+  DECLPROC __gen_write_DebtRate
+  DECLPROC __gen_read_DebtRate
   DECLPROC __gen_read_RepayBurnMessage
   DECLPROC __gen_write_RepayBurnNotification
   DECLPROC __gen_writecell_RepayBurnNotification
@@ -57,7 +60,7 @@ PROGRAM{
   DECLPROC __gen_constructor_TokenBurnNotification$queryId_amount_owner_responseAddress
   DECLPROC $__gen_StablecoinJettonContract_receive_TokenBurn
   DECLPROC $__gen_StablecoinJettonContract_receive_bounced
-  DECLPROC __gen_constructor_RepayBurnNotification$amount_user_fees
+  DECLPROC __gen_constructor_RepayBurnNotification$amount_user_rate
   DECLPROC $__gen_StablecoinJettonContract_receive_RepayBurnMessage
   DECLPROC __gen_router_StablecoinJettonContract
   DECLPROC recv_internal
@@ -167,6 +170,9 @@ PROGRAM{
     __tact_context GETGLOB
     4 UNTUPLE
   }>
+  __tact_context_get_sender PROCINLINE:<{
+    __tact_context_sender GETGLOB
+  }>
   __tact_store_bool PROCINLINE:<{
     SWAP
     1 STI
@@ -190,32 +196,43 @@ PROGRAM{
     NULLSWAPIFNOT
     135 THROWIFNOT
   }>
+  __gen_write_DebtRate PROCINLINE:<{
+    s0 s2 XCHG
+    32 STU
+    32 STU
+  }>
+  __gen_read_DebtRate PROCINLINE:<{
+    32 LDU
+    32 LDU
+    -ROT
+  }>
   __gen_read_RepayBurnMessage PROCINLINE:<{
     32 LDU
     SWAP
-    2959459244 PUSHINT
+    2032846846 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
     LDGRAMS
-    LDGRAMS
-    3 -ROLL
+    __gen_read_DebtRate INLINECALLDICT
+    s2 s4 XCHG
+    s2 s3 XCHG
   }>
   __gen_write_RepayBurnNotification PROCINLINE:<{
-    2355055729 PUSHINT
-    s0 s4 XCHG2
+    3290364212 PUSHINT
+    s0 s5 XCHG2
     32 STU
-    ROT
+    s0 s3 XCHG2
     __tact_store_address INLINECALLDICT
     SWAP
     STGRAMS
-    SWAP
-    STGRAMS
+    s0 s2 XCHG
+    __gen_write_DebtRate INLINECALLDICT
   }>
   __gen_writecell_RepayBurnNotification PROCINLINE:<{
     NEWC
-    3 -ROLL
+    4 -ROLL
     __gen_write_RepayBurnNotification INLINECALLDICT
     ENDC
   }>
@@ -810,33 +827,34 @@ PROGRAM{
     ADD
     s0 s2 XCHG
   }>
-  __gen_constructor_RepayBurnNotification$amount_user_fees PROCINLINE:<{
-    s1 s2 XCHG
+  __gen_constructor_RepayBurnNotification$amount_user_rate PROCINLINE:<{
+    s2 s3 XCHG
   }>
   $__gen_StablecoinJettonContract_receive_RepayBurnMessage PROCINLINE:<{
-    __tact_context_get INLINECALLDICT
     4429 PUSHINT
-    s3 s8 PUSH2
+    __tact_context_get_sender INLINECALLDICT
+    s6 PUSH
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
-    s9 s5 XCPU
-    SUB
     62972 PUSHINT
-    OVER
+    s7 s3 PUSH2
+    SUB
     -1 GTINT
     THROWANYIFNOT
-    s0 s9 XCHG
-    $__gen_Context_readForwardFee INLINECALLDICT
-    DROP
+    s6 s2 XCPU
+    SUB
+    s0 s2 XCHG
     0 PUSHINT
-    64 PUSHINT
-    s3 s4 XCHG2
+    66 PUSHINT
+    s5 s3 XCHG2
     TRUE
-    s0 s3 XCHG
-    __gen_constructor_RepayBurnNotification$amount_user_fees INLINECALLDICT
+    s0 s9 XCHG
+    __gen_constructor_RepayBurnNotification$amount_user_rate INLINECALLDICT
     __gen_writecell_RepayBurnNotification INLINECALLDICT
     s4 PUSH
-    s4 s4 s4 XCHG3
+    s0 s4 XCHG
+    s0 s3 XCHG
+    s7 s7 XCHG2
     __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
     $send INLINECALLDICT
   }>
@@ -887,11 +905,11 @@ PROGRAM{
       TRUE
     }>
     SWAP
-    2959459244 PUSHINT
+    2032846846 PUSHINT
     EQUAL
     IFJMP:<{
       __gen_read_RepayBurnMessage INLINECALLDICT
-      1 3 BLKDROP2
+      1 4 BLKDROP2
       $__gen_StablecoinJettonContract_receive_RepayBurnMessage INLINECALLDICT
       TRUE
     }>
@@ -934,7 +952,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d6551533338536e4c7a4b77366e7044534669425a5064467479656865653663324c4c54484e5a4a347938644a} PUSHSLICE
+    x{697066733a2f2f516d534a6675766a6e736a586a38706a70456246503147394d7a626865386f656339544577634b4d685471635961} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

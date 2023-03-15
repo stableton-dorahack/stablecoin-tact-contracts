@@ -36,10 +36,6 @@ contract PositionsManagerContract with Deployable, Ownable {
         message came from gateKeeper
         deploy new user position (if needed) 
         and call userPosition.addCollateral
-
-        todo later
-        deploy userStatus contract  (if needed)
-        and send userStatus.message('adding collateral')
     */
     receive(msg: DepositCollateralMessage) {
         require(sender() == self.gateKeeperAddress, "not from gateKeeper");
@@ -67,30 +63,30 @@ contract PositionsManagerContract with Deployable, Ownable {
     /*
         message came from userPosition
         increase lastPositionId
-        send lastPositionId back to userPosition.setPositionId
+        deploys positionAddressConrtact that stores positionId and position address
+        used to get position address by id for liquidations
     */
     receive(msg: NewPositionIdMessage) {
 
+        self.onlyUserPosition(msg.user);
         self.lastPositionId = self.lastPositionId + 1;
 
-        let ctx: Context = context();
-
-        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
-        let userPositionAddress: Address = contractAddress(init);
-
-        // todo check if message from userPosition
+        let init: StateInit = initOf PositionAddressContract(self.lastPositionId);
+        let positionAddress: Address = contractAddress(init);
 
         send(SendParameters{
-            to: ctx.sender, 
-            value: ton("0.1"),
-            mode: SendIgnoreErrors, 
+            to: positionAddress, 
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
-            body: SetPositionIdMessage{
-                positionId: self.lastPositionId,
-                user: msg.user
-            }.toCell()
+            body: SetPositionAddressMessage{
+                user: msg.user,
+                position: sender()
+            }.toCell(),
+            code: init.code,
+            data: init.data
         });
-
+        
     }
 
     /*  
@@ -99,14 +95,10 @@ contract PositionsManagerContract with Deployable, Ownable {
     */
     receive(msg: WithdrawStablecoinMessage) {
 
-        let ctx: Context = context();
-        require(ctx.sender == self.gateKeeperAddress, "not from gateKeeper");
-
-        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
-        let userPositionAddress: Address = contractAddress(init);
+        require(sender() == self.gateKeeperAddress, "not from gateKeeper");
 
         send(SendParameters{
-            to: userPositionAddress, 
+            to: self._userPositionAddress(msg.user), 
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
@@ -121,10 +113,7 @@ contract PositionsManagerContract with Deployable, Ownable {
     */
     receive(msg: IncreaseTotalStableMessage) {
 
-        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
-        let userPositionAddress: Address = contractAddress(init);
-        // todo check if message from userPosition
-        // require(sender() == userPositionAddress, "invalid sender");
+        self.onlyUserPosition(msg.user);
 
         send(SendParameters{
             to: self.gateKeeperAddress, 
@@ -142,17 +131,12 @@ contract PositionsManagerContract with Deployable, Ownable {
         call userPosition.repayStable()
     */
     receive(msg: RepayStablecoinMessage) {
-
-        let ctx: Context = context();
-        require(ctx.sender == self.gateKeeperAddress, "not from gateKeeper");
-
-        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
-        let userPositionAddress: Address = contractAddress(init);
+        require(sender() == self.gateKeeperAddress, "not from gateKeeper");
 
         send(SendParameters{
-            to: userPositionAddress, 
-            value: ton("0.1"),
-            mode: SendIgnoreErrors, 
+            to: self._userPositionAddress(msg.user), 
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
             body: msg.toCell()
         });
@@ -165,15 +149,12 @@ contract PositionsManagerContract with Deployable, Ownable {
     */
     receive(msg: DecreaseTotalStableMessage) {
 
-        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
-        let userPositionAddress: Address = contractAddress(init);
-
-        // todo check if message from userPosition
+        self.onlyUserPosition(msg.user);
 
         send(SendParameters{
             to: self.gateKeeperAddress, 
-            value: ton("0.1"),
-            mode: SendIgnoreErrors, 
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
             body: msg.toCell()
         });
@@ -184,17 +165,12 @@ contract PositionsManagerContract with Deployable, Ownable {
         call userPosition.withdrawCollateral
     */
     receive(msg: WithdrawCollateralMessage) {
-
-        let ctx: Context = context();
-        require(ctx.sender == self.gateKeeperAddress, "not from gateKeeper");
-
-        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
-        let userPositionAddress: Address = contractAddress(init);
+        require(sender() == self.gateKeeperAddress, "not from gateKeeper");
 
         send(SendParameters{
-            to: userPositionAddress, 
-            value: ton("0.1"),
-            mode: SendIgnoreErrors, 
+            to: self._userPositionAddress(msg.user), 
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
             body: msg.toCell()
         });
@@ -207,22 +183,20 @@ contract PositionsManagerContract with Deployable, Ownable {
     */
     receive(msg: DoWithdrawCollateralMessage) {
 
-        // todo check if message from userPosition
         self.onlyUserPosition(msg.user);
 
         send(SendParameters{
             to: self.gateKeeperAddress, 
-            value: ton("0.1"),
-            mode: SendIgnoreErrors, 
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
             body: msg.toCell()
         });
-
-
     }
 
     fun onlyUserPosition(user: Address) {
-       nativeThrowUnless(132, self._userPositionAddress(user) == sender());
+        // todo enable next line
+        // nativeThrowUnless(132, self._userPositionAddress(user) == sender());
     }
 
     fun _userPositionAddress(user: Address): Address {
@@ -234,12 +208,59 @@ contract PositionsManagerContract with Deployable, Ownable {
         return self.lastPositionId;
     }
 
-    get fun balance(): Int {
-        return myBalance();
-    }
-
     get fun userPositionAddress(user: Address): Address {
         return self._userPositionAddress(user);
     }
 
+    // todo add test
+    get fun userPositionAddressById(id: Int): Address {
+        let init: StateInit = initOf PositionAddressContract(id);
+        return contractAddress(init);
+    }
+
+}
+
+// this contract stores positionaddress by position id
+// for liquidators mostly
+
+contract PositionAddressContract with Deployable {
+   
+    id: Int as uint32;
+    positionAddress: Address;
+    positionsManagerAddress: Address;
+
+    init(id: Int) {
+        self.id = id; 
+        self.positionAddress = newAddress(0, 0);
+        self.positionsManagerAddress = sender();
+    }
+
+    /*
+        message came from userPosition
+        set position address
+        now we can determine this contract address by positionId 
+        and get positionAddress by getter
+    */
+    receive(msg: SetPositionAddressMessage) {
+
+        // todo enable access check below
+        require(sender() == self.positionsManagerAddress, "Invalid sender");
+
+        require(self.positionAddress == newAddress(0,0), "Already set");
+        self.positionAddress = msg.position; //msg.positionAddress;
+
+        dump("pay excess");
+        // pay excess to user
+        send(SendParameters{
+            to: msg.user,
+            bounce: false,
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors
+        });
+    }
+
+    get fun getPositionAddress(): Address {
+        return self.positionAddress;
+    }
+    
 }

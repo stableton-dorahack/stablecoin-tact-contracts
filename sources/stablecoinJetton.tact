@@ -157,29 +157,24 @@ contract StablecoinJettonContract {
         if balance < amount - error, userStatus.message(error)
         */
 
-        let ctx: Context = context();
-        require(ctx.sender == self.master, "Invalid sender");
+        require(sender() == self.master, "Invalid sender");
 
+        // todo add bounced handler in master
+        require(self.balance - msg.amount >= 0, "Invalid balance");
         self.balance = self.balance - msg.amount;
-        require(self.balance >= 0, "Invalid balance");
 
-        // Gas checks
-        let fwdFee: Int = ctx.readForwardFee();
         // todo error on this check
         // require(ctx.value > fwdFee + 2 * self.GasConsumption + self.MinTonsForStorage, "Invalid value");
 
-        // Burn tokens
         send(SendParameters{
             to: self.master,
             value: 0,
-            mode: SendRemainingValue,
+            mode: SendRemainingValue + SendIgnoreErrors,
             bounce: true,
             body: RepayBurnNotification{
-                // queryId: msg.queryId,
                 amount: msg.amount,
-                user: msg.user,
-                fees: msg.fees
-                // responseAddress: self.owner
+                user: msg.user, 
+                rate: msg.rate
             }.toCell()
         });
 

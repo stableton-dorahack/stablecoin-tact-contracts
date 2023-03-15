@@ -82,18 +82,20 @@ contract StablecoinMasterContract with Deployable, Ownable {
         send jetton.burn
     */
     receive(msg: RepayBurnMessage) {
-        // check if sender is userPosition
-        let ctx: Context = context();
+
         let init: StateInit = initOf UserPositionContract(msg.user, myAddress(), self.positionsManagerAddress);
         let userPositionAddress: Address = contractAddress(init);
+        // todo enable this line
+        //require(sender() == userPositionAddress, "invalid sender");
 
         let winit: StateInit = self.getJettonWalletInit(msg.user);
         let walletAddress: Address = contractAddress(winit);
+
         send(SendParameters{
             to: walletAddress, 
             value: 0, 
             bounce: false,
-            mode: SendRemainingValue,
+            mode: SendRemainingValue + SendIgnoreErrors,
             body: msg.toCell()
         });
     }
@@ -104,10 +106,8 @@ contract StablecoinMasterContract with Deployable, Ownable {
         call userPosition.stableBurned(user, amount, fees)
     */
     receive(msg: RepayBurnNotification) {
-        // how to test sender, need to rethink treasure to generate needed address
         self.requireWallet(msg.user);
 
-        let ctx: Context = context();
         let init: StateInit = initOf UserPositionContract(msg.user, myAddress(), self.positionsManagerAddress);
         let userPositionAddress: Address = contractAddress(init);
 
@@ -115,11 +115,11 @@ contract StablecoinMasterContract with Deployable, Ownable {
             to: userPositionAddress, 
             value: 0, 
             bounce: false,
-            mode: SendRemainingValue,
+            mode: SendRemainingValue + SendIgnoreErrors,
             body: StablecoinBurnedMessage{ 
                 amount: msg.amount,
                 user: msg.user,
-                fees: msg.fees
+                rate: msg.rate
             }.toCell()
         });
     }

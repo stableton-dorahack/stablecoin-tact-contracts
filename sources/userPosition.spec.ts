@@ -37,34 +37,7 @@ describe("PositionsManagerContract", () => {
         await system.run();
         expect(track.collect()).toMatchSnapshot();
 
-        expect(await userPositionContract.getGetPositionId()).toEqual(0n);
         expect(await userPositionContract.getGetMessage()).toEqual("Position created");
-    });
-
-    it("on setPositionId from positionsManager should set positionId and deploy positionAddress contract", async () => {
-        await userPositionContract.send(
-            positionsManager,
-            { value: toNano(1) },
-            { $$type: "SetPositionIdMessage", positionId: 23n, user: user.address }
-        );
-
-        await system.run();
-        expect(track.collect()).toMatchSnapshot();
-
-        expect(await userPositionContract.getGetPositionId()).toEqual(23n);
-    });
-
-    it("on witdrawStablecoin from positionsManager should revert unhealthy position", async () => {
-        await userPositionContract.send(
-            positionsManager,
-            { value: toNano(1) },
-            { $$type: "SetPositionIdMessage", positionId: 23n, user: user.address }
-        );
-
-        await system.run();
-        expect(track.collect()).toMatchSnapshot();
-
-        expect(await userPositionContract.getGetPositionId()).toEqual(23n);
     });
 
     // todo add actions to init healthy position
@@ -170,38 +143,10 @@ describe("PositionsManagerContract", () => {
         expect(await userPositionContract.getGetMessage()).toEqual("Stablecoins sent");
     });
 
-    it("on repayStablecoin from positionsManager with healthy position revert if debt less than amount", async () => {
-        await userPositionContract.send(
-            positionsManager,
-            { value: toNano(1) },
-            {
-                $$type: "RepayStablecoinMessage",
-                user: user.address,
-                amount: 150n,
-                settings: {
-                    $$type: "PoolSettings",
-                    liquidationRatio: 1n,
-                    stabilityFeeRate: 1n,
-                    closeFactorBps: 1n,
-                    liquidatorIncentiveBps: 1n,
-                },
-                rate: {
-                    $$type: "DebtRate",
-                    debtAccumulatedRate: 1n,
-                    lastAccumulationTime: 1n,
-                },
-                tonPriceWithSafetyMargin: 2600000000n,
-            }
-        );
-
-        await system.run();
-        expect(track.collect()).toMatchSnapshot();
-
-        const postitionState = await userPositionContract.getGetPositionState();
-        console.log({ postitionState });
-    });
-
     it("on repayStablecoin from positionsManager with healthy position", async () => {
+        let positionState = await userPositionContract.getGetPositionState();
+        console.log({ positionState });
+
         await userPositionContract.send(
             positionsManager,
             { value: toNano(1) },
@@ -228,15 +173,15 @@ describe("PositionsManagerContract", () => {
         await system.run();
         expect(track.collect()).toMatchSnapshot();
 
-        const postitionState = await userPositionContract.getGetPositionState();
-        console.log({ postitionState });
+        positionState = await userPositionContract.getGetPositionState();
+        console.log({ positionState });
     });
 
     it("on stablecoin burned ", async () => {
         await userPositionContract.send(
             stablecoinMaster,
             { value: toNano(1) },
-            { $$type: "StablecoinBurnedMessage", user: user.address, amount: 100n, fees: 1n }
+            { $$type: "StablecoinBurnedMessage", user: user.address, amount: 100n }
         );
 
         await system.run();

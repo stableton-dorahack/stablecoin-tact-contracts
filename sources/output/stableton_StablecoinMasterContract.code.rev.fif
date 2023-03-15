@@ -406,7 +406,7 @@ SETCP0
             3 GETGLOBVAR
             MYADDR
             ROT
-            49 CALLDICT
+            51 CALLDICT
           }> CALLREF
           s0 s1 XCHG
           4429 PUSHINT
@@ -685,7 +685,7 @@ SETCP0
         3 GETGLOBVAR
         MYADDR
         3 6 -1 PU2XC
-        52 CALLDICT
+        54 CALLDICT
         <{
           0 PUSHINT
           ROTREV
@@ -745,7 +745,7 @@ SETCP0
             3 GETGLOBVAR
             MYADDR
             ROT
-            49 CALLDICT
+            51 CALLDICT
           }> CALLREF
           2DUP
           <{
@@ -1043,13 +1043,13 @@ SETCP0
       }> PUSHCONT
       IFJMP
       s1 PUSH
-      2959459244 PUSHINT
+      2032846846 PUSHINT
       EQUAL
       <{
         s1 POP
         32 LDU
         s0 s1 XCHG
-        2959459244 PUSHINT
+        2032846846 PUSHINT
         EQUAL
         129 THROWIFNOT
         LDMSGADDR
@@ -1074,14 +1074,17 @@ SETCP0
         137 THROWIFNOT
         s0 s1 XCHG
         LDGRAMS
-        LDGRAMS
-        3 1 BLKSWAP
-        1 3 BLKDROP2
+        32 LDU
+        32 LDU
+        ROTREV
+        s2 s4 XCHG
+        s2 s3 XCHG
+        1 4 BLKDROP2
         <{
           3 GETGLOBVAR
           MYADDR
-          4 7 -1 PU2XC
-          52 CALLDICT
+          5 8 -1 PU2XC
+          54 CALLDICT
           <{
             0 PUSHINT
             ROTREV
@@ -1132,13 +1135,16 @@ SETCP0
             137 THROWIFNOT
           }> CALLREF
           s0 POP
-          6 3 BLKSWAP
-          s8 PUSH
+          s5 s9 XCHG
+          s4 s8 XCHG
+          s3 s7 XCHG
+          s6 s9 s8 XCHG3
+          s7 PUSH
           <{
             3 GETGLOBVAR
             MYADDR
             ROT
-            49 CALLDICT
+            51 CALLDICT
           }> CALLREF
           <{
             0 PUSHINT
@@ -1189,17 +1195,18 @@ SETCP0
             EQUAL
             137 THROWIFNOT
           }> CALLREF
+          s0 s8 XCHG
           0 PUSHINT
           0 PUSHINT
-          s11 s10 XCHG2
-          64 PUSHINT
-          s0 s10 XCHG
+          s9 s12 XCHG2
+          66 PUSHINT
+          s0 s12 XCHG
           NEWC
-          3 1 BLKSWAP
-          2959459244 PUSHINT
-          s0 s4 XCHG2
+          4 1 BLKSWAP
+          2032846846 PUSHINT
+          s0 s5 XCHG2
           32 STU
-          ROT
+          s0 s3 XCHG2
           s0 PUSH
           SBITS
           267 PUSHINT
@@ -1221,12 +1228,14 @@ SETCP0
           STSLICER
           s0 s1 XCHG
           STGRAMS
-          s0 s1 XCHG
-          STGRAMS
+          s0 s2 XCHG
+          s0 s2 XCHG
+          32 STU
+          32 STU
           ENDC
-          s1 s4 XCHG
-          s3 s10 XCHG
-          s9 s8 s0 XCHG3
+          s4 s8 XCHG
+          s3 s7 XCHG
+          s10 s9 s0 XCHG3
           s2 s4 XCHG
           s2 s3 XCHG
           PUSHNULL
@@ -1374,19 +1383,18 @@ SETCP0
             s0 s1 XCHG
             SENDRAWMSG
           }> CALLREF
-          s5 s1 s3 XCHG3
-          s0 s0 s4 XCHG3
+          s5 s4 XCHG2
         }> CALLREF
         -1 PUSHINT
       }> IFJMPREF
       s1 PUSH
-      2355055729 PUSHINT
+      3290364212 PUSHINT
       EQUAL
       <{
         s1 POP
         32 LDU
         s0 s1 XCHG
-        2355055729 PUSHINT
+        3290364212 PUSHINT
         EQUAL
         129 THROWIFNOT
         LDMSGADDR
@@ -1411,11 +1419,17 @@ SETCP0
         137 THROWIFNOT
         s0 s1 XCHG
         LDGRAMS
-        LDGRAMS
-        3 1 BLKSWAP
-        1 3 BLKDROP2
-        6 3 BLKSWAP
-        s8 PUSH
+        32 LDU
+        32 LDU
+        ROTREV
+        s2 s4 XCHG
+        s2 s3 XCHG
+        1 4 BLKDROP2
+        s5 s9 XCHG
+        s4 s8 XCHG
+        s3 s7 XCHG
+        s6 s9 s8 XCHG3
+        s7 PUSH
         <{
           1 GETGLOBVAR
           4 UNTUPLE
@@ -1426,7 +1440,7 @@ SETCP0
             3 GETGLOBVAR
             MYADDR
             ROT
-            49 CALLDICT
+            51 CALLDICT
           }> CALLREF
           s0 s1 XCHG
           4429 PUSHINT
@@ -1488,8 +1502,8 @@ SETCP0
         }> CALLREF
         3 GETGLOBVAR
         MYADDR
-        10 4 -1 PU2XC
-        52 CALLDICT
+        9 4 -1 PU2XC
+        54 CALLDICT
         <{
           0 PUSHINT
           ROTREV
@@ -1539,18 +1553,19 @@ SETCP0
           EQUAL
           137 THROWIFNOT
         }> CALLREF
+        s0 s7 XCHG
         0 PUSHINT
         0 PUSHINT
-        s10 s11 XCHG2
-        64 PUSHINT
-        s0 s10 XCHG
-        s1 s2 XCHG
+        s10 s12 XCHG2
+        66 PUSHINT
+        s0 s12 XCHG
+        s2 s3 XCHG
         NEWC
-        3 1 BLKSWAP
-        3929120156 PUSHINT
-        s0 s4 XCHG2
+        4 1 BLKSWAP
+        3203474459 PUSHINT
+        s0 s5 XCHG2
         32 STU
-        ROT
+        s0 s3 XCHG2
         s0 PUSH
         SBITS
         267 PUSHINT
@@ -1572,12 +1587,14 @@ SETCP0
         STSLICER
         s0 s1 XCHG
         STGRAMS
-        s0 s1 XCHG
-        STGRAMS
+        s0 s2 XCHG
+        s0 s2 XCHG
+        32 STU
+        32 STU
         ENDC
-        s1 s4 XCHG
-        s3 s9 XCHG
-        s10 s8 s0 XCHG3
+        s4 s7 XCHG
+        s3 s8 XCHG
+        s10 s9 s0 XCHG3
         s2 s4 XCHG
         s2 s3 XCHG
         PUSHNULL
@@ -1725,8 +1742,7 @@ SETCP0
           s0 s1 XCHG
           SENDRAWMSG
         }> CALLREF
-        s5 s1 s3 XCHG3
-        s4 s2 XCHG2
+        s3 s5 s4 XCHG3
         -1 PUSHINT
       }> PUSHCONT
       IFJMP
@@ -1781,7 +1797,7 @@ SETCP0
             3 GETGLOBVAR
             MYADDR
             ROT
-            49 CALLDICT
+            51 CALLDICT
           }> CALLREF
           2DUP
           <{
@@ -2346,7 +2362,7 @@ SETCP0
       1 STI
     }> CALLREF
 
-  49: 
+  51: 
     s0 s2 XCHG
     CTOS
     LDDICT
@@ -2418,13 +2434,13 @@ SETCP0
     STSLICER
     ENDC
 
-  52: 
+  54: 
     s0 s3 XCHG
     CTOS
     LDDICT
     s0 POP
     PUSHNULL
-    s1 PUSH
+    s0 s1 XCHG
     33846 PUSHINT
     s0 s1 XCHG
     16 PUSHINT
@@ -2434,19 +2450,6 @@ SETCP0
     s0 s1 XCHG
     33846 PUSHINT
     s2 PUSH
-    s0 s2 XCHG
-    16 PUSHINT
-    DICTUSETREF
-    s0 s2 XCHG
-    63327 PUSHINT
-    s0 s1 XCHG
-    16 PUSHINT
-    DICTUGETREF
-    NULLSWAPIFNOT
-    135 THROWIFNOT
-    s1 s2 XCHG
-    63327 PUSHINT
-    s0 s1 XCHG
     s0 s2 XCHG
     16 PUSHINT
     DICTUSETREF
@@ -3055,7 +3058,7 @@ SETCP0
         3 GETGLOBVAR
         MYADDR
         ROT
-        49 CALLDICT
+        51 CALLDICT
       }> CALLREF
       6 2 BLKDROP2
       <{
@@ -3281,7 +3284,7 @@ SETCP0
         3 GETGLOBVAR
         MYADDR
         ROT
-        49 CALLDICT
+        51 CALLDICT
       }> CALLREF
       2 3 BLKDROP2
       s0 POP
