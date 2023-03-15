@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: StablecoinJettonContract
-BOC Size: 2260 bytes
+BOC Size: 2382 bytes
 
 # Types
 Total Types: 36
@@ -150,9 +150,11 @@ TLB: `set_deps#bed5ddb8 positionsManagerAddress:address gateKeeperAddress:addres
 Signature: `SetDeps{positionsManagerAddress:address,gateKeeperAddress:address}`
 
 # Get Methods
-Total Get Methods: 1
+Total Get Methods: 2
 
 ## get_wallet_data
+
+## getBalance
 
 # Error Codes
 2: Stack undeflow

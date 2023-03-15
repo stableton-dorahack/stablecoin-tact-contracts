@@ -68,13 +68,11 @@ contract StablecoinMasterContract with Deployable, Ownable {
         todo add 
     */
     receive(msg: MintMessage) {
-  
-        let ctx: Context = context();
-
         let init: StateInit = initOf UserPositionContract(msg.user, myAddress(), self.positionsManagerAddress);
         let userPositionAddress: Address = contractAddress(init);
-
+       
         // todo check if message from userPosition
+        // require(sender() == self.userPositionAddress, "invalid sender");
 
         self.mint(msg.user, msg.amount, msg.user);
     }

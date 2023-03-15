@@ -44,6 +44,8 @@ PROGRAM{
   DECLPROC __gen_constructor_JettonWalletData$balance_owner_master_walletCode
   DECLPROC $__gen_StablecoinJettonContract_get_wallet_data
   97026 DECLMETHOD $__gen_get_get_wallet_data
+  DECLPROC $__gen_StablecoinJettonContract_getBalance
+  106323 DECLMETHOD $__gen_get_getBalance
   DECLPROC __gen_constructor_SendParameters$to_value_mode_bounce_body_code_data
   DECLPROC __gen_constructor_TokenTransferInternal$amount_queryId_from_responseAddress_forwardTonAmount_forwardPayload
   DECLPROC $__gen_StablecoinJettonContract_receive_TokenTransfer
@@ -580,6 +582,13 @@ PROGRAM{
     $__gen_StablecoinJettonContract_get_wallet_data INLINECALLDICT
     __gen_JettonWalletData_to_external INLINECALLDICT
   }>
+  $__gen_StablecoinJettonContract_getBalance PROCREF:<{
+    2DROP
+  }>
+  $__gen_get_getBalance PROC:<{
+    __gen_load_StablecoinJettonContract INLINECALLDICT
+    $__gen_StablecoinJettonContract_getBalance INLINECALLDICT
+  }>
   __gen_constructor_SendParameters$to_value_mode_bounce_body_code_data PROCINLINE:<{
     s3 s6 XCHG
     s3 s5 XCHG
@@ -925,7 +934,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d565651355245586752376958374a36354a4b744b7378325357526459385a7a4458676257447a78714a535055} PUSHSLICE
+    x{697066733a2f2f516d6551533338536e4c7a4b77366e7044534669425a5064467479656865653663324c4c54484e5a4a347938644a} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

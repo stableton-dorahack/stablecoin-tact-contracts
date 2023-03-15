@@ -2370,65 +2370,73 @@ SETCP0
         64 LDU
         ROTREV
         1 2 BLKDROP2
-        3 GETGLOBVAR
-        MYADDR
-        3 7 -2 PU2XC
-        57 CALLDICT
+        4 2 BLKSWAP
+        s5 PUSH
         <{
-          0 PUSHINT
-          ROTREV
-          NEWC
-          0 PUSHINT
-          s0 s1 XCHG
-          2 STU
-          3 PUSHINT
-          s0 s1 XCHG
-          2 STU
-          0 PUSHINT
-          s0 s1 XCHG
-          1 STU
-          s1 s2 XCHG
-          STREF
-          STREF
-          ENDC
-          HASHCU
-          NEWC
-          2 PUSHINT
-          s0 s1 XCHG
-          2 STU
-          0 PUSHINT
-          s0 s1 XCHG
-          1 STU
-          s1 s2 XCHG
-          8 STI
-          256 STU
-          ENDC
-          CTOS
-          s0 PUSH
-          SBITS
-          267 PUSHINT
-          EQUAL
-          136 THROWIFNOT
-          s0 PUSH
-          11 PLDU
-          s0 PUSH
-          10 PUSHPOW2
-          EQUAL
-          s1 PUSH
-          1279 PUSHINT
-          EQUAL
-          OR
-          136 THROWIFNOT
-          10 PUSHPOW2
-          EQUAL
-          137 THROWIFNOT
+          <{
+            3 GETGLOBVAR
+            MYADDR
+            2 6 -1 XCPUXC
+            57 CALLDICT
+            <{
+              0 PUSHINT
+              ROTREV
+              NEWC
+              0 PUSHINT
+              s0 s1 XCHG
+              2 STU
+              3 PUSHINT
+              s0 s1 XCHG
+              2 STU
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STU
+              s1 s2 XCHG
+              STREF
+              STREF
+              ENDC
+              HASHCU
+              NEWC
+              2 PUSHINT
+              s0 s1 XCHG
+              2 STU
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STU
+              s1 s2 XCHG
+              8 STI
+              256 STU
+              ENDC
+              CTOS
+              s0 PUSH
+              SBITS
+              267 PUSHINT
+              EQUAL
+              136 THROWIFNOT
+              s0 PUSH
+              11 PLDU
+              s0 PUSH
+              10 PUSHPOW2
+              EQUAL
+              s1 PUSH
+              1279 PUSHINT
+              EQUAL
+              OR
+              136 THROWIFNOT
+              10 PUSHPOW2
+              EQUAL
+              137 THROWIFNOT
+            }> CALLREF
+          }> CALLREF
+          2 GETGLOBVAR
+          SDEQ
+          132 THROWIFNOT
         }> CALLREF
-        s0 POP
         100000000 PUSHINT
         2 PUSHINT
-        s0 s3 XCHG
+        s0 s7 XCHG
         -1 PUSHINT
-        s0 s3 XCHG
+        s0 s7 XCHG
         NEWC
         ROTREV
         3285005247 PUSHINT
@@ -2456,9 +2464,9 @@ SETCP0
         STSLICER
         64 STU
         ENDC
-        s6 PUSH
-        s4 s1 s4 XCHG3
-        s3 s3 XCHG2
+        s4 PUSH
+        s3 s1 s4 XCHG3
+        s8 s7 s7 XCHG3
         s1 s4 XCHG
         s3 s3 s0 XCHG3
         PUSHNULL
@@ -2606,6 +2614,7 @@ SETCP0
           s0 s1 XCHG
           SENDRAWMSG
         }> CALLREF
+        s0 s0 s3 XCHG3
         -1 PUSHINT
       }> PUSHCONT
       IFJMP
@@ -3280,6 +3289,235 @@ SETCP0
       4 BLKDROP
       BALANCE
       0 INDEX
+    }> CALLREF
+
+  106213: 
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    10 PUSHPOW2
+    EQUAL
+    s1 PUSH
+    1279 PUSHINT
+    EQUAL
+    OR
+    136 THROWIFNOT
+    10 PUSHPOW2
+    EQUAL
+    137 THROWIFNOT
+    c4 PUSH
+    CTOS
+    LDREF
+    s0 s1 XCHG
+    3 SETGLOBVAR
+    1 LDI
+    s0 s1 XCHG
+    <{
+      s0 POP
+      MYADDR
+      11 PLDU
+      10 PUSHPOW2
+      EQUAL
+      137 THROWIFNOT
+      <{
+        0 PUSHINT
+        2 GETGLOBVAR
+        s1 s1 PUSH2
+        NEWC
+        2 PUSHINT
+        s0 s1 XCHG
+        2 STU
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STU
+        s1 s2 XCHG
+        8 STI
+        256 STU
+        ENDC
+        CTOS
+        s0 PUSH
+        SBITS
+        267 PUSHINT
+        EQUAL
+        136 THROWIFNOT
+        s0 PUSH
+        11 PLDU
+        s0 PUSH
+        10 PUSHPOW2
+        EQUAL
+        s1 PUSH
+        1279 PUSHINT
+        EQUAL
+        OR
+        136 THROWIFNOT
+        10 PUSHPOW2
+        EQUAL
+        137 THROWIFNOT
+        s2 s2 PUSH2
+        NEWC
+        2 PUSHINT
+        s0 s1 XCHG
+        2 STU
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STU
+        s1 s2 XCHG
+        8 STI
+        256 STU
+        ENDC
+        CTOS
+        s0 PUSH
+        SBITS
+        267 PUSHINT
+        EQUAL
+        136 THROWIFNOT
+        s0 PUSH
+        11 PLDU
+        s0 PUSH
+        10 PUSHPOW2
+        EQUAL
+        s1 PUSH
+        1279 PUSHINT
+        EQUAL
+        OR
+        136 THROWIFNOT
+        10 PUSHPOW2
+        EQUAL
+        137 THROWIFNOT
+        s2 s3 XCHG2
+      }> CALLREF
+    }> PUSHCONT
+    <{
+      LDMSGADDR
+      s0 s1 XCHG
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      10 PUSHPOW2
+      EQUAL
+      s1 PUSH
+      1279 PUSHINT
+      EQUAL
+      OR
+      136 THROWIFNOT
+      10 PUSHPOW2
+      EQUAL
+      137 THROWIFNOT
+      s0 s1 XCHG
+      LDMSGADDR
+      s0 s1 XCHG
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      10 PUSHPOW2
+      EQUAL
+      s1 PUSH
+      1279 PUSHINT
+      EQUAL
+      OR
+      136 THROWIFNOT
+      10 PUSHPOW2
+      EQUAL
+      137 THROWIFNOT
+      s0 s1 XCHG
+      LDMSGADDR
+      s0 s1 XCHG
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      10 PUSHPOW2
+      EQUAL
+      s1 PUSH
+      1279 PUSHINT
+      EQUAL
+      OR
+      136 THROWIFNOT
+      10 PUSHPOW2
+      EQUAL
+      137 THROWIFNOT
+      s0 s1 XCHG
+      32 LDU
+      4 1 BLKSWAP
+      1 4 BLKDROP2
+    }> IFREFELSE
+    1 4 BLKSWAP
+    <{
+      <{
+        3 GETGLOBVAR
+        MYADDR
+        2 6 -1 XCPUXC
+        57 CALLDICT
+        <{
+          0 PUSHINT
+          ROTREV
+          NEWC
+          0 PUSHINT
+          s0 s1 XCHG
+          2 STU
+          3 PUSHINT
+          s0 s1 XCHG
+          2 STU
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STU
+          s1 s2 XCHG
+          STREF
+          STREF
+          ENDC
+          HASHCU
+          NEWC
+          2 PUSHINT
+          s0 s1 XCHG
+          2 STU
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STU
+          s1 s2 XCHG
+          8 STI
+          256 STU
+          ENDC
+          CTOS
+          s0 PUSH
+          SBITS
+          267 PUSHINT
+          EQUAL
+          136 THROWIFNOT
+          s0 PUSH
+          11 PLDU
+          s0 PUSH
+          10 PUSHPOW2
+          EQUAL
+          s1 PUSH
+          1279 PUSHINT
+          EQUAL
+          OR
+          136 THROWIFNOT
+          10 PUSHPOW2
+          EQUAL
+          137 THROWIFNOT
+        }> CALLREF
+      }> CALLREF
+      4 1 BLKDROP2
     }> CALLREF
 
   113617: 

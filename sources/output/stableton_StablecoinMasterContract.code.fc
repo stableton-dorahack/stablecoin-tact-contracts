@@ -521,7 +521,6 @@ _ $__gen_get_owner() method_id(83229) {
 (((int, int, slice, slice, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_MintMessage((int, int, slice, slice, slice, cell) $self, (slice, int) $msg) impure inline {
     var ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content) = $self;
     var ($msg'user, $msg'amount) = $msg;
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
     var ($init'code, $init'data) = $__gen_UserPositionContract_init_child(__tact_context_sys, $msg'user, my_address(), $self'positionsManagerAddress);
     slice $userPositionAddress = $contractAddress(($init'code, $init'data));
     ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content)~$__gen_StablecoinMasterContract_mint($msg'user, $msg'amount, $msg'user);

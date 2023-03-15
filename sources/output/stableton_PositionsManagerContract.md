@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: PositionsManagerContract
-BOC Size: 2946 bytes
+BOC Size: 3052 bytes
 
 # Types
 Total Types: 36
@@ -150,11 +150,14 @@ TLB: `set_deps#23071186 stablecoinMasterAddress:address gateKeeperAddress:addres
 Signature: `SetDeps{stablecoinMasterAddress:address,gateKeeperAddress:address}`
 
 # Get Methods
-Total Get Methods: 3
+Total Get Methods: 4
 
 ## lastPositionId
 
 ## balance
+
+## userPositionAddress
+Argument: user
 
 ## owner
 

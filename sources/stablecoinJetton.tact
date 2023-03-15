@@ -193,5 +193,9 @@ contract StablecoinJettonContract {
             walletCode: (initOf StablecoinJettonContract(self.master, self.owner)).code
         };
     }
+
+    get fun getBalance(): Int {
+        return self.balance;
+    }
     
 }

@@ -58,10 +58,14 @@ PROGRAM{
   DECLPROC $__gen_UserPositionContract_init_child
   DECLPROC __gen_constructor_SendParameters$to_value_mode_bounce_body_code_data
   DECLPROC __gen_constructor_DeployOk$queryId
+  DECLPROC $__gen_PositionsManagerContract__userPositionAddress
+  DECLPROC $__gen_PositionsManagerContract_onlyUserPosition
   DECLPROC $__gen_PositionsManagerContract_lastPositionId
   129904 DECLMETHOD $__gen_get_lastPositionId
   DECLPROC $__gen_PositionsManagerContract_balance
   104128 DECLMETHOD $__gen_get_balance
+  DECLPROC $__gen_PositionsManagerContract_userPositionAddress
+  106213 DECLMETHOD $__gen_get_userPositionAddress
   DECLPROC $__gen_PositionsManagerContract_requireOwner
   DECLPROC $__gen_PositionsManagerContract_owner
   83229 DECLMETHOD $__gen_get_owner
@@ -734,6 +738,19 @@ PROGRAM{
   }>
   __gen_constructor_DeployOk$queryId PROCINLINE:<{
   }>
+  $__gen_PositionsManagerContract__userPositionAddress PROCREF:<{
+    __tact_context_sys GETGLOB
+    MYADDR
+    s2 s6 s(-1) XCPUXC
+    $__gen_UserPositionContract_init_child CALLDICT
+    $contractAddress INLINECALLDICT
+  }>
+  $__gen_PositionsManagerContract_onlyUserPosition PROCREF:<{
+    $__gen_PositionsManagerContract__userPositionAddress INLINECALLDICT
+    __tact_context_get_sender INLINECALLDICT
+    __tact_address_eq INLINECALLDICT
+    132 THROWIFNOT
+  }>
   $__gen_PositionsManagerContract_lastPositionId PROCREF:<{
     3 1 BLKDROP2
   }>
@@ -748,6 +765,16 @@ PROGRAM{
   $__gen_get_balance PROC:<{
     __gen_load_PositionsManagerContract INLINECALLDICT
     $__gen_PositionsManagerContract_balance INLINECALLDICT
+  }>
+  $__gen_PositionsManagerContract_userPositionAddress PROCREF:<{
+    $__gen_PositionsManagerContract__userPositionAddress INLINECALLDICT
+    4 1 BLKDROP2
+  }>
+  $__gen_get_userPositionAddress PROC:<{
+    __tact_verify_address INLINECALLDICT
+    __gen_load_PositionsManagerContract INLINECALLDICT
+    4 ROLL
+    $__gen_PositionsManagerContract_userPositionAddress INLINECALLDICT
   }>
   $__gen_PositionsManagerContract_requireOwner PROCREF:<{
     __tact_context_get_sender INLINECALLDICT
@@ -944,23 +971,21 @@ PROGRAM{
     $send INLINECALLDICT
   }>
   $__gen_PositionsManagerContract_receive_DoWithdrawCollateralMessage PROCINLINE:<{
-    __tact_context_sys GETGLOB
-    MYADDR
-    s3 s7 s(-2) PU2XC
-    $__gen_UserPositionContract_init_child CALLDICT
-    $contractAddress INLINECALLDICT
-    DROP
+    4 2 BLKSWAP
+    s5 PUSH
+    $__gen_PositionsManagerContract_onlyUserPosition INLINECALLDICT
     100000000 PUSHINT
     2 PUSHINT
-    s0 s3 XCHG
+    s0 s7 XCHG
     TRUE
-    s0 s3 XCHG
+    s0 s7 XCHG
     __gen_writecell_DoWithdrawCollateralMessage INLINECALLDICT
-    s6 PUSH
-    s4 s1 s4 XCHG3
-    s3 s3 XCHG2
+    s4 PUSH
+    s3 s1 s4 XCHG3
+    s8 s7 s7 XCHG3
     __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
     $send INLINECALLDICT
+    s0 s0 s3 XCHG3
   }>
   $__gen_PositionsManagerContract_receive_Deploy PROCINLINE:<{
     __gen_constructor_DeployOk$queryId INLINECALLDICT
@@ -1121,7 +1146,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d545645716d56524b517958765069546d715137327739384c4c31413635426661747557326666733775524747} PUSHSLICE
+    x{697066733a2f2f516d5165473576764679664c66506d62756459693753546a414d394b6d504259477163625036526f76416f6b5268} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

@@ -26,9 +26,7 @@ describe("StablecoinMasterContract", () => {
         userPosition = system.treasure("userPosition");
         jetton = system.treasure("jetton");
 
-        stablecoinMasterContract = system.open(
-            await StablecoinMasterContract.fromInit(positionsManager.address, gateKeeper.address)
-        );
+        stablecoinMasterContract = system.open(await StablecoinMasterContract.fromInit());
 
         track = system.track(stablecoinMasterContract.address);
         logger = system.log(stablecoinMasterContract.address);

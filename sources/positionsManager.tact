@@ -207,10 +207,8 @@ contract PositionsManagerContract with Deployable, Ownable {
     */
     receive(msg: DoWithdrawCollateralMessage) {
 
-        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
-        let userPositionAddress: Address = contractAddress(init);
-
         // todo check if message from userPosition
+        self.onlyUserPosition(msg.user);
 
         send(SendParameters{
             to: self.gateKeeperAddress, 
@@ -222,7 +220,15 @@ contract PositionsManagerContract with Deployable, Ownable {
 
 
     }
-   
+
+    fun onlyUserPosition(user: Address) {
+       nativeThrowUnless(132, self._userPositionAddress(user) == sender());
+    }
+
+    fun _userPositionAddress(user: Address): Address {
+        let init: StateInit = initOf UserPositionContract(user, self.stablecoinMasterAddress, myAddress());
+        return contractAddress(init);
+    }
 
     get fun lastPositionId(): Int {
         return self.lastPositionId;
@@ -230,6 +236,10 @@ contract PositionsManagerContract with Deployable, Ownable {
 
     get fun balance(): Int {
         return myBalance();
+    }
+
+    get fun userPositionAddress(user: Address): Address {
+        return self._userPositionAddress(user);
     }
 
 }
