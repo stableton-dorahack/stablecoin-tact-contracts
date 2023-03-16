@@ -1,4 +1,4 @@
-import { StablecoinMaster, storeMint } from "../output/jetton_StablecoinMaster";
+import { GateKeeperContract } from "./../output/stableton_GateKeeperContract";
 import {
     Address,
     beginCell,
@@ -12,7 +12,6 @@ import {
 } from "ton";
 import { mnemonicToPrivateKey } from "ton-crypto";
 import { testAddress } from "ton-emulator";
-import { GateKeeperContract } from "../output/stableton_GateKeeperContract";
 import { PositionAddressContract } from "../output/stableton_PositionAddressContract";
 import { PositionsManagerContract } from "../output/stableton_PositionsManagerContract";
 import { StablecoinJettonContract } from "../output/stableton_StablecoinJettonContract";
@@ -50,22 +49,19 @@ const workchain = 0; //we are working in basechain.
     let balance: bigint = await contract.getBalance();
     console.log({ balance });
 
-    // StabletonMaster
-    const jettonParams = {
-        name: "STABLE",
-        symbol: "STB1",
-        description: "Dorahack stableton",
-        image: "https://ipfs.io/ipfs/QmbPZjC1tuP6ickCCBtoTCQ9gc3RpkbKx7C1LMYQdcLwti", // Image url
-    };
+    let init = await GateKeeperContract.init();
 
-    let content = buildOnchainMetadata(jettonParams);
-    let init = await SampleJetton.init(owner, content);
     let destination_address = contractAddress(workchain, init);
     console.log("master contract", destination_address);
 
-    let deployAmount = toNano("0.35");
+    let deployAmount = toNano("0.5");
     let supply = toNano(500);
     let seqno: number = await contract.getSeqno();
+
+    //TL-B mint#01fb345b amount:int257 = Mint
+    // let msg = beginCell()
+    //     .store(storeDeploy({ $$type: "Deploy", queryId: 1n }))
+    //     .endCell();
 
     let msg = beginCell()
         .store(storeMint({ $$type: "Mint", amount: toNano("430") }))
@@ -83,6 +79,10 @@ const workchain = 0; //we are working in basechain.
             internal({
                 value: deployAmount,
                 to: destination_address,
+                init: {
+                    code: init.code,
+                    data: init.data,
+                },
                 body: msg,
             }),
         ],

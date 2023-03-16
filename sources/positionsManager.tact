@@ -262,5 +262,6 @@ contract PositionAddressContract with Deployable {
     get fun getPositionAddress(): Address {
         return self.positionAddress;
     }
+
     
 }
