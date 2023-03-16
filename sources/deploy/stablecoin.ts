@@ -23,6 +23,9 @@ import { buildOnchainMetadata } from "../utils/jetton-helpers";
 import { printAddress, printDeploy, printHeader } from "../utils/print";
 import { getHttpEndpoint } from "@orbs-network/ton-access";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const workchain = 0; //we are working in basechain.
 
 (async () => {
@@ -32,10 +35,8 @@ const workchain = 0; //we are working in basechain.
     });
 
     let owner = Address.parse("EQC6RMuMRAvN3X-sBiNOzV8a2h25vvQrUv8T-04nWPX2ddIs");
-    let mnemonics =
-        "profit parent fortune gentle panda pony fiber climb ten boost focus magnet pizza topic soup ship lyrics all exotic guilt student answer squirrel spawn";
-
-    let keyPair = await mnemonicToPrivateKey(mnemonics.split(" "));
+    let mnemonics = process.env.mnemonic;
+    let keyPair = await mnemonicToPrivateKey(mnemonics!.split(" "));
     let secretKey = keyPair.secretKey;
 
     let wallet = WalletContractV4.create({
