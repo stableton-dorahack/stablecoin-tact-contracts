@@ -680,7 +680,8 @@ PROGRAM{
   }>
   $__gen_StablecoinJettonContract_receive_TokenTransferInternal PROCINLINE:<{
     __tact_context_get INLINECALLDICT
-    s2 s10 PUSH2
+    __tact_context_get_sender INLINECALLDICT
+    s11 PUSH
     __tact_address_neq INLINECALLDICT
     IF:<{
       __tact_context_sys GETGLOB
@@ -690,7 +691,7 @@ PROGRAM{
       4429 PUSHINT
       s0 s2 XCHG
       $contractAddress INLINECALLDICT
-      s4 PUSH
+      __tact_context_get_sender INLINECALLDICT
       __tact_address_eq INLINECALLDICT
       THROWANYIFNOT
     }>
@@ -952,7 +953,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d534a6675766a6e736a586a38706a70456246503147394d7a626865386f656339544577634b4d685471635961} PUSHSLICE
+    x{697066733a2f2f516d51587a646878664777315675766e4b6a36543176686265424752313159714a6f58794d456966367933665238} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

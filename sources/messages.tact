@@ -60,11 +60,6 @@ message DecreaseTotalStableMessage {
 
 // stablecoinMaster messages
 
-message MintFeesMessage { 
-    to: Address;
-    amount: Int as coins;
-}
-
 struct JettonData {
     totalSupply: Int;
     mintable: Bool;
@@ -174,4 +169,10 @@ message(0xd53276db) TokenExcesses {
 
 message TokenUpdateContent {
     content: Cell?;
+}
+
+
+message WithdrawFeesMessage {
+    to: Address;
+    amount: Int as coins;
 }

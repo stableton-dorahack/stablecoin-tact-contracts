@@ -29,16 +29,17 @@ PROGRAM{
   DECLPROC __gen_read_DoWithdrawCollateralMessage
   DECLPROC __gen_read_IncreaseTotalStableMessage
   DECLPROC __gen_read_DecreaseTotalStableMessage
+  DECLPROC __gen_write_WithdrawFeesMessage
+  DECLPROC __gen_writecell_WithdrawFeesMessage
   DECLPROC __gen_read_PoolSettingsMsg
   DECLPROC __gen_write_Deps
   DECLPROC __gen_read_Deps
-  DECLPROC __gen_read_SetDeps
   DECLPROC __gen_read_UpdateTonPriceMsg
   DECLPROC __gen_read_DepositCollateralUserMessage
   DECLPROC __gen_read_WithdrawStablecoinUserMessage
   DECLPROC __gen_read_RepayStablecoinUserMessage
   DECLPROC __gen_read_WithdrawCollateralUserMessage
-  DECLPROC __gen_read_WithdrawFeesMessage
+  DECLPROC __gen_read_SetDeps
   DECLPROC __gen_write_GateKeeperContract
   DECLPROC __gen_read_GateKeeperContract
   DECLPROC __gen_Context_get_value
@@ -82,7 +83,9 @@ PROGRAM{
   DECLPROC $__gen_GateKeeperContract_receive_PoolSettingsMsg
   DECLPROC $__gen_GateKeeperContract_receive_UpdateTonPriceMsg
   DECLPROC $__gen_GateKeeperContract_receive_comment_098326c3bf83cbcd5017033fa0bf3d9c6d461897bba0345c5c7278c6313ad94b
-  DECLPROC $__gen_GateKeeperContract_receive_WithdrawFeesMessage
+  DECLPROC __gen_constructor_SendParameters$to_bounce_value_mode_body
+  DECLPROC __gen_constructor_WithdrawFeesMessage$to_amount
+  DECLPROC $__gen_GateKeeperContract_receive_comment_3a1232dd99a1f3b4e586ff8276e7c53a35e5fd6718f77c5fc5ed815847addd3f
   DECLPROC __gen_constructor_DepositCollateralMessage$user_amount_settings_rate_tonPriceWithSafetyMargin
   DECLPROC $__gen_GateKeeperContract_receive_DepositCollateralUserMessage
   DECLPROC __gen_constructor_WithdrawStablecoinMessage$user_amount_settings_rate_tonPriceWithSafetyMargin
@@ -93,6 +96,7 @@ PROGRAM{
   DECLPROC $__gen_GateKeeperContract_receive_DoWithdrawCollateralMessage
   DECLPROC $__gen_GateKeeperContract_receive_DecreaseTotalStableMessage
   DECLPROC $__gen_GateKeeperContract_receive_IncreaseTotalStableMessage
+  DECLPROC $__gen_GateKeeperContract_receive_comment_8186637db46dfb34bf098cf6ab5da36b3794b4a6f20b2c3688214b2fb575249e
   DECLPROC $__gen_GateKeeperContract_receive_Deploy
   DECLPROC __gen_router_GateKeeperContract
   DECLPROC recv_internal
@@ -407,6 +411,21 @@ PROGRAM{
     64 LDU
     -ROT
   }>
+  __gen_write_WithdrawFeesMessage PROCINLINE:<{
+    3347752776 PUSHINT
+    s0 s3 XCHG2
+    32 STU
+    SWAP
+    __tact_store_address INLINECALLDICT
+    SWAP
+    STGRAMS
+  }>
+  __gen_writecell_WithdrawFeesMessage PROCINLINE:<{
+    NEWC
+    -ROT
+    __gen_write_WithdrawFeesMessage INLINECALLDICT
+    ENDC
+  }>
   __gen_read_PoolSettingsMsg PROCINLINE:<{
     32 LDU
     SWAP
@@ -426,17 +445,6 @@ PROGRAM{
     __tact_store_address INLINECALLDICT
   }>
   __gen_read_Deps PROCINLINE:<{
-    __tact_load_address INLINECALLDICT
-    SWAP
-    __tact_load_address INLINECALLDICT
-    s1 s2 XCHG
-  }>
-  __gen_read_SetDeps PROCINLINE:<{
-    32 LDU
-    SWAP
-    1512759282 PUSHINT
-    EQUAL
-    129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
     __tact_load_address INLINECALLDICT
@@ -495,13 +503,16 @@ PROGRAM{
     LDGRAMS
     -ROT
   }>
-  __gen_read_WithdrawFeesMessage PROCINLINE:<{
+  __gen_read_SetDeps PROCINLINE:<{
     32 LDU
     SWAP
-    960452073 PUSHINT
+    1512759282 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
+    SWAP
+    __tact_load_address INLINECALLDICT
+    s1 s2 XCHG
   }>
   __gen_write_GateKeeperContract PROCINLINE:<{
     s14 s13 s12 XCHG3
@@ -929,20 +940,31 @@ PROGRAM{
     $reply INLINECALLDICT
     s4 s3 XCHG2
   }>
-  $__gen_GateKeeperContract_receive_WithdrawFeesMessage PROCINLINE:<{
-    14 -ROLL
+  __gen_constructor_SendParameters$to_bounce_value_mode_body PROCINLINE:<{
+    s3 s4 XCHG
+    PUSHNULL
+    PUSHNULL
+  }>
+  __gen_constructor_WithdrawFeesMessage$to_amount PROCINLINE:<{
+  }>
+  $__gen_GateKeeperContract_receive_comment_3a1232dd99a1f3b4e586ff8276e7c53a35e5fd6718f77c5fc5ed815847addd3f PROCINLINE:<{
     $__gen_GateKeeperContract_requireOwner INLINECALLDICT
     60380 PUSHINT
     OVER
     0 GTINT
     THROWANYIFNOT
-    s1 s14 XCHG
+    __tact_context_get_sender INLINECALLDICT
     FALSE
-    SWAP
+    0 PUSHINT
     66 PUSHINT
-    __gen_constructor_SendParameters$to_bounce_value_mode INLINECALLDICT
+    __tact_context_get_sender INLINECALLDICT
+    s0 s5 XCHG2
+    __gen_constructor_WithdrawFeesMessage$to_amount INLINECALLDICT
+    __gen_writecell_WithdrawFeesMessage INLINECALLDICT
+    s3 s4 XCHG
+    s1 s3 s0 XCHG3
+    __gen_constructor_SendParameters$to_bounce_value_mode_body INLINECALLDICT
     $send INLINECALLDICT
-    12 ROLL
     0 PUSHINT
   }>
   __gen_constructor_DepositCollateralMessage$user_amount_settings_rate_tonPriceWithSafetyMargin PROCINLINE:<{
@@ -1091,6 +1113,24 @@ PROGRAM{
     __gen_constructor_SendParameters$to_bounce_value_mode INLINECALLDICT
     $send INLINECALLDICT
   }>
+  $__gen_GateKeeperContract_receive_comment_8186637db46dfb34bf098cf6ab5da36b3794b4a6f20b2c3688214b2fb575249e PROCINLINE:<{
+    41207 PUSHINT
+    __tact_context_get_sender INLINECALLDICT
+    s13 PUSH
+    __tact_address_eq INLINECALLDICT
+    THROWANYIFNOT
+    __tact_context_get_sender INLINECALLDICT
+    FALSE
+    __tact_my_balance INLINECALLDICT
+    __tact_context_get INLINECALLDICT
+    __gen_Context_get_value INLINECALLDICT
+    SUB
+    10000000 PUSHINT
+    SUB
+    66 PUSHINT
+    __gen_constructor_SendParameters$to_bounce_value_mode INLINECALLDICT
+    $send INLINECALLDICT
+  }>
   $__gen_GateKeeperContract_receive_Deploy PROCINLINE:<{
     __gen_constructor_DeployOk$queryId INLINECALLDICT
     __gen_writecell_DeployOk INLINECALLDICT
@@ -1141,16 +1181,6 @@ PROGRAM{
       __gen_read_UpdateTonPriceMsg INLINECALLDICT
       NIP
       $__gen_GateKeeperContract_receive_UpdateTonPriceMsg INLINECALLDICT
-      TRUE
-    }>
-    OVER
-    960452073 PUSHINT
-    EQUAL
-    IFJMP:<{
-      NIP
-      __gen_read_WithdrawFeesMessage INLINECALLDICT
-      NIP
-      $__gen_GateKeeperContract_receive_WithdrawFeesMessage INLINECALLDICT
       TRUE
     }>
     OVER
@@ -1237,10 +1267,28 @@ PROGRAM{
     0 EQINT
     IF:<{
       HASHSU
+      DUP
       4302540146455009458473342851652021623442854512728118228727579797373207632203 PUSHINT
       EQUAL
       IFJMP:<{
+        DROP
         $__gen_GateKeeperContract_receive_comment_098326c3bf83cbcd5017033fa0bf3d9c6d461897bba0345c5c7278c6313ad94b INLINECALLDICT
+        TRUE
+        RETALT
+      }>
+      DUP
+      26266299526640418217238556326853660645932458724938662807292547700702793555263 PUSHINT
+      EQUAL
+      IFJMP:<{
+        DROP
+        $__gen_GateKeeperContract_receive_comment_3a1232dd99a1f3b4e586ff8276e7c53a35e5fd6718f77c5fc5ed815847addd3f INLINECALLDICT
+        TRUE
+        RETALT
+      }>
+      58585801635804789432037825763135775859502612265472240304489357952288212460702 PUSHINT
+      EQUAL
+      IFJMP:<{
+        $__gen_GateKeeperContract_receive_comment_8186637db46dfb34bf098cf6ab5da36b3794b4a6f20b2c3688214b2fb575249e INLINECALLDICT
         TRUE
         RETALT
       }>
@@ -1287,7 +1335,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d616f6b324d4e476365656a72726a3839666335714a71644d7278666658353142475446637a46667769683833} PUSHSLICE
+    x{697066733a2f2f516d5166433845526659566771616d4b584c546e487772456f437158706f626151417a5958644278786a64587457} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

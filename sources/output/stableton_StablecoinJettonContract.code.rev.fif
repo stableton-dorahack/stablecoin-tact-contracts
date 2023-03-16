@@ -675,7 +675,8 @@ SETCP0
         1 6 BLKDROP2
         1 GETGLOBVAR
         4 UNTUPLE
-        s2 s10 PUSH2
+        2 GETGLOBVAR
+        s11 PUSH
         SDEQ
         NOT
         <{
@@ -734,7 +735,7 @@ SETCP0
             EQUAL
             137 THROWIFNOT
           }> CALLREF
-          s4 PUSH
+          2 GETGLOBVAR
           SDEQ
           THROWANYIFNOT
         }> PUSHCONT

@@ -18,7 +18,6 @@ PROGRAM{
   DECLPROC __gen_writecell_DeployOk
   DECLPROC __gen_write_DebtRate
   DECLPROC __gen_read_DebtRate
-  DECLPROC __gen_read_MintFeesMessage
   DECLPROC __gen_read_MintMessage
   DECLPROC __gen_write_RepayBurnMessage
   DECLPROC __gen_writecell_RepayBurnMessage
@@ -32,6 +31,8 @@ PROGRAM{
   DECLPROC __gen_write_TokenExcesses
   DECLPROC __gen_writecell_TokenExcesses
   DECLPROC __gen_read_TokenUpdateContent
+  DECLPROC __gen_read_WithdrawFeesMessage
+  DECLPROC __gen_read_Mint
   DECLPROC __gen_read_SetDeps
   DECLPROC __gen_write_StablecoinMasterContract
   DECLPROC __gen_read_StablecoinMasterContract
@@ -39,6 +40,7 @@ PROGRAM{
   DECLPROC __gen_JettonData_to_external
   DECLPROC __gen_write_$init$StablecoinJettonContract
   DECLPROC __gen_write_$init$UserPositionContract
+  DECLPROC __gen_read_$init$StablecoinMasterContract
   DECLPROC $__gen_StablecoinMasterContract_init
   DECLPROC __gen_load_StablecoinMasterContract
   DECLPROC __gen_store_StablecoinMasterContract
@@ -76,7 +78,8 @@ PROGRAM{
   DECLPROC $__gen_StablecoinMasterContract_receive_RepayBurnMessage
   DECLPROC __gen_constructor_StablecoinBurnedMessage$amount_user_rate
   DECLPROC $__gen_StablecoinMasterContract_receive_RepayBurnNotification
-  DECLPROC $__gen_StablecoinMasterContract_receive_MintFeesMessage
+  DECLPROC $__gen_StablecoinMasterContract_receive_WithdrawFeesMessage
+  DECLPROC $__gen_StablecoinMasterContract_receive_Mint
   DECLPROC $__gen_StablecoinMasterContract_receive_Deploy
   DECLPROC __gen_router_StablecoinMasterContract
   DECLPROC recv_internal
@@ -235,17 +238,6 @@ PROGRAM{
     32 LDU
     -ROT
   }>
-  __gen_read_MintFeesMessage PROCINLINE:<{
-    32 LDU
-    SWAP
-    2638369821 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    __tact_load_address INLINECALLDICT
-    SWAP
-    LDGRAMS
-    -ROT
-  }>
   __gen_read_MintMessage PROCINLINE:<{
     32 LDU
     SWAP
@@ -382,6 +374,27 @@ PROGRAM{
     }>
     SWAP
   }>
+  __gen_read_WithdrawFeesMessage PROCINLINE:<{
+    32 LDU
+    SWAP
+    3347752776 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    __tact_load_address INLINECALLDICT
+    SWAP
+    LDGRAMS
+    -ROT
+  }>
+  __gen_read_Mint PROCINLINE:<{
+    32 LDU
+    SWAP
+    33240155 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    257 PUSHINT
+    LDIX
+    SWAP
+  }>
   __gen_read_SetDeps PROCINLINE:<{
     32 LDU
     SWAP
@@ -456,16 +469,21 @@ PROGRAM{
     SWAP
     __tact_store_address INLINECALLDICT
   }>
+  __gen_read_$init$StablecoinMasterContract PROCINLINE:<{
+    __tact_load_address INLINECALLDICT
+    SWAP
+    LDREF
+    -ROT
+  }>
   $__gen_StablecoinMasterContract_init PROCREF:<{
     0 PUSHINT
     TRUE
-    PUSHNULL
-    __tact_context_get_sender INLINECALLDICT
-    s3 s3 PUSH2
+    s1 s1 PUSH2
     __tact_create_address INLINECALLDICT
-    s4 s4 PUSH2
+    s2 s2 PUSH2
     __tact_create_address INLINECALLDICT
-    3 ROLL
+    s3 s5 XCHG
+    s1 s0 s4 XCHG3
   }>
   __gen_load_StablecoinMasterContract PROCINLINE:<{
     c4 PUSH
@@ -479,12 +497,15 @@ PROGRAM{
       __gen_read_StablecoinMasterContract INLINECALLDICT
       1 6 BLKDROP2
     }>ELSE<{
-      DROP
       MYADDR
       11 PLDU
       10 PUSHPOW2
       EQUAL
       137 THROWIFNOT
+      __gen_read_$init$StablecoinMasterContract INLINECALLDICT
+      s0 s2 XCHG
+      ENDS
+      SWAP
       $__gen_StablecoinMasterContract_init INLINECALLDICT
     }>
   }>
@@ -794,6 +815,9 @@ PROGRAM{
     $__gen_StablecoinMasterContract_owner INLINECALLDICT
   }>
   $__gen_StablecoinMasterContract_receive_SetDeps PROCINLINE:<{
+    100000000 PUSHINT
+    0 PUSHINT
+    RAWRESERVE
     6 2 BLKSWAP
     $__gen_StablecoinMasterContract_requireOwner INLINECALLDICT
     2 1 BLKDROP2
@@ -915,15 +939,24 @@ PROGRAM{
     $send INLINECALLDICT
     s3 s5 s4 XCHG3
   }>
-  $__gen_StablecoinMasterContract_receive_MintFeesMessage PROCINLINE:<{
-    __tact_context_get INLINECALLDICT
-    2DROP
+  $__gen_StablecoinMasterContract_receive_WithdrawFeesMessage PROCINLINE:<{
     33545 PUSHINT
-    s2 POP
+    __tact_context_get_sender INLINECALLDICT
     s5 PUSH
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
     OVER
+    $__gen_StablecoinMasterContract_mint INLINECALLDICT
+  }>
+  $__gen_StablecoinMasterContract_receive_Mint PROCINLINE:<{
+    41207 PUSHINT
+    __tact_context_get_sender INLINECALLDICT
+    s6 PUSH
+    __tact_address_eq INLINECALLDICT
+    THROWANYIFNOT
+    __tact_context_get_sender INLINECALLDICT
+    __tact_context_get_sender INLINECALLDICT
+    s1 s2 XCHG
     $__gen_StablecoinMasterContract_mint INLINECALLDICT
   }>
   $__gen_StablecoinMasterContract_receive_Deploy PROCINLINE:<{
@@ -1007,13 +1040,23 @@ PROGRAM{
       TRUE
     }>
     OVER
-    2638369821 PUSHINT
+    3347752776 PUSHINT
     EQUAL
     IFJMP:<{
       NIP
-      __gen_read_MintFeesMessage INLINECALLDICT
+      __gen_read_WithdrawFeesMessage INLINECALLDICT
       1 2 BLKDROP2
-      $__gen_StablecoinMasterContract_receive_MintFeesMessage INLINECALLDICT
+      $__gen_StablecoinMasterContract_receive_WithdrawFeesMessage INLINECALLDICT
+      TRUE
+    }>
+    OVER
+    33240155 PUSHINT
+    EQUAL
+    IFJMP:<{
+      NIP
+      __gen_read_Mint INLINECALLDICT
+      NIP
+      $__gen_StablecoinMasterContract_receive_Mint INLINECALLDICT
       TRUE
     }>
     SWAP
@@ -1065,7 +1108,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d644b564c31526e3662684559755a6d797a705a46756d38585246414868637758794b394a684d7a7644714664} PUSHSLICE
+    x{697066733a2f2f516d6346516a5854547276753669765a5a6168744e344353636f75506748755579455469747a4a6a644a4b724447} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

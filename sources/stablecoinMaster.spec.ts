@@ -4,6 +4,7 @@ import { PositionsManagerContract } from "./output/stableton_PositionsManagerCon
 import { StablecoinMasterContract } from "./output/stableton_StablecoinMasterContract";
 import { UserPositionContract } from "./output/stableton_UserPositionContract";
 import { StablecoinJettonContract } from "./output/stableton_StablecoinJettonContract";
+import { buildOnchainMetadata } from "./utils/jetton-helpers";
 
 describe("StablecoinMasterContract", () => {
     let system: ContractSystem;
@@ -26,21 +27,54 @@ describe("StablecoinMasterContract", () => {
         userPosition = system.treasure("userPosition");
         jetton = system.treasure("jetton");
 
-        stablecoinMasterContract = system.open(await StablecoinMasterContract.fromInit());
+        const jettonParams = {
+            name: "STABLE",
+            symbol: "STB",
+            description: "Dorahack stableton",
+            image: "https://ipfs.io/ipfs/QmbPZjC1tuP6ickCCBtoTCQ9gc3RpkbKx7C1LMYQdcLwti", // Image url
+        };
+
+        let content = buildOnchainMetadata(jettonParams);
+
+        stablecoinMasterContract = system.open(await StablecoinMasterContract.fromInit(content));
 
         track = system.track(stablecoinMasterContract.address);
         logger = system.log(stablecoinMasterContract.address);
     });
 
-    it("should deploy correctly and set init state", async () => {
-        await stablecoinMasterContract.send(owner, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
+    it.only("should deploy correctly, set init state and premint amount to owner wallet", async () => {
+        const premintValue = toNano("1000");
+
+        await stablecoinMasterContract.send(owner, { value: toNano(1) }, { $$type: "Mint", amount: premintValue });
         console.log("stablecoinMasterContract", stablecoinMasterContract.address);
 
         await system.run();
         expect(track.collect()).toMatchSnapshot();
 
+        //check master data and total supply
         const masterData = await stablecoinMasterContract.getGetJettonData();
         expect(masterData.owner.toString()).toEqual(owner.address.toString());
+        // console.log("total supply", masterData.totalSupply);
+        expect(masterData.totalSupply).toEqual(premintValue);
+
+        // check getWalletAddress by owner address works
+        const ownerRealJettonAddress = await stablecoinMasterContract.getGetWalletAddress(owner.address);
+        // console.log({ ownerRealJettonAddress: ownerRealJettonAddress.toString() });
+
+        const ownerCalculatedJettonContract = system.open(
+            await StablecoinJettonContract.fromInit(stablecoinMasterContract.address, owner.address)
+        );
+
+        // console.log({ ownerCalculatedJettonAddress: ownerCalculatedJettonContract.address.toString() });
+
+        expect(ownerRealJettonAddress.toString()).toEqual(ownerCalculatedJettonContract.address.toString());
+
+        // check owner wallet balance has premint
+
+        const ownerBalance = await ownerCalculatedJettonContract.getGetBalance();
+        // console.log({ ownerBalance });
+
+        expect(ownerBalance).toEqual(premintValue);
     });
 
     it("on mintMessage should increase totalsupply and transfer amount", async () => {
@@ -60,7 +94,16 @@ describe("StablecoinMasterContract", () => {
         await stablecoinMasterContract.send(
             userPosition,
             { value: toNano(1) },
-            { $$type: "RepayBurnMessage", user: user.address, amount: 100n, fees: 10n }
+            {
+                $$type: "RepayBurnMessage",
+                user: user.address,
+                amount: 100n,
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1n,
+                    lastAccumulationTime: 1n,
+                },
+            }
         );
 
         await system.run();
@@ -71,7 +114,16 @@ describe("StablecoinMasterContract", () => {
         await stablecoinMasterContract.send(
             jetton,
             { value: toNano(1) },
-            { $$type: "RepayBurnNotification", user: user.address, amount: 100n, fees: 10n }
+            {
+                $$type: "RepayBurnNotification",
+                user: user.address,
+                amount: 100n,
+                rate: {
+                    $$type: "DebtRate",
+                    debtAccumulatedRate: 1n,
+                    lastAccumulationTime: 1n,
+                },
+            }
         );
 
         await system.run();
@@ -79,11 +131,7 @@ describe("StablecoinMasterContract", () => {
     });
 
     it("on MintFeesMessage should increase amount and send internaltransfer to jetton", async () => {
-        await stablecoinMasterContract.send(
-            gateKeeper,
-            { value: toNano(1) },
-            { $$type: "MintFeesMessage", to: user.address, amount: 100n }
-        );
+        await stablecoinMasterContract.send(gateKeeper, { value: toNano(1) }, { $$type: "Mint", amount: 100n });
 
         await system.run();
         expect(track.collect()).toMatchSnapshot();

@@ -174,7 +174,7 @@ exports[`StablecoinMasterContract on repayBurnNotification should send stablecoi
 ]
 `;
 
-exports[`StablecoinMasterContract should deploy correctly and set init state 1`] = `
+exports[`StablecoinMasterContract should deploy correctly, set init state and premint amount to owner wallet 1`] = `
 [
   {
     "$seq": 0,
@@ -186,33 +186,33 @@ exports[`StablecoinMasterContract should deploy correctly and set init state 1`]
         "$type": "received",
         "message": {
           "body": {
-            "cell": "x{946A98B60000000000000000}",
+            "cell": "x{01FB345B000000000000000000000000000000000000000000000000000000746A5288004_}",
             "type": "cell",
           },
           "bounce": true,
           "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-          "to": "kQCvEGmk27vea3FYBdf6TiCp3U30vtq0p62qJHO0fGPgxIkv",
+          "to": "kQAasLO_2xc6_cfOoccmU5-s13JSph3Ga85VBy0mBzgW4qbV",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 7781n,
+        "gasUsed": 23821n,
       },
       {
         "$type": "sent",
         "messages": [
           {
             "body": {
-              "cell": "x{AFF90F570000000000000000}",
+              "cell": "x{178D451900000000000000005E8D4A510008003561677FB62E75FB8F9D438E4CA73F59AEE4A54C3B8CD79CAA0E5A4C0E702DC500023EDC525573FCB04AE638BEAD1B62BCD1ED2E0E721E32EDB4D4FE2E722CE07702_}",
               "type": "cell",
             },
-            "bounce": true,
-            "from": "kQCvEGmk27vea3FYBdf6TiCp3U30vtq0p62qJHO0fGPgxIkv",
-            "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+            "bounce": false,
+            "from": "kQAasLO_2xc6_cfOoccmU5-s13JSph3Ga85VBy0mBzgW4qbV",
+            "to": "kQAcNvElz2dMtEP9esrAGOslGY8CrWfQLU1PaaZPmvHTPkvL",
             "type": "internal",
-            "value": 991023000n,
+            "value": 951950000n,
           },
         ],
       },

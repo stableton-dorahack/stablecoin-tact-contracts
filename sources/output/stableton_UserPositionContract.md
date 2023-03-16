@@ -3,7 +3,7 @@ Contract: UserPositionContract
 BOC Size: 2968 bytes
 
 # Types
-Total Types: 35
+Total Types: 34
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -60,10 +60,6 @@ Signature: `IncreaseTotalStableMessage{user:address,amount:uint64}`
 ## DecreaseTotalStableMessage
 TLB: `decrease_total_stable_message#10cda82c user:address amount:uint64 = DecreaseTotalStableMessage`
 Signature: `DecreaseTotalStableMessage{user:address,amount:uint64}`
-
-## MintFeesMessage
-TLB: `mint_fees_message#9d42541d to:address amount:coins = MintFeesMessage`
-Signature: `MintFeesMessage{to:address,amount:coins}`
 
 ## JettonData
 TLB: `_ totalSupply:int257 mintable:bool owner:address content:Maybe ^cell walletCode:^cell = JettonData`
@@ -133,9 +129,9 @@ Signature: `TokenExcesses{queryId:uint64}`
 TLB: `token_update_content#0c087a9e content:Maybe ^cell = TokenUpdateContent`
 Signature: `TokenUpdateContent{content:Maybe ^cell}`
 
-## SetUserStatusMsg
-TLB: `set_user_status_msg#837b1751 queryId:uint64 user:address message:^string = SetUserStatusMsg`
-Signature: `SetUserStatusMsg{queryId:uint64,user:address,message:^string}`
+## WithdrawFeesMessage
+TLB: `withdraw_fees_message#c78aa748 to:address amount:coins = WithdrawFeesMessage`
+Signature: `WithdrawFeesMessage{to:address,amount:coins}`
 
 ## PositionState
 TLB: `_ collateral:coins debt:uint64 = PositionState`

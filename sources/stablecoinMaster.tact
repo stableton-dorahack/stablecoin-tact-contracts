@@ -4,6 +4,13 @@ import "./messages";
 import "./StablecoinJetton";
 import "./UserPosition";
 
+
+// tmp message for initial dev mint to owner
+// should be removed
+message Mint {
+    amount: Int;
+}
+
 message SetDeps {
     positionsManagerAddress: Address;
     gateKeeperAddress: Address;
@@ -18,13 +25,15 @@ contract StablecoinMasterContract with Deployable, Ownable {
     gateKeeperAddress: Address;
     content: Cell?;
 
-    init() {
-        self.owner = sender();
+    init(owner: Address, content: Cell) {
+        self.owner = owner;
         self.positionsManagerAddress = newAddress(0, 0);
         self.gateKeeperAddress = newAddress(0, 0);
+        self.content = content;
     }
 
     receive (msg: SetDeps) {
+        nativeReserve(ton("0.1"), 0);
         self.requireOwner();
         self.positionsManagerAddress = msg.positionsManagerAddress;
         self.gateKeeperAddress = msg.gateKeeperAddress;
@@ -129,12 +138,14 @@ contract StablecoinMasterContract with Deployable, Ownable {
         increase totalSupply
         send transfer to jetton
     */
-    receive(msg: MintFeesMessage) {
-        let ctx: Context = context(); 
-        require(ctx.sender == self.gateKeeperAddress, "not from gatekeeper");
-
+    receive(msg: WithdrawFeesMessage) {
+        require(sender() == self.gateKeeperAddress, "not from gatekeeper");
         self.mint(msg.to, msg.amount, msg.to);
-        
+    }
+
+    receive(msg: Mint) {
+        require(sender() == self.owner, "invalid sender");
+        self.mint(sender(), msg.amount, sender());
     }
 
     fun requireWallet(owner: Address) {
@@ -155,6 +166,7 @@ contract StablecoinMasterContract with Deployable, Ownable {
         // Create message
         let winit: StateInit = self.getJettonWalletInit(to);
         let walletAddress: Address = contractAddress(winit);
+
         send(SendParameters{
             to: walletAddress, 
             value: 0, 

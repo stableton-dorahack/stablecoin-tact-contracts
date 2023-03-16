@@ -117,13 +117,6 @@ builder __gen_write_DebtRate(builder build_0, (int, int) v) inline {
     return (sc_0, (v'debtAccumulatedRate, v'lastAccumulationTime));
 }
 
-(slice, ((slice, int))) __gen_read_MintFeesMessage(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 2638369821);
-    var v'to = sc_0~__tact_load_address();
-    var v'amount = sc_0~load_coins();
-    return (sc_0, (v'to, v'amount));
-}
-
 (slice, ((slice, int))) __gen_read_MintMessage(slice sc_0) inline {
     throw_unless(129, sc_0~load_uint(32) == 2419415474);
     var v'user = sc_0~__tact_load_address();
@@ -215,6 +208,19 @@ cell __gen_writecell_TokenExcesses((int) v) inline {
     return (sc_0, (v'content));
 }
 
+(slice, ((slice, int))) __gen_read_WithdrawFeesMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3347752776);
+    var v'to = sc_0~__tact_load_address();
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'to, v'amount));
+}
+
+(slice, ((int))) __gen_read_Mint(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 33240155);
+    var v'amount = sc_0~load_int(257);
+    return (sc_0, (v'amount));
+}
+
 (slice, ((slice, slice))) __gen_read_SetDeps(slice sc_0) inline {
     throw_unless(129, sc_0~load_uint(32) == 3201686968);
     var v'positionsManagerAddress = sc_0~__tact_load_address();
@@ -268,11 +274,18 @@ builder __gen_write_$init$UserPositionContract(builder build_0, (slice, slice, s
     return build_0;
 }
 
-(int, int, slice, slice, slice, cell) $__gen_StablecoinMasterContract_init() impure inline_ref {
+(slice, ((slice, cell))) __gen_read_$init$StablecoinMasterContract(slice sc_0) inline {
+    var v'owner = sc_0~__tact_load_address();
+    var v'content = sc_0~load_ref();
+    return (sc_0, (v'owner, v'content));
+}
+
+(int, int, slice, slice, slice, cell) $__gen_StablecoinMasterContract_init(slice $owner, cell $content) impure inline_ref {
     var (($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content)) = (0, true, null(), null(), null(), null());
-    $self'owner = __tact_context_get_sender();
+    $self'owner = $owner;
     $self'positionsManagerAddress = __tact_create_address(0, 0);
     $self'gateKeeperAddress = __tact_create_address(0, 0);
+    $self'content = $content;
     return ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content);
 }
 
@@ -285,7 +298,9 @@ builder __gen_write_$init$UserPositionContract(builder build_0, (slice, slice, s
     } else {
         ;; Allow only workchain deployments
         throw_unless(137, my_address().preload_uint(11) == 1024);
-        return $__gen_StablecoinMasterContract_init();
+        (slice owner, cell content) = $sc~__gen_read_$init$StablecoinMasterContract();
+        $sc.end_parse();
+        return $__gen_StablecoinMasterContract_init(owner, content);
     }
 }
 
@@ -498,6 +513,7 @@ _ $__gen_get_owner() method_id(83229) {
 (((int, int, slice, slice, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_SetDeps((int, int, slice, slice, slice, cell) $self, (slice, slice) $msg) impure inline {
     var ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content) = $self;
     var ($msg'positionsManagerAddress, $msg'gateKeeperAddress) = $msg;
+    raw_reserve(100000000, 0);
     ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content)~$__gen_StablecoinMasterContract_requireOwner();
     $self'positionsManagerAddress = $msg'positionsManagerAddress;
     $self'gateKeeperAddress = $msg'gateKeeperAddress;
@@ -561,12 +577,19 @@ _ $__gen_get_owner() method_id(83229) {
     return (($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content), ());
 }
 
-(((int, int, slice, slice, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_MintFeesMessage((int, int, slice, slice, slice, cell) $self, (slice, int) $msg) impure inline {
+(((int, int, slice, slice, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_WithdrawFeesMessage((int, int, slice, slice, slice, cell) $self, (slice, int) $msg) impure inline {
     var ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content) = $self;
     var ($msg'to, $msg'amount) = $msg;
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    throw_unless(33545, __tact_address_eq($ctx'sender, $self'gateKeeperAddress));
+    throw_unless(33545, __tact_address_eq(__tact_context_get_sender(), $self'gateKeeperAddress));
     ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content)~$__gen_StablecoinMasterContract_mint($msg'to, $msg'amount, $msg'to);
+    return (($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content), ());
+}
+
+(((int, int, slice, slice, slice, cell)), ()) $__gen_StablecoinMasterContract_receive_Mint((int, int, slice, slice, slice, cell) $self, (int) $msg) impure inline {
+    var ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content) = $self;
+    var ($msg'amount) = $msg;
+    throw_unless(41207, __tact_address_eq(__tact_context_get_sender(), $self'owner));
+    ($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content)~$__gen_StablecoinMasterContract_mint(__tact_context_get_sender(), $msg'amount, __tact_context_get_sender());
     return (($self'totalSupply, $self'mintable, $self'owner, $self'positionsManagerAddress, $self'gateKeeperAddress, $self'content), ());
 }
 
@@ -632,10 +655,17 @@ _ $__gen_get_owner() method_id(83229) {
         return (self, true);
     }
     
-    ;; Receive MintFeesMessage message
-    if (op == 2638369821) {
-        var msg = in_msg~__gen_read_MintFeesMessage();
-        self~$__gen_StablecoinMasterContract_receive_MintFeesMessage(msg);
+    ;; Receive WithdrawFeesMessage message
+    if (op == 3347752776) {
+        var msg = in_msg~__gen_read_WithdrawFeesMessage();
+        self~$__gen_StablecoinMasterContract_receive_WithdrawFeesMessage(msg);
+        return (self, true);
+    }
+    
+    ;; Receive Mint message
+    if (op == 33240155) {
+        var msg = in_msg~__gen_read_Mint();
+        self~$__gen_StablecoinMasterContract_receive_Mint(msg);
         return (self, true);
     }
     
@@ -683,7 +713,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmdKVL1Rn6bhEYuZmyzpZFum8XRFAHhcwXyK9JhMzvDqFd";
+    return "ipfs://QmcFQjXTTrvu6ivZZahtN4CScouPgHuUyETitzJjdJKrDG";
 }
 
 _ lazy_deployment_completed() {

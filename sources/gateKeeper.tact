@@ -17,11 +17,6 @@ struct Deps {
     positionsManagerAddress: Address;
 }
 
-message SetDeps {
-    stablecoinMasterAddress: Address;
-    positionsManagerAddress: Address;
-}
-
 message UpdateTonPriceMsg {
     price: Int as uint32;
 }
@@ -46,15 +41,15 @@ message WithdrawCollateralUserMessage {
     amount: Int as coins;
 }
 
-message WithdrawFeesMessage {
-    to: Address;
-    // amount: Int as coins;
+message SetDeps {
+    stablecoinMasterAddress: Address;
+    positionsManagerAddress: Address;
 }
 
 
 contract GateKeeperContract with Deployable, Ownable {
 
-    const MinTonsForStorage: Int = ton("0.01");
+    const MinTonForStorage: Int = ton("0.01");
     const GasConsumption: Int = ton("0.01");
     const RAY: Int = pow(10, 27);
 
@@ -142,14 +137,18 @@ contract GateKeeperContract with Deployable, Ownable {
         decrease collectedFees (maybe need to do it after notification from stablecoin master mint)
         stablecoinMaster.mintFees(MintFeesMessage)
     */
-    receive(msg: WithdrawFeesMessage) {
+    receive("WithdrawFees") {
         self.requireOwner();
         require(self.totalFeesCollected > 0, "no fees collected");
         send(SendParameters{
-            to: msg.to,
+            to: sender(),
             bounce: false,
-            value: self.totalFeesCollected,
-            mode: SendRemainingValue + SendIgnoreErrors
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors,
+            body: WithdrawFeesMessage{
+                to: sender(),
+                amount: self.totalFeesCollected
+            }.toCell()
         });
         self.totalFeesCollected = 0;
     }
@@ -166,9 +165,9 @@ contract GateKeeperContract with Deployable, Ownable {
     receive(msg: DepositCollateralUserMessage) {
         require(sender() == msg.user, "Invalid sender");
     
-        require(context().value >= msg.amount + self.GasConsumption + self.MinTonsForStorage, "not enough tons sent");
+        require(context().value >= msg.amount + self.GasConsumption + self.MinTonForStorage, "not enough tons sent");
 
-        let valueToSendForward: Int = context().value - self.MinTonsForStorage - self.GasConsumption - msg.amount;
+        let valueToSendForward: Int = context().value - self.MinTonForStorage - self.GasConsumption - msg.amount;
        
         // dump("valueToSendForward");
         // dump(valueToSendForward);

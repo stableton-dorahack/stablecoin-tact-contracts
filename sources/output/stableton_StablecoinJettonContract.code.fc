@@ -429,9 +429,9 @@ _ $__gen_get_getBalance() method_id(106323) {
     var ($self'balance, $self'owner, $self'master) = $self;
     var ($msg'queryId, $msg'amount, $msg'from, $msg'responseAddress, $msg'forwardTonAmount, $msg'forwardPayload) = $msg;
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    if (__tact_address_neq($ctx'sender, $self'master)) {
+    if (__tact_address_neq(__tact_context_get_sender(), $self'master)) {
         var ($sinit'code, $sinit'data) = $__gen_StablecoinJettonContract_init_child(__tact_context_sys, $self'master, $msg'from);
-        throw_unless(4429, __tact_address_eq($contractAddress(($sinit'code, $sinit'data)), $ctx'sender));
+        throw_unless(4429, __tact_address_eq($contractAddress(($sinit'code, $sinit'data)), __tact_context_get_sender()));
     }
     $self'balance = ($self'balance + $msg'amount);
     throw_unless(62972, ($self'balance >= 0));
@@ -574,7 +574,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmSJfuvjnsjXj8pjpEbFP1G9Mzbhe8oec9TEwcKMhTqcYa";
+    return "ipfs://QmQXzdhxfGw1VuvnKj6T1vhbeBGR11YqJoXyMEif6y3fR8";
 }
 
 _ lazy_deployment_completed() {

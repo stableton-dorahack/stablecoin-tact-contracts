@@ -802,53 +802,6 @@ function dictValueParserDecreaseTotalStableMessage(): DictionaryValue<DecreaseTo
     }
 }
 
-export type MintFeesMessage = {
-    $$type: 'MintFeesMessage';
-    to: Address;
-    amount: bigint;
-}
-
-export function storeMintFeesMessage(src: MintFeesMessage) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(2638369821, 32);
-        b_0.storeAddress(src.to);
-        b_0.storeCoins(src.amount);
-    };
-}
-
-export function loadMintFeesMessage(slice: Slice) {
-    let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 2638369821) { throw Error('Invalid prefix'); }
-    let _to = sc_0.loadAddress();
-    let _amount = sc_0.loadCoins();
-    return { $$type: 'MintFeesMessage' as const, to: _to, amount: _amount };
-}
-
-function loadTupleMintFeesMessage(source: TupleReader) {
-    let _to = source.readAddress();
-    let _amount = source.readBigNumber();
-    return { $$type: 'MintFeesMessage' as const, to: _to, amount: _amount };
-}
-
-function storeTupleMintFeesMessage(source: MintFeesMessage) {
-    let builder = new TupleBuilder();
-    builder.writeAddress(source.to);
-    builder.writeNumber(source.amount);
-    return builder.build();
-}
-
-function dictValueParserMintFeesMessage(): DictionaryValue<MintFeesMessage> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeMintFeesMessage(src)).endCell());
-        },
-        parse: (src) => {
-            return loadMintFeesMessage(src.loadRef().beginParse());
-        }
-    }
-}
-
 export type JettonData = {
     $$type: 'JettonData';
     totalSupply: bigint;
@@ -1744,54 +1697,49 @@ function dictValueParserTokenUpdateContent(): DictionaryValue<TokenUpdateContent
     }
 }
 
-export type SetUserStatusMsg = {
-    $$type: 'SetUserStatusMsg';
-    queryId: bigint;
-    user: Address;
-    message: string;
+export type WithdrawFeesMessage = {
+    $$type: 'WithdrawFeesMessage';
+    to: Address;
+    amount: bigint;
 }
 
-export function storeSetUserStatusMsg(src: SetUserStatusMsg) {
+export function storeWithdrawFeesMessage(src: WithdrawFeesMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(2205882193, 32);
-        b_0.storeUint(src.queryId, 64);
-        b_0.storeAddress(src.user);
-        b_0.storeStringRefTail(src.message);
+        b_0.storeUint(3347752776, 32);
+        b_0.storeAddress(src.to);
+        b_0.storeCoins(src.amount);
     };
 }
 
-export function loadSetUserStatusMsg(slice: Slice) {
+export function loadWithdrawFeesMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 2205882193) { throw Error('Invalid prefix'); }
-    let _queryId = sc_0.loadUintBig(64);
-    let _user = sc_0.loadAddress();
-    let _message = sc_0.loadStringRefTail();
-    return { $$type: 'SetUserStatusMsg' as const, queryId: _queryId, user: _user, message: _message };
+    if (sc_0.loadUint(32) !== 3347752776) { throw Error('Invalid prefix'); }
+    let _to = sc_0.loadAddress();
+    let _amount = sc_0.loadCoins();
+    return { $$type: 'WithdrawFeesMessage' as const, to: _to, amount: _amount };
 }
 
-function loadTupleSetUserStatusMsg(source: TupleReader) {
-    let _queryId = source.readBigNumber();
-    let _user = source.readAddress();
-    let _message = source.readString();
-    return { $$type: 'SetUserStatusMsg' as const, queryId: _queryId, user: _user, message: _message };
+function loadTupleWithdrawFeesMessage(source: TupleReader) {
+    let _to = source.readAddress();
+    let _amount = source.readBigNumber();
+    return { $$type: 'WithdrawFeesMessage' as const, to: _to, amount: _amount };
 }
 
-function storeTupleSetUserStatusMsg(source: SetUserStatusMsg) {
+function storeTupleWithdrawFeesMessage(source: WithdrawFeesMessage) {
     let builder = new TupleBuilder();
-    builder.writeNumber(source.queryId);
-    builder.writeAddress(source.user);
-    builder.writeString(source.message);
+    builder.writeAddress(source.to);
+    builder.writeNumber(source.amount);
     return builder.build();
 }
 
-function dictValueParserSetUserStatusMsg(): DictionaryValue<SetUserStatusMsg> {
+function dictValueParserWithdrawFeesMessage(): DictionaryValue<WithdrawFeesMessage> {
     return {
         serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeSetUserStatusMsg(src)).endCell());
+            buidler.storeRef(beginCell().store(storeWithdrawFeesMessage(src)).endCell());
         },
         parse: (src) => {
-            return loadSetUserStatusMsg(src.loadRef().beginParse());
+            return loadWithdrawFeesMessage(src.loadRef().beginParse());
         }
     }
 }

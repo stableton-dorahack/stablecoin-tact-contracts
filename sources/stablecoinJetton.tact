@@ -59,9 +59,9 @@ contract StablecoinJettonContract {
     receive(msg: TokenTransferInternal) {
         // Check sender
         let ctx: Context = context();
-        if (ctx.sender != self.master) {
+        if (sender() != self.master) {
             let sinit: StateInit = initOf StablecoinJettonContract(self.master, msg.from);
-            require(contractAddress(sinit) == ctx.sender, "Invalid sender");
+            require(contractAddress(sinit) == sender(), "Invalid sender");
         }
 
         // Update balance

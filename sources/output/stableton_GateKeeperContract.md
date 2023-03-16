@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: GateKeeperContract
-BOC Size: 3185 bytes
+BOC Size: 3309 bytes
 
 # Types
-Total Types: 45
+Total Types: 43
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -64,10 +64,6 @@ Signature: `IncreaseTotalStableMessage{user:address,amount:uint64}`
 ## DecreaseTotalStableMessage
 TLB: `decrease_total_stable_message#10cda82c user:address amount:uint64 = DecreaseTotalStableMessage`
 Signature: `DecreaseTotalStableMessage{user:address,amount:uint64}`
-
-## MintFeesMessage
-TLB: `mint_fees_message#9d42541d to:address amount:coins = MintFeesMessage`
-Signature: `MintFeesMessage{to:address,amount:coins}`
 
 ## JettonData
 TLB: `_ totalSupply:int257 mintable:bool owner:address content:Maybe ^cell walletCode:^cell = JettonData`
@@ -137,9 +133,9 @@ Signature: `TokenExcesses{queryId:uint64}`
 TLB: `token_update_content#0c087a9e content:Maybe ^cell = TokenUpdateContent`
 Signature: `TokenUpdateContent{content:Maybe ^cell}`
 
-## SetUserStatusMsg
-TLB: `set_user_status_msg#837b1751 queryId:uint64 user:address message:^string = SetUserStatusMsg`
-Signature: `SetUserStatusMsg{queryId:uint64,user:address,message:^string}`
+## WithdrawFeesMessage
+TLB: `withdraw_fees_message#c78aa748 to:address amount:coins = WithdrawFeesMessage`
+Signature: `WithdrawFeesMessage{to:address,amount:coins}`
 
 ## PositionState
 TLB: `_ collateral:coins debt:uint64 = PositionState`
@@ -156,10 +152,6 @@ Signature: `PoolSettingsMsg{liquidationRatio:uint32,stabilityFeeRate:uint32,clos
 ## Deps
 TLB: `_ stablecoinMasterAddress:address positionsManagerAddress:address = Deps`
 Signature: `Deps{stablecoinMasterAddress:address,positionsManagerAddress:address}`
-
-## SetDeps
-TLB: `set_deps#5a2adff2 stablecoinMasterAddress:address positionsManagerAddress:address = SetDeps`
-Signature: `SetDeps{stablecoinMasterAddress:address,positionsManagerAddress:address}`
 
 ## UpdateTonPriceMsg
 TLB: `update_ton_price_msg#0d11babd price:uint32 = UpdateTonPriceMsg`
@@ -181,9 +173,9 @@ Signature: `RepayStablecoinUserMessage{user:address,amount:coins}`
 TLB: `withdraw_collateral_user_message#d55dc57a user:address amount:coins = WithdrawCollateralUserMessage`
 Signature: `WithdrawCollateralUserMessage{user:address,amount:coins}`
 
-## WithdrawFeesMessage
-TLB: `withdraw_fees_message#393f55e9 to:address = WithdrawFeesMessage`
-Signature: `WithdrawFeesMessage{to:address}`
+## SetDeps
+TLB: `set_deps#5a2adff2 stablecoinMasterAddress:address positionsManagerAddress:address = SetDeps`
+Signature: `SetDeps{stablecoinMasterAddress:address,positionsManagerAddress:address}`
 
 # Get Methods
 Total Get Methods: 9
