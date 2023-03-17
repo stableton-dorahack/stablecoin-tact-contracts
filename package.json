@@ -3,7 +3,7 @@
     "scripts": {
         "build": "tact --config ./tact.config.json",
         "test": "jest",
-        "deploy": "ts-node ./sources/all.deploy.ts"
+        "deploy": "ts-node ./sources/..ts"
     },
     "dependencies": {
         "@aws-crypto/sha256-js": "^4.0.0",
