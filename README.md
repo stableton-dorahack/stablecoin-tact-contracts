@@ -36,6 +36,10 @@ Due to the lack of time and human power, we've simplified key concepts to fit ha
 
 ### Architecture. Contracts.
 
+Look at tech design here:
+
+https://whimsical.com/high-level-overiview-DMyxhKgC7ygSDnenDpSiwF
+
 #### UserPosition
 
 Stores state of user position
