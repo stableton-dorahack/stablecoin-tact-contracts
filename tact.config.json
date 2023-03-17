@@ -13,23 +13,7 @@
         },
         {
             "name": "stableton",
-            "path": "./sources/stablecoinJetton.tact",
-            "output": "./sources/output"
-        },
-        {
-            "name": "stableton",
-            "path": "./sources/stablecoinMaster.tact",
-            "output": "./sources/output"
-        },
-        {
-            "name": "stableton",
-            "path": "./sources/userPosition.tact",
-            "output": "./sources/output",
-            "options": { "debug": true }
-        },
-        {
-            "name": "jetton",
-            "path": "./sources/jetton.tact",
+            "path": "./sources/stablecoin.tact",
             "output": "./sources/output",
             "options": { "debug": true }
         }

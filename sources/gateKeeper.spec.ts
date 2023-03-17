@@ -1,6 +1,11 @@
+import { on } from "events";
 import { OpenedContract, toNano } from "ton";
 import { ContractSystem, Logger, Tracker, Treasure } from "ton-emulator";
 import { GateKeeperContract } from "./output/stableton_GateKeeperContract";
+
+const sleep = async (ms: number) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
 describe("GateKeeperContract", () => {
     let system: ContractSystem;
@@ -62,7 +67,7 @@ describe("GateKeeperContract", () => {
             {
                 $$type: "PoolSettingsMsg",
                 liquidationRatio: 1200000000n,
-                stabilityFeeRate: 2n,
+                stabilityFeeRate: 1000000000625n,
                 liquidatorIncentiveBps: 10500n,
             }
         );
@@ -73,7 +78,7 @@ describe("GateKeeperContract", () => {
         expect(await gateKeeperContract.getPoolSettings()).toEqual({
             $$type: "PoolSettings",
             liquidationRatio: 1200000000n,
-            stabilityFeeRate: 2n,
+            stabilityFeeRate: 1000000000625n,
             liquidatorIncentiveBps: 10500n,
         });
     });
@@ -172,6 +177,20 @@ describe("GateKeeperContract", () => {
         );
         await system.run();
         expect(track.collect()).toMatchSnapshot();
+    });
+
+    it("collectFees increases debtRate", async () => {
+        const debtRate = await gateKeeperContract.getDebtRate();
+        console.log({ debtRate });
+        console.log(system.now);
+
+        await gateKeeperContract.send(owner, { value: toNano(1) }, "CollectFees");
+        system.run();
+        expect(track.collect()).toMatchSnapshot();
+        console.warn(logger.collect());
+
+        const debtRateAfter = await gateKeeperContract.getDebtRate();
+        console.log({ debtRateAfter });
     });
 
     // todo test for WithdrawFeesMessage

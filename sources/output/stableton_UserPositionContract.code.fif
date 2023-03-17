@@ -7,9 +7,6 @@ PROGRAM{
   DECLPROC __tact_store_bool
   DECLPROC __tact_address_eq
   DECLPROC __tact_int_to_string
-  DECLPROC __gen_read_Deploy
-  DECLPROC __gen_write_DeployOk
-  DECLPROC __gen_writecell_DeployOk
   DECLPROC __gen_read_PoolSettings
   DECLPROC __gen_write_DebtRate
   DECLPROC __gen_read_DebtRate
@@ -44,31 +41,27 @@ PROGRAM{
   DECLPROC $__gen_UserPositionContract_init
   DECLPROC __gen_load_UserPositionContract
   DECLPROC __gen_store_UserPositionContract
-  DECLPROC __gen_constructor_SendParameters$bounce_to_value_mode_body
-  DECLPROC $reply
   DECLPROC $__gen_UserPositionContract_setMessage
   DECLPROC $__gen_UserPositionContract_isPositionHealthy
-  DECLPROC $__gen_UserPositionContract_getPositionUser
-  117072 DECLMETHOD $__gen_get_getPositionUser
+  DECLPROC $__gen_UserPositionContract_positionUser
+  81007 DECLMETHOD $__gen_get_positionUser
   DECLPROC __gen_constructor_PositionState$collateral_debt
-  DECLPROC $__gen_UserPositionContract_getPositionState
-  118440 DECLMETHOD $__gen_get_getPositionState
-  DECLPROC $__gen_UserPositionContract_getMessage
-  91266 DECLMETHOD $__gen_get_getMessage
+  DECLPROC $__gen_UserPositionContract_positionState
+  85522 DECLMETHOD $__gen_get_positionState
+  DECLPROC $__gen_UserPositionContract_message
+  93457 DECLMETHOD $__gen_get_message
   DECLPROC __gen_constructor_SendParameters$to_bounce_value_mode
   DECLPROC $__gen_UserPositionContract_receive_DepositCollateralMessage
   DECLPROC __gen_constructor_SendParameters$to_value_mode_bounce_body
   DECLPROC __gen_constructor_MintMessage$user_amount
   DECLPROC __gen_constructor_IncreaseTotalStableMessage$user_amount
   DECLPROC $__gen_UserPositionContract_receive_WithdrawStablecoinMessage
-  DECLPROC __gen_constructor_RepayBurnMessage$user_amount_rate
+  DECLPROC __gen_constructor_RepayBurnMessage$user_amount_rate_userPosition
   DECLPROC $__gen_UserPositionContract_receive_RepayStablecoinMessage
   DECLPROC __gen_constructor_DecreaseTotalStableMessage$user_amount
   DECLPROC $__gen_UserPositionContract_receive_StablecoinBurnedMessage
   DECLPROC __gen_constructor_DoWithdrawCollateralMessage$user_amount
   DECLPROC $__gen_UserPositionContract_receive_WithdrawCollateralMessage
-  DECLPROC __gen_constructor_DeployOk$queryId
-  DECLPROC $__gen_UserPositionContract_receive_Deploy
   DECLPROC __gen_router_UserPositionContract
   DECLPROC recv_internal
   113617 DECLMETHOD supported_interfaces
@@ -199,118 +192,136 @@ PROGRAM{
     ENDC
     CTOS
   }>
-  __gen_read_Deploy PROCINLINE:<{
-    32 LDU
-    SWAP
-    2490013878 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    64 LDU
-    SWAP
-  }>
-  __gen_write_DeployOk PROCINLINE:<{
-    2952335191 PUSHINT
-    ROT
-    32 STU
-    64 STU
-  }>
-  __gen_writecell_DeployOk PROCINLINE:<{
-    NEWC
-    SWAP
-    __gen_write_DeployOk INLINECALLDICT
-    ENDC
-  }>
   __gen_read_PoolSettings PROCINLINE:<{
-    32 LDU
-    32 LDU
-    32 LDU
+    257 PUSHINT
+    LDIX
+    257 PUSHINT
+    LDIX
+    257 PUSHINT
+    LDIX
     3 -ROLL
   }>
   __gen_write_DebtRate PROCINLINE:<{
     s0 s2 XCHG
-    32 STU
-    32 STU
+    257 PUSHINT
+    STIX
+    257 PUSHINT
+    STIX
   }>
   __gen_read_DebtRate PROCINLINE:<{
-    32 LDU
-    32 LDU
+    257 PUSHINT
+    LDIX
+    257 PUSHINT
+    LDIX
     -ROT
   }>
   __gen_read_DepositCollateralMessage PROCINLINE:<{
     32 LDU
     SWAP
-    3932134519 PUSHINT
+    2462180005 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
     LDGRAMS
+    LDREF
+    SWAP
+    CTOS
     __gen_read_PoolSettings INLINECALLDICT
     s0 s3 XCHG
+    LDREF
+    DROP
+    CTOS
     __gen_read_DebtRate INLINECALLDICT
     s0 s2 XCHG
     LDGRAMS
-    s0 s8 XCHG
-    s0 s7 XCHG
-    s0 s6 XCHG
-    s3 s3 XCHG2
+    DROP
+    s6 s8 XCHG
+    s6 s7 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s1 s2 XCHG
   }>
   __gen_read_WithdrawCollateralMessage PROCINLINE:<{
     32 LDU
     SWAP
-    433324996 PUSHINT
+    2015316053 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
     LDGRAMS
+    LDREF
+    SWAP
+    CTOS
     __gen_read_PoolSettings INLINECALLDICT
     s0 s3 XCHG
+    LDREF
+    DROP
+    CTOS
     __gen_read_DebtRate INLINECALLDICT
     s0 s2 XCHG
     LDGRAMS
-    s0 s8 XCHG
-    s0 s7 XCHG
-    s0 s6 XCHG
-    s3 s3 XCHG2
+    DROP
+    s6 s8 XCHG
+    s6 s7 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s1 s2 XCHG
   }>
   __gen_read_WithdrawStablecoinMessage PROCINLINE:<{
     32 LDU
     SWAP
-    73036137 PUSHINT
+    1345893159 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
     64 LDU
+    LDREF
+    SWAP
+    CTOS
     __gen_read_PoolSettings INLINECALLDICT
     s0 s3 XCHG
+    LDREF
+    DROP
+    CTOS
     __gen_read_DebtRate INLINECALLDICT
     s0 s2 XCHG
     LDGRAMS
-    s0 s8 XCHG
-    s0 s7 XCHG
-    s0 s6 XCHG
-    s3 s3 XCHG2
+    DROP
+    s6 s8 XCHG
+    s6 s7 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s1 s2 XCHG
   }>
   __gen_read_RepayStablecoinMessage PROCINLINE:<{
     32 LDU
     SWAP
-    2621043381 PUSHINT
+    3058094568 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
     64 LDU
+    LDREF
+    SWAP
+    CTOS
     __gen_read_PoolSettings INLINECALLDICT
     s0 s3 XCHG
+    LDREF
+    DROP
+    CTOS
     __gen_read_DebtRate INLINECALLDICT
     s0 s2 XCHG
     LDGRAMS
-    s0 s8 XCHG
-    s0 s7 XCHG
-    s0 s6 XCHG
-    s3 s3 XCHG2
+    DROP
+    s6 s8 XCHG
+    s6 s7 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s1 s2 XCHG
   }>
   __gen_write_DoWithdrawCollateralMessage PROCINLINE:<{
     3285005247 PUSHINT
@@ -383,26 +394,32 @@ PROGRAM{
     ENDC
   }>
   __gen_write_RepayBurnMessage PROCINLINE:<{
-    2032846846 PUSHINT
-    s0 s5 XCHG2
+    3969973468 PUSHINT
+    s0 s6 XCHG2
     32 STU
-    s0 s3 XCHG2
+    s0 s4 XCHG2
     __tact_store_address INLINECALLDICT
-    SWAP
+    ROT
     STGRAMS
     s0 s2 XCHG
     __gen_write_DebtRate INLINECALLDICT
+    NEWC
+    ROT
+    __tact_store_address INLINECALLDICT
+    ENDC
+    SWAP
+    STREF
   }>
   __gen_writecell_RepayBurnMessage PROCINLINE:<{
     NEWC
-    4 -ROLL
+    5 -ROLL
     __gen_write_RepayBurnMessage INLINECALLDICT
     ENDC
   }>
   __gen_read_StablecoinBurnedMessage PROCINLINE:<{
     32 LDU
     SWAP
-    3203474459 PUSHINT
+    2304493462 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
@@ -438,8 +455,10 @@ PROGRAM{
     __tact_store_address INLINECALLDICT
     SWAP
     STGRAMS
-    64 STU
+    SWAP
     NEWC
+    257 PUSHINT
+    STIX
     2SWAP
     __gen_write_Message INLINECALLDICT
     ENDC
@@ -454,17 +473,18 @@ PROGRAM{
     __tact_load_address INLINECALLDICT
     SWAP
     LDGRAMS
-    64 LDU
     LDREF
     SWAP
     CTOS
+    257 PUSHINT
+    LDIX
     __gen_read_Message INLINECALLDICT
     s2 POP
-    s2 s7 XCHG
-    s2 s6 XCHG
-    s2 s5 XCHG
-    s2 s4 XCHG
-    s3 s0 s0 XCHG3
+    s3 s7 XCHG
+    s3 s6 XCHG
+    s3 s5 XCHG
+    s3 s4 XCHG
+    SWAP
   }>
   __gen_PositionState_to_external PROCINLINE:<{
   }>
@@ -589,8 +609,7 @@ PROGRAM{
   }>
   $__gen_UserPositionContract_init PROCREF:<{
     0 PUSHINT
-    s0 s3 PUSH2
-    NOW
+    s0 s3 s0 PUSH3
     B{b5ee9c72410101010012000020506f736974696f6e204372656174656486cee2ce} B>boc <s PUSHSLICE
     __gen_constructor_Message$timestamp_message INLINECALLDICT
     2 PUSHINT
@@ -642,21 +661,6 @@ PROGRAM{
     __gen_write_UserPositionContract INLINECALLDICT
     ENDC
     c4 POP
-  }>
-  __gen_constructor_SendParameters$bounce_to_value_mode_body PROCINLINE:<{
-    PUSHNULL
-    PUSHNULL
-  }>
-  $reply PROCREF:<{
-    TRUE
-    __tact_context_get_sender INLINECALLDICT
-    0 PUSHINT
-    ROT
-    s0 s3 XCHG
-    66 PUSHINT
-    SWAP
-    __gen_constructor_SendParameters$bounce_to_value_mode_body INLINECALLDICT
-    $send INLINECALLDICT
   }>
   $__gen_UserPositionContract_setMessage PROCREF:<{
     NIP
@@ -718,31 +722,31 @@ PROGRAM{
     SWAP
     GEQ
   }>
-  $__gen_UserPositionContract_getPositionUser PROCREF:<{
+  $__gen_UserPositionContract_positionUser PROCREF:<{
     6 BLKDROP
   }>
-  $__gen_get_getPositionUser PROC:<{
+  $__gen_get_positionUser PROC:<{
     __gen_load_UserPositionContract INLINECALLDICT
-    $__gen_UserPositionContract_getPositionUser INLINECALLDICT
+    $__gen_UserPositionContract_positionUser INLINECALLDICT
   }>
   __gen_constructor_PositionState$collateral_debt PROCINLINE:<{
   }>
-  $__gen_UserPositionContract_getPositionState PROCREF:<{
+  $__gen_UserPositionContract_positionState PROCREF:<{
     2DROP
     3 2 BLKDROP2
     __gen_constructor_PositionState$collateral_debt INLINECALLDICT
   }>
-  $__gen_get_getPositionState PROC:<{
+  $__gen_get_positionState PROC:<{
     __gen_load_UserPositionContract INLINECALLDICT
-    $__gen_UserPositionContract_getPositionState INLINECALLDICT
+    $__gen_UserPositionContract_positionState INLINECALLDICT
     __gen_PositionState_to_external INLINECALLDICT
   }>
-  $__gen_UserPositionContract_getMessage PROCREF:<{
+  $__gen_UserPositionContract_message PROCREF:<{
     5 2 BLKDROP2
   }>
-  $__gen_get_getMessage PROC:<{
+  $__gen_get_message PROC:<{
     __gen_load_UserPositionContract INLINECALLDICT
-    $__gen_UserPositionContract_getMessage INLINECALLDICT
+    $__gen_UserPositionContract_message INLINECALLDICT
     __gen_Message_to_external INLINECALLDICT
   }>
   __gen_constructor_SendParameters$to_bounce_value_mode PROCINLINE:<{
@@ -760,14 +764,20 @@ PROGRAM{
     THROWANYIFNOT
     s1 s5 XCHG
     ADD
-    s0 s4 XCHG
+    B{b5ee9c72410101010012000020436f6c6c61746572616c206164646564255e4d6d} B>boc <s PUSHSLICE
+    s7 s8 XCHG
+    s6 s8 XCHG
+    s5 s8 XCHG
+    s1 s4 XCHG
+    s3 s3 s0 XCHG3
+    $__gen_UserPositionContract_setMessage INLINECALLDICT
+    s0 s7 XCHG
     FALSE
     0 PUSHINT
     66 PUSHINT
     __gen_constructor_SendParameters$to_bounce_value_mode INLINECALLDICT
     $send INLINECALLDICT
-    B{b5ee9c72410101010012000020436f6c6c61746572616c206164646564255e4d6d} B>boc <s PUSHSLICE
-    $__gen_UserPositionContract_setMessage INLINECALLDICT
+    6 ROLL
   }>
   __gen_constructor_SendParameters$to_value_mode_bounce_body PROCINLINE:<{
     s1 s4 XCHG
@@ -788,9 +798,12 @@ PROGRAM{
     s10 PUSH
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
-    s6 s0 PUSH2
+    s2 PUSH
+    1000000000 PUSHINT
     MUL
-    s3 PUSH
+    OVER
+    DIV
+    s7 s(-1) PUXC
     ADD
     s8 PUSH
     s9 s12 XCHG
@@ -800,7 +813,7 @@ PROGRAM{
     s5 s11 XCHG
     s4 s10 XCHG
     s12 s1 s3 XCHG3
-    s12 PUSH
+    s1 s0 s12 PUXC2
     $__gen_UserPositionContract_isPositionHealthy INLINECALLDICT
     NOT
     IF:<{
@@ -821,89 +834,128 @@ PROGRAM{
       $send INLINECALLDICT
       6 ROLL
     }>ELSE<{
+      s2 POP
       100000000 PUSHINT
       2 PUSHINT
       TRUE
-      s11 s10 PUSH2
+      s10 s9 PUSH2
       __gen_constructor_MintMessage$user_amount INLINECALLDICT
       __gen_writecell_MintMessage INLINECALLDICT
-      s9 PUSH
+      s8 PUSH
       4 -ROLL
       __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
       $send INLINECALLDICT
+      B{b5ee9c72410101010012000020537461626c65636f696e732073656e74e8a66862} B>boc <s PUSHSLICE
+      s6 s7 XCHG
+      s5 s6 XCHG
+      s4 s5 XCHG
+      s3 s4 XCHG
+      s3 s9 XCHG
+      s1 s2 XCHG
+      $__gen_UserPositionContract_setMessage INLINECALLDICT
       0 PUSHINT
       66 PUSHINT
+      s0 s9 XCHG
       TRUE
-      s11 s10 XCPU
+      s0 s11 XCHG
       __gen_constructor_IncreaseTotalStableMessage$user_amount INLINECALLDICT
       __gen_writecell_IncreaseTotalStableMessage INLINECALLDICT
-      s7 PUSH
-      s0 s4 XCHG
-      s12 s12 XCHG2
+      s6 PUSH
+      s3 s1 s4 XCHG3
+      s10 s11 s11 XCHG3
       __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
       $send INLINECALLDICT
-      s0 s6 XCHG
-      1000000000 PUSHINT
-      MUL
-      s0 s8 XCHG2
-      DIV
-      s1 s7 XCHG
-      ADD
-      B{b5ee9c72410101010012000020537461626c65636f696e732073656e74e8a66862} B>boc <s PUSHSLICE
-      s4 s7 XCHG
-      s3 s6 XCHG
-      s5 s3 s0 XCHG3
-      $__gen_UserPositionContract_setMessage INLINECALLDICT
+      2 5 BLKSWAP
     }>
   }>
-  __gen_constructor_RepayBurnMessage$user_amount_rate PROCINLINE:<{
+  __gen_constructor_RepayBurnMessage$user_amount_rate_userPosition PROCINLINE:<{
   }>
   $__gen_UserPositionContract_receive_RepayStablecoinMessage PROCINLINE:<{
-    DROP
-    2 2 BLKDROP2
-    s2 POP
+    3 3 BLKDROP2
     61910 PUSHINT
     __tact_context_get_sender INLINECALLDICT
-    s10 PUSH
+    s11 PUSH
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
-    s2 s6 s0 PUSH3
+    s3 s7 s2 PUSH3
     MUL
     1000000000 PUSHINT
     DIV
-    s0 s4 PUXC
-    LESS
+    s10 PUSH
+    s8 s14 XCHG
+    s7 s13 XCHG
+    s6 s12 XCHG
+    s5 s10 XCPU
+    s0 s5 XCHG
+    s4 s10 XCHG
+    s3 s15 XCHG
+    s12 s11 s10 XCHG3
+    s11 PUSH
+    $__gen_UserPositionContract_isPositionHealthy INLINECALLDICT
+    NOT
     IF:<{
-      DROP
-      B{b5ee9c7241010101003c000074596f75722064656274206973206c657373207468616e20796f752077616e7420746f2072657061792c206368617267652073656e74206261636b0dedde20} B>boc <s PUSHSLICE
-      s7 s11 XCHG
-      s6 s10 XCHG
-      s5 s9 XCHG
-      s4 s8 XCHG
-      s3 s11 XCHG
-      s10 s9 s0 XCHG3
+      s7 POP
+      s7 POP
+      s7 POP
+      s7 POP
+      s8 POP
+      B{b5ee9c7241010101001900002e706f736974696f6e206973206e6f74206865616c746879c2766195} B>boc <s PUSHSLICE
+      s7 s6 s0 XCHG3
+      s5 s8 XCHG
+      s1 s4 XCHG
+      s3 s8 XCHG
+      s1 s8 s0 XCHG3
       $__gen_UserPositionContract_setMessage INLINECALLDICT
-      s6 s10 XCHG
-      s5 s9 XCHG
-      s4 s8 XCHG
-      4 4 BLKSWAP
+      s0 s7 XCHG
+      FALSE
+      0 PUSHINT
+      66 PUSHINT
+      __gen_constructor_SendParameters$to_bounce_value_mode INLINECALLDICT
+      $send INLINECALLDICT
+      6 ROLL
     }>ELSE<{
-      s3 POP
+      s9 s10 PUXC
+      LESS
+      IF:<{
+        s11 POP
+        B{b5ee9c7241010101003c000074596f75722064656274206973206c657373207468616e20796f752077616e7420746f2072657061792c206368617267652073656e74206261636b0dedde20} B>boc <s PUSHSLICE
+        s5 s7 XCHG
+        s4 s6 XCHG
+        s3 s5 XCHG
+        s4 s3 s0 XCHG3
+        s11 s9 s0 XCHG3
+        $__gen_UserPositionContract_setMessage INLINECALLDICT
+        s7 s10 XCHG
+        s0 s8 XCHG
+        6 2 BLKSWAP
+      }>ELSE<{
+        s8 POP
+      }>
+      B{b5ee9c7241010101001e000038737461626c65732061726520676f696e6720746f206275726e2e2e2ebe2308a0} B>boc <s PUSHSLICE
+      s5 s7 XCHG
+      s4 s6 XCHG
+      s3 s5 XCHG
+      s4 s3 s0 XCHG3
+      s8 s9 s0 XCHG3
+      $__gen_UserPositionContract_setMessage INLINECALLDICT
+      0 PUSHINT
+      66 PUSHINT
+      TRUE
+      MYADDR
+      s4 s13 XCHG
+      s3 s14 XCHG
+      s12 s11 s0 XCHG3
+      __gen_constructor_RepayBurnMessage$user_amount_rate_userPosition INLINECALLDICT
+      __gen_writecell_RepayBurnMessage INLINECALLDICT
+      s5 PUSH
+      s0 s4 XCHG
+      s3 s11 XCHG
+      s9 s8 s8 XCHG3
+      __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
+      $send INLINECALLDICT
+      s6 s4 s4 XCHG3
+      s0 s5 XCHG
     }>
-    s0 s3 XCHG
-    0 PUSHINT
-    66 PUSHINT
-    s4 s5 XCHG2
-    TRUE
-    s0 s4 XCHG
-    __gen_constructor_RepayBurnMessage$user_amount_rate INLINECALLDICT
-    __gen_writecell_RepayBurnMessage INLINECALLDICT
-    s9 PUSH
-    s4 s4 s4 XCHG3
-    __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
-    $send INLINECALLDICT
-    B{b5ee9c7241010101003700006a737461626c65732061726520676f696e6720746f205769746864726177436f6c6c61746572616c4d6573736167656275726e2e2e2e452e30b1} B>boc <s PUSHSLICE
-    $__gen_UserPositionContract_setMessage INLINECALLDICT
   }>
   __gen_constructor_DecreaseTotalStableMessage$user_amount PROCINLINE:<{
   }>
@@ -914,26 +966,32 @@ PROGRAM{
     s10 PUSH
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
-    0 PUSHINT
-    66 PUSHINT
-    TRUE
-    s5 s4 XCPU
-    __gen_constructor_DecreaseTotalStableMessage$user_amount INLINECALLDICT
-    __gen_writecell_DecreaseTotalStableMessage INLINECALLDICT
-    s10 PUSH
-    s0 s4 XCHG
-    s6 s6 XCHG2
-    __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
-    $send INLINECALLDICT
+    OVER
     1000000000 PUSHINT
     MUL
     SWAP
     DIV
-    s1 s3 XCHG
+    s1 s5 XCHG
     SUB
     B{b5ee9c7241010101001a000030796f75277665207061696420737461626c6573206261636bf2782f91} B>boc <s PUSHSLICE
-    s1 s3 XCHG
+    s7 s9 XCHG
+    5 5 REVERSE
+    s4 s8 XCHG
+    s8 s3 s0 XCHG3
     $__gen_UserPositionContract_setMessage INLINECALLDICT
+    0 PUSHINT
+    66 PUSHINT
+    s0 s9 XCHG
+    TRUE
+    s0 s11 XCHG
+    __gen_constructor_DecreaseTotalStableMessage$user_amount INLINECALLDICT
+    __gen_writecell_DecreaseTotalStableMessage INLINECALLDICT
+    s6 PUSH
+    s3 s1 s4 XCHG3
+    s10 s11 s11 XCHG3
+    __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
+    $send INLINECALLDICT
+    2 5 BLKSWAP
   }>
   __gen_constructor_DoWithdrawCollateralMessage$user_amount PROCINLINE:<{
   }>
@@ -1018,13 +1076,6 @@ PROGRAM{
       $__gen_UserPositionContract_setMessage INLINECALLDICT
     }>
   }>
-  __gen_constructor_DeployOk$queryId PROCINLINE:<{
-  }>
-  $__gen_UserPositionContract_receive_Deploy PROCINLINE:<{
-    __gen_constructor_DeployOk$queryId INLINECALLDICT
-    __gen_writecell_DeployOk INLINECALLDICT
-    $reply INLINECALLDICT
-  }>
   __gen_router_UserPositionContract PROCREF:<{
     0 PUSHINT
     OVER
@@ -1041,7 +1092,7 @@ PROGRAM{
       TRUE
     }>
     OVER
-    3932134519 PUSHINT
+    2462180005 PUSHINT
     EQUAL
     IFJMP:<{
       NIP
@@ -1051,7 +1102,7 @@ PROGRAM{
       TRUE
     }>
     OVER
-    73036137 PUSHINT
+    1345893159 PUSHINT
     EQUAL
     IFJMP:<{
       NIP
@@ -1061,7 +1112,7 @@ PROGRAM{
       TRUE
     }>
     OVER
-    2621043381 PUSHINT
+    3058094568 PUSHINT
     EQUAL
     IFJMP:<{
       NIP
@@ -1071,7 +1122,7 @@ PROGRAM{
       TRUE
     }>
     OVER
-    3203474459 PUSHINT
+    2304493462 PUSHINT
     EQUAL
     IFJMP:<{
       NIP
@@ -1080,23 +1131,13 @@ PROGRAM{
       $__gen_UserPositionContract_receive_StablecoinBurnedMessage INLINECALLDICT
       TRUE
     }>
-    OVER
-    433324996 PUSHINT
+    SWAP
+    2015316053 PUSHINT
     EQUAL
     IFJMP:<{
-      NIP
       __gen_read_WithdrawCollateralMessage INLINECALLDICT
       1 8 BLKDROP2
       $__gen_UserPositionContract_receive_WithdrawCollateralMessage INLINECALLDICT
-      TRUE
-    }>
-    SWAP
-    2490013878 PUSHINT
-    EQUAL
-    IFJMP:<{
-      __gen_read_Deploy INLINECALLDICT
-      NIP
-      $__gen_UserPositionContract_receive_Deploy INLINECALLDICT
       TRUE
     }>
     DROP
@@ -1139,7 +1180,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d62484d4858395739436a795a356a34574568366958506971704774706f37336e4a636a313553547a4c506178} PUSHSLICE
+    x{697066733a2f2f516d50766e79644464694178485351413148446f71414672516f3947634d593452336b59436744386675736e6d34} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

@@ -187,6 +187,96 @@ function dictValueParserSendParameters(): DictionaryValue<SendParameters> {
     }
 }
 
+export type PositionState = {
+    $$type: 'PositionState';
+    collateral: bigint;
+    debt: bigint;
+}
+
+export function storePositionState(src: PositionState) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeCoins(src.collateral);
+        b_0.storeUint(src.debt, 64);
+    };
+}
+
+export function loadPositionState(slice: Slice) {
+    let sc_0 = slice;
+    let _collateral = sc_0.loadCoins();
+    let _debt = sc_0.loadUintBig(64);
+    return { $$type: 'PositionState' as const, collateral: _collateral, debt: _debt };
+}
+
+function loadTuplePositionState(source: TupleReader) {
+    let _collateral = source.readBigNumber();
+    let _debt = source.readBigNumber();
+    return { $$type: 'PositionState' as const, collateral: _collateral, debt: _debt };
+}
+
+function storeTuplePositionState(source: PositionState) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.collateral);
+    builder.writeNumber(source.debt);
+    return builder.build();
+}
+
+function dictValueParserPositionState(): DictionaryValue<PositionState> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storePositionState(src)).endCell());
+        },
+        parse: (src) => {
+            return loadPositionState(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type Message = {
+    $$type: 'Message';
+    timestamp: bigint;
+    message: string;
+}
+
+export function storeMessage(src: Message) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(src.timestamp, 64);
+        b_0.storeStringRefTail(src.message);
+    };
+}
+
+export function loadMessage(slice: Slice) {
+    let sc_0 = slice;
+    let _timestamp = sc_0.loadUintBig(64);
+    let _message = sc_0.loadStringRefTail();
+    return { $$type: 'Message' as const, timestamp: _timestamp, message: _message };
+}
+
+function loadTupleMessage(source: TupleReader) {
+    let _timestamp = source.readBigNumber();
+    let _message = source.readString();
+    return { $$type: 'Message' as const, timestamp: _timestamp, message: _message };
+}
+
+function storeTupleMessage(source: Message) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.timestamp);
+    builder.writeString(source.message);
+    return builder.build();
+}
+
+function dictValueParserMessage(): DictionaryValue<Message> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type Deploy = {
     $$type: 'Deploy';
     queryId: bigint;
@@ -323,17 +413,17 @@ export type PoolSettings = {
 export function storePoolSettings(src: PoolSettings) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(src.liquidationRatio, 32);
-        b_0.storeUint(src.stabilityFeeRate, 32);
-        b_0.storeUint(src.liquidatorIncentiveBps, 32);
+        b_0.storeInt(src.liquidationRatio, 257);
+        b_0.storeInt(src.stabilityFeeRate, 257);
+        b_0.storeInt(src.liquidatorIncentiveBps, 257);
     };
 }
 
 export function loadPoolSettings(slice: Slice) {
     let sc_0 = slice;
-    let _liquidationRatio = sc_0.loadUintBig(32);
-    let _stabilityFeeRate = sc_0.loadUintBig(32);
-    let _liquidatorIncentiveBps = sc_0.loadUintBig(32);
+    let _liquidationRatio = sc_0.loadIntBig(257);
+    let _stabilityFeeRate = sc_0.loadIntBig(257);
+    let _liquidatorIncentiveBps = sc_0.loadIntBig(257);
     return { $$type: 'PoolSettings' as const, liquidationRatio: _liquidationRatio, stabilityFeeRate: _stabilityFeeRate, liquidatorIncentiveBps: _liquidatorIncentiveBps };
 }
 
@@ -372,15 +462,15 @@ export type DebtRate = {
 export function storeDebtRate(src: DebtRate) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(src.debtAccumulatedRate, 32);
-        b_0.storeUint(src.lastAccumulationTime, 32);
+        b_0.storeInt(src.debtAccumulatedRate, 257);
+        b_0.storeInt(src.lastAccumulationTime, 257);
     };
 }
 
 export function loadDebtRate(slice: Slice) {
     let sc_0 = slice;
-    let _debtAccumulatedRate = sc_0.loadUintBig(32);
-    let _lastAccumulationTime = sc_0.loadUintBig(32);
+    let _debtAccumulatedRate = sc_0.loadIntBig(257);
+    let _lastAccumulationTime = sc_0.loadIntBig(257);
     return { $$type: 'DebtRate' as const, debtAccumulatedRate: _debtAccumulatedRate, lastAccumulationTime: _lastAccumulationTime };
 }
 
@@ -420,23 +510,29 @@ export type DepositCollateralMessage = {
 export function storeDepositCollateralMessage(src: DepositCollateralMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(3932134519, 32);
+        b_0.storeUint(2462180005, 32);
         b_0.storeAddress(src.user);
         b_0.storeCoins(src.amount);
-        b_0.store(storePoolSettings(src.settings));
-        b_0.store(storeDebtRate(src.rate));
-        b_0.storeCoins(src.tonPriceWithSafetyMargin);
+        let b_1 = new Builder();
+        b_1.store(storePoolSettings(src.settings));
+        let b_2 = new Builder();
+        b_2.store(storeDebtRate(src.rate));
+        b_2.storeCoins(src.tonPriceWithSafetyMargin);
+        b_1.storeRef(b_2.endCell());
+        b_0.storeRef(b_1.endCell());
     };
 }
 
 export function loadDepositCollateralMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 3932134519) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 2462180005) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadCoins();
-    let _settings = loadPoolSettings(sc_0);
-    let _rate = loadDebtRate(sc_0);
-    let _tonPriceWithSafetyMargin = sc_0.loadCoins();
+    let sc_1 = sc_0.loadRef().beginParse();
+    let _settings = loadPoolSettings(sc_1);
+    let sc_2 = sc_1.loadRef().beginParse();
+    let _rate = loadDebtRate(sc_2);
+    let _tonPriceWithSafetyMargin = sc_2.loadCoins();
     return { $$type: 'DepositCollateralMessage' as const, user: _user, amount: _amount, settings: _settings, rate: _rate, tonPriceWithSafetyMargin: _tonPriceWithSafetyMargin };
 }
 
@@ -482,23 +578,29 @@ export type WithdrawCollateralMessage = {
 export function storeWithdrawCollateralMessage(src: WithdrawCollateralMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(433324996, 32);
+        b_0.storeUint(2015316053, 32);
         b_0.storeAddress(src.user);
         b_0.storeCoins(src.amount);
-        b_0.store(storePoolSettings(src.settings));
-        b_0.store(storeDebtRate(src.rate));
-        b_0.storeCoins(src.tonPriceWithSafetyMargin);
+        let b_1 = new Builder();
+        b_1.store(storePoolSettings(src.settings));
+        let b_2 = new Builder();
+        b_2.store(storeDebtRate(src.rate));
+        b_2.storeCoins(src.tonPriceWithSafetyMargin);
+        b_1.storeRef(b_2.endCell());
+        b_0.storeRef(b_1.endCell());
     };
 }
 
 export function loadWithdrawCollateralMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 433324996) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 2015316053) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadCoins();
-    let _settings = loadPoolSettings(sc_0);
-    let _rate = loadDebtRate(sc_0);
-    let _tonPriceWithSafetyMargin = sc_0.loadCoins();
+    let sc_1 = sc_0.loadRef().beginParse();
+    let _settings = loadPoolSettings(sc_1);
+    let sc_2 = sc_1.loadRef().beginParse();
+    let _rate = loadDebtRate(sc_2);
+    let _tonPriceWithSafetyMargin = sc_2.loadCoins();
     return { $$type: 'WithdrawCollateralMessage' as const, user: _user, amount: _amount, settings: _settings, rate: _rate, tonPriceWithSafetyMargin: _tonPriceWithSafetyMargin };
 }
 
@@ -544,23 +646,29 @@ export type WithdrawStablecoinMessage = {
 export function storeWithdrawStablecoinMessage(src: WithdrawStablecoinMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(73036137, 32);
+        b_0.storeUint(1345893159, 32);
         b_0.storeAddress(src.user);
         b_0.storeUint(src.amount, 64);
-        b_0.store(storePoolSettings(src.settings));
-        b_0.store(storeDebtRate(src.rate));
-        b_0.storeCoins(src.tonPriceWithSafetyMargin);
+        let b_1 = new Builder();
+        b_1.store(storePoolSettings(src.settings));
+        let b_2 = new Builder();
+        b_2.store(storeDebtRate(src.rate));
+        b_2.storeCoins(src.tonPriceWithSafetyMargin);
+        b_1.storeRef(b_2.endCell());
+        b_0.storeRef(b_1.endCell());
     };
 }
 
 export function loadWithdrawStablecoinMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 73036137) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 1345893159) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadUintBig(64);
-    let _settings = loadPoolSettings(sc_0);
-    let _rate = loadDebtRate(sc_0);
-    let _tonPriceWithSafetyMargin = sc_0.loadCoins();
+    let sc_1 = sc_0.loadRef().beginParse();
+    let _settings = loadPoolSettings(sc_1);
+    let sc_2 = sc_1.loadRef().beginParse();
+    let _rate = loadDebtRate(sc_2);
+    let _tonPriceWithSafetyMargin = sc_2.loadCoins();
     return { $$type: 'WithdrawStablecoinMessage' as const, user: _user, amount: _amount, settings: _settings, rate: _rate, tonPriceWithSafetyMargin: _tonPriceWithSafetyMargin };
 }
 
@@ -606,23 +714,29 @@ export type RepayStablecoinMessage = {
 export function storeRepayStablecoinMessage(src: RepayStablecoinMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(2621043381, 32);
+        b_0.storeUint(3058094568, 32);
         b_0.storeAddress(src.user);
         b_0.storeUint(src.amount, 64);
-        b_0.store(storePoolSettings(src.settings));
-        b_0.store(storeDebtRate(src.rate));
-        b_0.storeCoins(src.tonPriceWithSafetyMargin);
+        let b_1 = new Builder();
+        b_1.store(storePoolSettings(src.settings));
+        let b_2 = new Builder();
+        b_2.store(storeDebtRate(src.rate));
+        b_2.storeCoins(src.tonPriceWithSafetyMargin);
+        b_1.storeRef(b_2.endCell());
+        b_0.storeRef(b_1.endCell());
     };
 }
 
 export function loadRepayStablecoinMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 2621043381) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 3058094568) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadUintBig(64);
-    let _settings = loadPoolSettings(sc_0);
-    let _rate = loadDebtRate(sc_0);
-    let _tonPriceWithSafetyMargin = sc_0.loadCoins();
+    let sc_1 = sc_0.loadRef().beginParse();
+    let _settings = loadPoolSettings(sc_1);
+    let sc_2 = sc_1.loadRef().beginParse();
+    let _rate = loadDebtRate(sc_2);
+    let _tonPriceWithSafetyMargin = sc_2.loadCoins();
     return { $$type: 'RepayStablecoinMessage' as const, user: _user, amount: _amount, settings: _settings, rate: _rate, tonPriceWithSafetyMargin: _tonPriceWithSafetyMargin };
 }
 
@@ -1147,32 +1261,39 @@ export type RepayBurnMessage = {
     user: Address;
     amount: bigint;
     rate: DebtRate;
+    userPosition: Address;
 }
 
 export function storeRepayBurnMessage(src: RepayBurnMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(2032846846, 32);
+        b_0.storeUint(3969973468, 32);
         b_0.storeAddress(src.user);
         b_0.storeCoins(src.amount);
         b_0.store(storeDebtRate(src.rate));
+        let b_1 = new Builder();
+        b_1.storeAddress(src.userPosition);
+        b_0.storeRef(b_1.endCell());
     };
 }
 
 export function loadRepayBurnMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 2032846846) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 3969973468) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadCoins();
     let _rate = loadDebtRate(sc_0);
-    return { $$type: 'RepayBurnMessage' as const, user: _user, amount: _amount, rate: _rate };
+    let sc_1 = sc_0.loadRef().beginParse();
+    let _userPosition = sc_1.loadAddress();
+    return { $$type: 'RepayBurnMessage' as const, user: _user, amount: _amount, rate: _rate, userPosition: _userPosition };
 }
 
 function loadTupleRepayBurnMessage(source: TupleReader) {
     let _user = source.readAddress();
     let _amount = source.readBigNumber();
     const _rate = loadTupleDebtRate(source.readTuple());
-    return { $$type: 'RepayBurnMessage' as const, user: _user, amount: _amount, rate: _rate };
+    let _userPosition = source.readAddress();
+    return { $$type: 'RepayBurnMessage' as const, user: _user, amount: _amount, rate: _rate, userPosition: _userPosition };
 }
 
 function storeTupleRepayBurnMessage(source: RepayBurnMessage) {
@@ -1180,6 +1301,7 @@ function storeTupleRepayBurnMessage(source: RepayBurnMessage) {
     builder.writeAddress(source.user);
     builder.writeNumber(source.amount);
     builder.writeTuple(storeTupleDebtRate(source.rate));
+    builder.writeAddress(source.userPosition);
     return builder.build();
 }
 
@@ -1199,32 +1321,39 @@ export type RepayBurnNotification = {
     user: Address;
     amount: bigint;
     rate: DebtRate;
+    userPosition: Address;
 }
 
 export function storeRepayBurnNotification(src: RepayBurnNotification) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(3290364212, 32);
+        b_0.storeUint(2785635685, 32);
         b_0.storeAddress(src.user);
         b_0.storeCoins(src.amount);
         b_0.store(storeDebtRate(src.rate));
+        let b_1 = new Builder();
+        b_1.storeAddress(src.userPosition);
+        b_0.storeRef(b_1.endCell());
     };
 }
 
 export function loadRepayBurnNotification(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 3290364212) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 2785635685) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadCoins();
     let _rate = loadDebtRate(sc_0);
-    return { $$type: 'RepayBurnNotification' as const, user: _user, amount: _amount, rate: _rate };
+    let sc_1 = sc_0.loadRef().beginParse();
+    let _userPosition = sc_1.loadAddress();
+    return { $$type: 'RepayBurnNotification' as const, user: _user, amount: _amount, rate: _rate, userPosition: _userPosition };
 }
 
 function loadTupleRepayBurnNotification(source: TupleReader) {
     let _user = source.readAddress();
     let _amount = source.readBigNumber();
     const _rate = loadTupleDebtRate(source.readTuple());
-    return { $$type: 'RepayBurnNotification' as const, user: _user, amount: _amount, rate: _rate };
+    let _userPosition = source.readAddress();
+    return { $$type: 'RepayBurnNotification' as const, user: _user, amount: _amount, rate: _rate, userPosition: _userPosition };
 }
 
 function storeTupleRepayBurnNotification(source: RepayBurnNotification) {
@@ -1232,6 +1361,7 @@ function storeTupleRepayBurnNotification(source: RepayBurnNotification) {
     builder.writeAddress(source.user);
     builder.writeNumber(source.amount);
     builder.writeTuple(storeTupleDebtRate(source.rate));
+    builder.writeAddress(source.userPosition);
     return builder.build();
 }
 
@@ -1256,7 +1386,7 @@ export type StablecoinBurnedMessage = {
 export function storeStablecoinBurnedMessage(src: StablecoinBurnedMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(3203474459, 32);
+        b_0.storeUint(2304493462, 32);
         b_0.storeAddress(src.user);
         b_0.storeCoins(src.amount);
         b_0.store(storeDebtRate(src.rate));
@@ -1265,7 +1395,7 @@ export function storeStablecoinBurnedMessage(src: StablecoinBurnedMessage) {
 
 export function loadStablecoinBurnedMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 3203474459) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 2304493462) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadCoins();
     let _rate = loadDebtRate(sc_0);
@@ -1739,129 +1869,44 @@ function dictValueParserWithdrawFeesMessage(): DictionaryValue<WithdrawFeesMessa
     }
 }
 
-export type PositionState = {
-    $$type: 'PositionState';
-    collateral: bigint;
-    debt: bigint;
-}
-
-export function storePositionState(src: PositionState) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeCoins(src.collateral);
-        b_0.storeUint(src.debt, 64);
-    };
-}
-
-export function loadPositionState(slice: Slice) {
-    let sc_0 = slice;
-    let _collateral = sc_0.loadCoins();
-    let _debt = sc_0.loadUintBig(64);
-    return { $$type: 'PositionState' as const, collateral: _collateral, debt: _debt };
-}
-
-function loadTuplePositionState(source: TupleReader) {
-    let _collateral = source.readBigNumber();
-    let _debt = source.readBigNumber();
-    return { $$type: 'PositionState' as const, collateral: _collateral, debt: _debt };
-}
-
-function storeTuplePositionState(source: PositionState) {
-    let builder = new TupleBuilder();
-    builder.writeNumber(source.collateral);
-    builder.writeNumber(source.debt);
-    return builder.build();
-}
-
-function dictValueParserPositionState(): DictionaryValue<PositionState> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storePositionState(src)).endCell());
-        },
-        parse: (src) => {
-            return loadPositionState(src.loadRef().beginParse());
-        }
-    }
-}
-
-export type Message = {
-    $$type: 'Message';
-    timestamp: bigint;
-    message: string;
-}
-
-export function storeMessage(src: Message) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(src.timestamp, 64);
-        b_0.storeStringRefTail(src.message);
-    };
-}
-
-export function loadMessage(slice: Slice) {
-    let sc_0 = slice;
-    let _timestamp = sc_0.loadUintBig(64);
-    let _message = sc_0.loadStringRefTail();
-    return { $$type: 'Message' as const, timestamp: _timestamp, message: _message };
-}
-
-function loadTupleMessage(source: TupleReader) {
-    let _timestamp = source.readBigNumber();
-    let _message = source.readString();
-    return { $$type: 'Message' as const, timestamp: _timestamp, message: _message };
-}
-
-function storeTupleMessage(source: Message) {
-    let builder = new TupleBuilder();
-    builder.writeNumber(source.timestamp);
-    builder.writeString(source.message);
-    return builder.build();
-}
-
-function dictValueParserMessage(): DictionaryValue<Message> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeMessage(src)).endCell());
-        },
-        parse: (src) => {
-            return loadMessage(src.loadRef().beginParse());
-        }
-    }
-}
-
 export type SetDeps = {
     $$type: 'SetDeps';
-    stablecoinMasterAddress: Address;
+    positionsManagerAddress: Address;
     gateKeeperAddress: Address;
+    stablecoinMasterAddress: Address;
 }
 
 export function storeSetDeps(src: SetDeps) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(587665798, 32);
-        b_0.storeAddress(src.stablecoinMasterAddress);
+        b_0.storeUint(3189103484, 32);
+        b_0.storeAddress(src.positionsManagerAddress);
         b_0.storeAddress(src.gateKeeperAddress);
+        b_0.storeAddress(src.stablecoinMasterAddress);
     };
 }
 
 export function loadSetDeps(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 587665798) { throw Error('Invalid prefix'); }
-    let _stablecoinMasterAddress = sc_0.loadAddress();
+    if (sc_0.loadUint(32) !== 3189103484) { throw Error('Invalid prefix'); }
+    let _positionsManagerAddress = sc_0.loadAddress();
     let _gateKeeperAddress = sc_0.loadAddress();
-    return { $$type: 'SetDeps' as const, stablecoinMasterAddress: _stablecoinMasterAddress, gateKeeperAddress: _gateKeeperAddress };
+    let _stablecoinMasterAddress = sc_0.loadAddress();
+    return { $$type: 'SetDeps' as const, positionsManagerAddress: _positionsManagerAddress, gateKeeperAddress: _gateKeeperAddress, stablecoinMasterAddress: _stablecoinMasterAddress };
 }
 
 function loadTupleSetDeps(source: TupleReader) {
-    let _stablecoinMasterAddress = source.readAddress();
+    let _positionsManagerAddress = source.readAddress();
     let _gateKeeperAddress = source.readAddress();
-    return { $$type: 'SetDeps' as const, stablecoinMasterAddress: _stablecoinMasterAddress, gateKeeperAddress: _gateKeeperAddress };
+    let _stablecoinMasterAddress = source.readAddress();
+    return { $$type: 'SetDeps' as const, positionsManagerAddress: _positionsManagerAddress, gateKeeperAddress: _gateKeeperAddress, stablecoinMasterAddress: _stablecoinMasterAddress };
 }
 
 function storeTupleSetDeps(source: SetDeps) {
     let builder = new TupleBuilder();
-    builder.writeAddress(source.stablecoinMasterAddress);
+    builder.writeAddress(source.positionsManagerAddress);
     builder.writeAddress(source.gateKeeperAddress);
+    builder.writeAddress(source.stablecoinMasterAddress);
     return builder.build();
 }
 
@@ -1872,6 +1917,56 @@ function dictValueParserSetDeps(): DictionaryValue<SetDeps> {
         },
         parse: (src) => {
             return loadSetDeps(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type Deps = {
+    $$type: 'Deps';
+    positionsManagerAddress: Address;
+    gateKeeperAddress: Address;
+    stablecoinMasterAddress: Address;
+}
+
+export function storeDeps(src: Deps) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeAddress(src.positionsManagerAddress);
+        b_0.storeAddress(src.gateKeeperAddress);
+        b_0.storeAddress(src.stablecoinMasterAddress);
+    };
+}
+
+export function loadDeps(slice: Slice) {
+    let sc_0 = slice;
+    let _positionsManagerAddress = sc_0.loadAddress();
+    let _gateKeeperAddress = sc_0.loadAddress();
+    let _stablecoinMasterAddress = sc_0.loadAddress();
+    return { $$type: 'Deps' as const, positionsManagerAddress: _positionsManagerAddress, gateKeeperAddress: _gateKeeperAddress, stablecoinMasterAddress: _stablecoinMasterAddress };
+}
+
+function loadTupleDeps(source: TupleReader) {
+    let _positionsManagerAddress = source.readAddress();
+    let _gateKeeperAddress = source.readAddress();
+    let _stablecoinMasterAddress = source.readAddress();
+    return { $$type: 'Deps' as const, positionsManagerAddress: _positionsManagerAddress, gateKeeperAddress: _gateKeeperAddress, stablecoinMasterAddress: _stablecoinMasterAddress };
+}
+
+function storeTupleDeps(source: Deps) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.positionsManagerAddress);
+    builder.writeAddress(source.gateKeeperAddress);
+    builder.writeAddress(source.stablecoinMasterAddress);
+    return builder.build();
+}
+
+function dictValueParserDeps(): DictionaryValue<Deps> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeDeps(src)).endCell());
+        },
+        parse: (src) => {
+            return loadDeps(src.loadRef().beginParse());
         }
     }
 }
@@ -1889,8 +1984,8 @@ function initPositionAddressContract_init_args(src: PositionAddressContract_init
 }
 
 async function PositionAddressContract_init(id: bigint) {
-    const __code = Cell.fromBase64('te6ccgECEAEABAAAART/APSkE/S88sgLAQIBYgIDAX7QAdDTAwFxsMABkX+RcOIB+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJVFBTA28E+GEC+GIEAgEgDA0D8O1E0NQB+GPSAAGOT9Mf+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJAfpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiUMwbBOOlfgo1wsKgwm68uCJgQEB1wABAdHbPOJVEts8MA4FBgLwcCHXScIflTAg1wsf3gKSW3/gIYIQXabelrqO2jHTHwGCEF2m3pa68uCB+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJAfpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiRJsEuABBwgAtMj4QwHMfwHKAFUgUCPLHwEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4InPFgEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4InPFsntVAGkgRFN+EIkxwXy9IFW1nAgyHIBywFwAcsAEsoHy//J0CDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiRXHBRTy9HBwgEIQI21tbds8fwoBXIIQlGqYtrqOotMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8nbPH/gMHAJARp/+EJwWAOAQgFtbds8CgHOyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgic8WUAP6AnABymgjbrMlbrOxlzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7AAsAmH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMwC777cr2omhqAPwx6QAAxyfpj/0gAJBrpMCAhd15cEQQa4WFEEGE3RDAgn/dWPlwREGE3XlwRID9IACQa6TAgIXdeXBEEGuFhRBBhN0QwIJ/3Vj5cERBhN15cEShmDYJx0r8FGuFhUGE3XlwRMCAgOuAAIDo7Z5xbZ5A4PAJW93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwThOy6ctWadluZ0HSzbKM3RSQAanAgyHIBywFwAcsAEsoHy//J0CDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgifhCAAQwMQ==');
-    const __system = Cell.fromBase64('te6cckECEgEABAoAAQHAAQEFoe6/AgEU/wD0pBP0vPLICwMCAWIIBAIBIAYFAJW93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwThOy6ctWadluZ0HSzbKM3RSQC777cr2omhqAPwx6QAAxyfpj/0gAJBrpMCAhd15cEQQa4WFEEGE3RDAgn/dWPlwREGE3XlwRID9IACQa6TAgIXdeXBEEGuFhRBBhN0QwIJ/3Vj5cERBhN15cEShmDYJx0r8FGuFhUGE3XlwRMCAgOuAAIDo7Z5xbZ5BEHAAQwMQF+0AHQ0wMBcbDAAZF/kXDiAfpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiVRQUwNvBPhhAvhiCQPw7UTQ1AH4Y9IAAY5P0x/6QAEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IkB+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJQzBsE46V+CjXCwqDCbry4ImBAQHXAAEB0ds84lUS2zwwEQsKALTI+EMBzH8BygBVIFAjyx8BINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJzxYBINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJzxbJ7VQC8HAh10nCH5UwINcLH94Cklt/4CGCEF2m3pa6jtox0x8BghBdpt6WuvLggfpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiQH6QAEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IkSbBLgAQ4MAVyCEJRqmLa6jqLTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/4DBwDQEaf/hCcFgDgEIBbW3bPA8BpIERTfhCJMcF8vSBVtZwIMhyAcsBcAHLABLKB8v/ydAg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IkVxwUU8vRwcIBCECNtbW3bPH8PAc7IcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJzxZQA/oCcAHKaCNusyVus7GXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsAEACYfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzABqcCDIcgHLAXABywASygfL/8nQINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJ+ELuScR4');
+    const __code = Cell.fromBase64('te6ccgECEAEABAcAART/APSkE/S88sgLAQIBYgIDAX7QAdDTAwFxsMABkX+RcOIB+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJVFBTA28E+GEC+GIEAgEgDA0D8O1E0NQB+GPSAAGOT9Mf+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJAfpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiUMwbBOOlfgo1wsKgwm68uCJgQEB1wABAdHbPOJVEts8MA4FBgLwcCHXScIflTAg1wsf3gKSW3/gIYIQXabelrqO2jHTHwGCEF2m3pa68uCB+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJAfpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiRJsEuABBwgAtMj4QwHMfwHKAFUgUCPLHwEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4InPFgEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4InPFsntVAGkgRFN+EIkxwXy9IFW1nAgyHIBywFwAcsAEsoHy//J0CDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiRXHBRTy9HBwgEIQI21tbds8fwoBXIIQlGqYtrqOotMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8nbPH/gMHAJARp/+EJwWAOAQgFtbds8CgHOyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgic8WUAP6AnABymgjbrMlbrOxlzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7AAsAmH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMwC774052omhqAPwx6QAAxyfpj/0gAJBrpMCAhd15cEQQa4WFEEGE3RDAgn/dWPlwREGE3XlwRID9IACQa6TAgIXdeXBEEGuFhRBBhN0QwIJ/3Vj5cERBhN15cEShmDYJx0r8FGuFhUGE3XlwRMCAgOuAAIDo7Z5xbZ5A4PAJW93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwThOy6ctWadluZ0HSzbKM3RSQAePhBbyQQI18DcCDIcgHLAXABywASygfL/8nQINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJAQAEMDE=');
+    const __system = Cell.fromBase64('te6cckECEgEABBEAAQHAAQEFoe6/AgEU/wD0pBP0vPLICwMCAWIIBAIBIAYFAJW93owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwThOy6ctWadluZ0HSzbKM3RSQC774052omhqAPwx6QAAxyfpj/0gAJBrpMCAhd15cEQQa4WFEEGE3RDAgn/dWPlwREGE3XlwRID9IACQa6TAgIXdeXBEEGuFhRBBhN0QwIJ/3Vj5cERBhN15cEShmDYJx0r8FGuFhUGE3XlwRMCAgOuAAIDo7Z5xbZ5BEHAAQwMQF+0AHQ0wMBcbDAAZF/kXDiAfpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiVRQUwNvBPhhAvhiCQPw7UTQ1AH4Y9IAAY5P0x/6QAEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IkB+kABINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJQzBsE46V+CjXCwqDCbry4ImBAQHXAAEB0ds84lUS2zwwEQsKALTI+EMBzH8BygBVIFAjyx8BINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJzxYBINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJzxbJ7VQC8HAh10nCH5UwINcLH94Cklt/4CGCEF2m3pa6jtox0x8BghBdpt6WuvLggfpAASDXSYEBC7ry4Igg1wsKIIMJuiGBBP+6sfLgiIMJuvLgiQH6QAEg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IkSbBLgAQ4MAVyCEJRqmLa6jqLTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J2zx/4DBwDQEaf/hCcFgDgEIBbW3bPA8BpIERTfhCJMcF8vSBVtZwIMhyAcsBcAHLABLKB8v/ydAg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IkVxwUU8vRwcIBCECNtbW3bPH8PAc7IcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggwm6IYEE/7qx8uCIgwm68uCJzxZQA/oCcAHKaCNusyVus7GXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsAEACYfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzAB4+EFvJBAjXwNwIMhyAcsBcAHLABLKB8v/ydAg10mBAQu68uCIINcLCiCDCbohgQT/urHy4IiDCbry4IkBqiJvNw==');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -1974,9 +2069,9 @@ export class PositionAddressContract implements Contract {
         
     }
     
-    async getGetPositionAddress(provider: ContractProvider) {
+    async getPositionAddress(provider: ContractProvider) {
         let builder = new TupleBuilder();
-        let source = (await provider.get('getPositionAddress', builder.build())).stack;
+        let source = (await provider.get('positionAddress', builder.build())).stack;
         let result = source.readAddress();
         return result;
     }

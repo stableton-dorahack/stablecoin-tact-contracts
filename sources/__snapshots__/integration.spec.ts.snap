@@ -1,0 +1,1029 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` 1`] = `
+[
+  {
+    "$seq": 0,
+    "events": [
+      {
+        "$type": "deploy",
+      },
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{BE15DB7C8018C9E237CAB5101572C0C3DCFF9380930A79F8111D371274B5F7EDBB18E758D3F00337FC357E8BF55DDE69C1817F8A1138988A2A46285CBD8F984A04C4FE8E44812E003CD4EB3196F3AB80CB8F8763C7AA59038E6E51152A5327411D9898D7D65D2D7E4_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+          "to": "kQB5qdZjLedXAZcfDsePVLIHHNyiKlSmToI7MTGvrLpa_H1R",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 19878n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "text": "deps set",
+              "type": "text",
+            },
+            "bounce": true,
+            "from": "kQB5qdZjLedXAZcfDsePVLIHHNyiKlSmToI7MTGvrLpa_H1R",
+            "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+            "type": "internal",
+            "value": 978926000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[` 2`] = `
+[
+  {
+    "$seq": 0,
+    "events": [
+      {
+        "$type": "deploy",
+      },
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{BE15DB7C8018C9E237CAB5101572C0C3DCFF9380930A79F8111D371274B5F7EDBB18E758D3F00337FC357E8BF55DDE69C1817F8A1138988A2A46285CBD8F984A04C4FE8E44812E003CD4EB3196F3AB80CB8F8763C7AA59038E6E51152A5327411D9898D7D65D2D7E4_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+          "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 17976n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "text": "deps set",
+              "type": "text",
+            },
+            "bounce": true,
+            "from": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+            "type": "internal",
+            "value": 980828000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[` 3`] = `
+[
+  {
+    "$seq": 0,
+    "events": [
+      {
+        "$type": "deploy",
+      },
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{BE15DB7C8018C9E237CAB5101572C0C3DCFF9380930A79F8111D371274B5F7EDBB18E758D3F00337FC357E8BF55DDE69C1817F8A1138988A2A46285CBD8F984A04C4FE8E44812E003CD4EB3196F3AB80CB8F8763C7AA59038E6E51152A5327411D9898D7D65D2D7E4_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+          "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 21165n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "text": "deps set",
+              "type": "text",
+            },
+            "bounce": true,
+            "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+            "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+            "type": "internal",
+            "value": 977639000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[` 4`] = `
+[
+  {
+    "$seq": 1,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{5C8C5E0B0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+          "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 18790n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "text": "pool settings updated",
+              "type": "text",
+            },
+            "bounce": true,
+            "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+            "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+            "type": "internal",
+            "value": 979910000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[` 5`] = `
+[
+  {
+    "$seq": 2,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{6EB2483F4BEBC2000}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+          "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 18326n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "text": "ton price updated",
+              "type": "text",
+            },
+            "bounce": true,
+            "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+            "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
+            "type": "internal",
+            "value": 980406000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`Integration test user actions flow 1`] = `
+[
+  {
+    "$seq": 3,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{C46CCBB6800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2877359401_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQA8J7zdze7xzxWC0UEFLI_ebJedZgQbQuay8b9oAkTSWQkO",
+          "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "type": "internal",
+          "value": 2000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 19610n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{92C1E2A5800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2877359401_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001905179AD27BC86AAA_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+            "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "type": "internal",
+            "value": 977044000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`Integration test user actions flow 2`] = `
+[
+  {
+    "$seq": 1,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{92C1E2A5800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2877359401_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001905179AD27BC86AAA_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "type": "internal",
+          "value": 977044000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 24628n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{92C1E2A5800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2877359401_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001905179AD27BC86AAA_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "to": "kQDM_uBwIJJO0oko4mshKFNRV9YMRfIustg_vHBmG2djBIh5",
+            "type": "internal",
+            "value": 922482000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 2,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{0D74C595800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B3_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDM_uBwIJJO0oko4mshKFNRV9YMRfIustg_vHBmG2djBIh5",
+          "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "type": "internal",
+          "value": 98601000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 21031n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{5DA6DE96800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B300333FB81C082493B4A24A389AC84A14D455F583117C8BACB60FEF1C1986D9D8C12_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "to": "kQCZlJ3XjUb2QbY_eFeUbBY9jBSyOQBG8DrvBhk2NnB8tNrz",
+            "type": "internal",
+            "value": 65775000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`Integration test user actions flow 3`] = `
+[
+  {
+    "$seq": 4,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{705FE53E800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2877359401_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQA8J7zdze7xzxWC0UEFLI_ebJedZgQbQuay8b9oAkTSWQkO",
+          "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 19056n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{5038B327800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000077359401_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001905179AD27BC86AAA_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+            "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "type": "internal",
+            "value": 977960000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 5,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{96096519800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000077359401_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "type": "internal",
+          "value": 914703000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 16651n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "type": "empty",
+            },
+            "bounce": false,
+            "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+            "to": "kQA8J7zdze7xzxWC0UEFLI_ebJedZgQbQuay8b9oAkTSWQkO",
+            "type": "internal",
+            "value": 897052000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`Integration test user actions flow 4`] = `
+[
+  {
+    "$seq": 3,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{5038B327800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000077359401_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001905179AD27BC86AAA_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "type": "internal",
+          "value": 977960000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 23621n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{5038B327800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000077359401_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001905179AD27BC86AAA_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "to": "kQDM_uBwIJJO0oko4mshKFNRV9YMRfIustg_vHBmG2djBIh5",
+            "type": "internal",
+            "value": 951355000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 4,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{96096519800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000077359401_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDM_uBwIJJO0oko4mshKFNRV9YMRfIustg_vHBmG2djBIh5",
+          "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "type": "internal",
+          "value": 930263000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 14097n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{96096519800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000077359401_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+            "type": "internal",
+            "value": 914703000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`Integration test user actions flow 5`] = `
+[
+  {
+    "$seq": 1,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{903559B2800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2877359401_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDM_uBwIJJO0oko4mshKFNRV9YMRfIustg_vHBmG2djBIh5",
+          "to": "kQB5qdZjLedXAZcfDsePVLIHHNyiKlSmToI7MTGvrLpa_H1R",
+          "type": "internal",
+          "value": 98565000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 31828n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{178D4519000000000000000043B9ACA00800F353ACC65BCEAE032E3E1D8F1EA9640E39B94454A94C9D047662635F5974B5F9000F09EF37737BBC73C560B450414B23F79B25E7598106D0B9ACBC6FDA0091349642_}",
+              "type": "cell",
+            },
+            "bounce": false,
+            "from": "kQB5qdZjLedXAZcfDsePVLIHHNyiKlSmToI7MTGvrLpa_H1R",
+            "to": "kQC3XMSfY1GxH6fIOLH2V5VcYW9By0VKZ9Pp_Bl8EUzhpr7D",
+            "type": "internal",
+            "value": 41296000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`Integration test user actions flow 6`] = `
+[
+  {
+    "$seq": 6,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{DE1FA942800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2877359401_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQA8J7zdze7xzxWC0UEFLI_ebJedZgQbQuay8b9oAkTSWQkO",
+          "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 19141n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{B646D1E8800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000077359401_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001905179AD27BC86AAA_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+            "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "type": "internal",
+            "value": 977875000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 7,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{10CDA82C800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000077359401_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "type": "internal",
+          "value": 832319000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 16538n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "type": "empty",
+            },
+            "bounce": false,
+            "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+            "to": "kQA8J7zdze7xzxWC0UEFLI_ebJedZgQbQuay8b9oAkTSWQkO",
+            "type": "internal",
+            "value": 814781000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`Integration test user actions flow 7`] = `
+[
+  {
+    "$seq": 5,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{B646D1E8800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000077359401_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001905179AD27BC86AAA_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "type": "internal",
+          "value": 977875000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 23819n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{B646D1E8800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000077359401_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001905179AD27BC86AAA_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "to": "kQDM_uBwIJJO0oko4mshKFNRV9YMRfIustg_vHBmG2djBIh5",
+            "type": "internal",
+            "value": 951072000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 6,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{10CDA82C800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000077359401_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDM_uBwIJJO0oko4mshKFNRV9YMRfIustg_vHBmG2djBIh5",
+          "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "type": "internal",
+          "value": 848177000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 14395n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{10CDA82C800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000000077359401_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+            "type": "internal",
+            "value": 832319000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`Integration test user actions flow 8`] = `
+[
+  {
+    "$seq": 2,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{ECA0FCDC800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2877359400000000000000000000000000000000000000000000000000000000003B9ACA0000000000000000000000000000000000000000000000000000000000320A2F35C_}
+ x{80199FDC0E041249DA51251C4D64250A6A2AFAC188BE45D65B07F78E0CC36CEC609_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDM_uBwIJJO0oko4mshKFNRV9YMRfIustg_vHBmG2djBIh5",
+          "to": "kQB5qdZjLedXAZcfDsePVLIHHNyiKlSmToI7MTGvrLpa_H1R",
+          "type": "internal",
+          "value": 931457000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 23987n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{ECA0FCDC800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2877359400000000000000000000000000000000000000000000000000000000003B9ACA0000000000000000000000000000000000000000000000000000000000320A2F35C_}
+ x{80199FDC0E041249DA51251C4D64250A6A2AFAC188BE45D65B07F78E0CC36CEC609_}",
+              "type": "cell",
+            },
+            "bounce": false,
+            "from": "kQB5qdZjLedXAZcfDsePVLIHHNyiKlSmToI7MTGvrLpa_H1R",
+            "to": "kQC3XMSfY1GxH6fIOLH2V5VcYW9By0VKZ9Pp_Bl8EUzhpr7D",
+            "type": "internal",
+            "value": 905154000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 3,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{A6096D65800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2877359400000000000000000000000000000000000000000000000000000000003B9ACA0000000000000000000000000000000000000000000000000000000000320A2F35C_}
+ x{80199FDC0E041249DA51251C4D64250A6A2AFAC188BE45D65B07F78E0CC36CEC609_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQC3XMSfY1GxH6fIOLH2V5VcYW9By0VKZ9Pp_Bl8EUzhpr7D",
+          "to": "kQB5qdZjLedXAZcfDsePVLIHHNyiKlSmToI7MTGvrLpa_H1R",
+          "type": "internal",
+          "value": 889527000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 23402n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{895BC796800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2877359400000000000000000000000000000000000000000000000000000000003B9ACA0000000000000000000000000000000000000000000000000000000000320A2F35C_}",
+              "type": "cell",
+            },
+            "bounce": false,
+            "from": "kQB5qdZjLedXAZcfDsePVLIHHNyiKlSmToI7MTGvrLpa_H1R",
+            "to": "kQDM_uBwIJJO0oko4mshKFNRV9YMRfIustg_vHBmG2djBIh5",
+            "type": "internal",
+            "value": 864176000n,
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`Integration test user actions flow 9`] = `
+[
+  {
+    "$seq": 8,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{D55DC57A800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B283B9ACA01_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQA8J7zdze7xzxWC0UEFLI_ebJedZgQbQuay8b9oAkTSWQkO",
+          "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "type": "internal",
+          "value": 1000000000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 19512n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{781F4855800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B283B9ACA01_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001905179AD27BC86AAA_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+            "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "type": "internal",
+            "value": 977532000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 9,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{C3CD33BF800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2000000003B9ACA01_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "type": "internal",
+          "value": 916797000n,
+        },
+      },
+      {
+        "$type": "failed",
+        "errorCode": 47204,
+        "errorMessage": "not enough collateral on contract",
+      },
+      {
+        "$type": "sent-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "type": "internal",
+          "value": 907953000n,
+        },
+      },
+    ],
+  },
+]
+`;
+
+exports[`Integration test user actions flow 10`] = `
+[
+  {
+    "$seq": 7,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{781F4855800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B283B9ACA01_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001905179AD27BC86AAA_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "type": "internal",
+          "value": 977532000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 24125n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{781F4855800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B283B9ACA01_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001905179AD27BC86AAA_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "to": "kQDM_uBwIJJO0oko4mshKFNRV9YMRfIustg_vHBmG2djBIh5",
+            "type": "internal",
+            "value": 950451000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 8,
+    "events": [
+      {
+        "$type": "received",
+        "message": {
+          "body": {
+            "cell": "x{C3CD33BF800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2000000003B9ACA01_}",
+            "type": "cell",
+          },
+          "bounce": true,
+          "from": "kQDM_uBwIJJO0oko4mshKFNRV9YMRfIustg_vHBmG2djBIh5",
+          "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "type": "internal",
+          "value": 932953000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 14693n,
+      },
+      {
+        "$type": "sent",
+        "messages": [
+          {
+            "body": {
+              "cell": "x{C3CD33BF800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2000000003B9ACA01_}",
+              "type": "cell",
+            },
+            "bounce": true,
+            "from": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+            "to": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+            "type": "internal",
+            "value": 916797000n,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "$seq": 9,
+    "events": [
+      {
+        "$type": "received-bounced",
+        "message": {
+          "body": {
+            "type": "empty",
+          },
+          "bounce": false,
+          "from": "kQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgS7dy",
+          "to": "kQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn1Qu",
+          "type": "internal",
+          "value": 907953000n,
+        },
+      },
+      {
+        "$type": "processed",
+        "gasUsed": 8279n,
+      },
+    ],
+  },
+]
+`;
+
+exports[`Integration test user actions flow 11`] = `[]`;

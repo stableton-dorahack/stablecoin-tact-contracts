@@ -1,4 +1,3 @@
-import { StablecoinMaster, storeDeploy, storeMint } from "../output/jetton_StablecoinMaster";
 import {
     Address,
     beginCell,
@@ -11,20 +10,18 @@ import {
     WalletContractV4,
 } from "ton";
 import { mnemonicToPrivateKey } from "ton-crypto";
-import { testAddress } from "ton-emulator";
-import { GateKeeperContract } from "../output/stableton_GateKeeperContract";
-import { PositionAddressContract } from "../output/stableton_PositionAddressContract";
-import { PositionsManagerContract } from "../output/stableton_PositionsManagerContract";
-
-import { deploy } from "../utils/deploy";
-import { buildOnchainMetadata } from "../utils/jetton-helpers";
-import { printAddress, printDeploy, printHeader } from "../utils/print";
 import { getHttpEndpoint } from "@orbs-network/ton-access";
+import { buildOnchainMetadata } from "../utils/jetton-helpers";
+
+import { GateKeeperContract } from "../output/stableton_GateKeeperContract";
+import { PositionsManagerContract } from "../output/stableton_PositionsManagerContract";
+import { StablecoinMaster } from "../output/stableton_StablecoinMaster";
+
+const workchain = 0;
 
 import dotenv from "dotenv";
+import { storeDeploy, storeMint } from "../output/stableton_UserStablecoinWallet";
 dotenv.config();
-
-const workchain = 0; //we are working in basechain.
 
 (async () => {
     const endpoint = await getHttpEndpoint({ network: "mainnet" });
@@ -49,31 +46,25 @@ const workchain = 0; //we are working in basechain.
     let balance: bigint = await contract.getBalance();
     console.log({ balance });
 
-    // StabletonMaster
+    // ------ deploy contracts
     const jettonParams = {
-        name: "STABLE",
-        symbol: "STB3",
+        name: "Stableton",
+        symbol: "STAB",
         description: "Dorahack stableton",
-        image: "https://ipfs.io/ipfs/QmbPZjC1tuP6ickCCBtoTCQ9gc3RpkbKx7C1LMYQdcLwti", // Image url
+        image: "https://ipfs.io/ipfs/QmbPZjC1tuP6ickCCBtoTCQ9gc3RpkbKx7C1LMYQdcLwti",
     };
-
     let content = buildOnchainMetadata(jettonParams);
-    let init = await StablecoinMaster.init(owner, content);
 
-    let destination_address = contractAddress(workchain, init);
-    console.log("master contract", destination_address);
+    let init = await StablecoinMaster.init(owner, content);
+    let stableMasterAddress = contractAddress(workchain, init);
+    console.log("stablecoin master contract", stableMasterAddress);
 
     let deployAmount = toNano("0.5");
     let supply = toNano(500);
     let seqno: number = await contract.getSeqno();
 
-    //TL-B mint#01fb345b amount:int257 = Mint
-    // let msg = beginCell()
-    //     .store(storeDeploy({ $$type: "Deploy", queryId: 1n }))
-    //     .endCell();
-
     let msg = beginCell()
-        .store(storeMint({ $$type: "Mint", amount: toNano("430") }))
+        .store(storeDeploy({ $$type: "Deploy", queryId: 1n }))
         .endCell();
 
     console.log("🛠️Preparing new outgoing massage from deployment wallet. Seqno = ", seqno);
@@ -87,7 +78,7 @@ const workchain = 0; //we are working in basechain.
         messages: [
             internal({
                 value: deployAmount,
-                to: destination_address,
+                to: stableMasterAddress,
                 init: {
                     code: init.code,
                     data: init.data,
@@ -96,5 +87,5 @@ const workchain = 0; //we are working in basechain.
             }),
         ],
     });
-    console.log("======deployment message sent to ", destination_address, " ======");
+    console.log("======deployment message sent to ", stableMasterAddress, " ======");
 })();

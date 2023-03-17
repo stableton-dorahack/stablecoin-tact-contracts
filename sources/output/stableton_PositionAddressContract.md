@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: PositionAddressContract
-BOC Size: 1036 bytes
+BOC Size: 1043 bytes
 
 # Types
-Total Types: 36
+Total Types: 37
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -16,6 +16,14 @@ Signature: `Context{bounced:bool,sender:address,value:int257,raw:^slice}`
 ## SendParameters
 TLB: `_ bounce:bool to:address value:int257 mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell = SendParameters`
 Signature: `SendParameters{bounce:bool,to:address,value:int257,mode:int257,body:Maybe ^cell,code:Maybe ^cell,data:Maybe ^cell}`
+
+## PositionState
+TLB: `_ collateral:coins debt:uint64 = PositionState`
+Signature: `PositionState{collateral:coins,debt:uint64}`
+
+## Message
+TLB: `_ timestamp:uint64 message:^string = Message`
+Signature: `Message{timestamp:uint64,message:^string}`
 
 ## Deploy
 TLB: `deploy#946a98b6 queryId:uint64 = Deploy`
@@ -30,28 +38,28 @@ TLB: `change_owner#0f474d03 newOwner:address = ChangeOwner`
 Signature: `ChangeOwner{newOwner:address}`
 
 ## PoolSettings
-TLB: `_ liquidationRatio:uint32 stabilityFeeRate:uint32 liquidatorIncentiveBps:uint32 = PoolSettings`
-Signature: `PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,liquidatorIncentiveBps:uint32}`
+TLB: `_ liquidationRatio:int257 stabilityFeeRate:int257 liquidatorIncentiveBps:int257 = PoolSettings`
+Signature: `PoolSettings{liquidationRatio:int257,stabilityFeeRate:int257,liquidatorIncentiveBps:int257}`
 
 ## DebtRate
-TLB: `_ debtAccumulatedRate:uint32 lastAccumulationTime:uint32 = DebtRate`
-Signature: `DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}`
+TLB: `_ debtAccumulatedRate:int257 lastAccumulationTime:int257 = DebtRate`
+Signature: `DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257}`
 
 ## DepositCollateralMessage
-TLB: `deposit_collateral_message#ea5f9c77 user:address amount:coins settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,liquidatorIncentiveBps:uint32} rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} tonPriceWithSafetyMargin:coins = DepositCollateralMessage`
-Signature: `DepositCollateralMessage{user:address,amount:coins,settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,liquidatorIncentiveBps:uint32},rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32},tonPriceWithSafetyMargin:coins}`
+TLB: `deposit_collateral_message#92c1e2a5 user:address amount:coins settings:PoolSettings{liquidationRatio:int257,stabilityFeeRate:int257,liquidatorIncentiveBps:int257} rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257} tonPriceWithSafetyMargin:coins = DepositCollateralMessage`
+Signature: `DepositCollateralMessage{user:address,amount:coins,settings:PoolSettings{liquidationRatio:int257,stabilityFeeRate:int257,liquidatorIncentiveBps:int257},rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257},tonPriceWithSafetyMargin:coins}`
 
 ## WithdrawCollateralMessage
-TLB: `withdraw_collateral_message#19d403c4 user:address amount:coins settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,liquidatorIncentiveBps:uint32} rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} tonPriceWithSafetyMargin:coins = WithdrawCollateralMessage`
-Signature: `WithdrawCollateralMessage{user:address,amount:coins,settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,liquidatorIncentiveBps:uint32},rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32},tonPriceWithSafetyMargin:coins}`
+TLB: `withdraw_collateral_message#781f4855 user:address amount:coins settings:PoolSettings{liquidationRatio:int257,stabilityFeeRate:int257,liquidatorIncentiveBps:int257} rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257} tonPriceWithSafetyMargin:coins = WithdrawCollateralMessage`
+Signature: `WithdrawCollateralMessage{user:address,amount:coins,settings:PoolSettings{liquidationRatio:int257,stabilityFeeRate:int257,liquidatorIncentiveBps:int257},rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257},tonPriceWithSafetyMargin:coins}`
 
 ## WithdrawStablecoinMessage
-TLB: `withdraw_stablecoin_message#045a7169 user:address amount:uint64 settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,liquidatorIncentiveBps:uint32} rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} tonPriceWithSafetyMargin:coins = WithdrawStablecoinMessage`
-Signature: `WithdrawStablecoinMessage{user:address,amount:uint64,settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,liquidatorIncentiveBps:uint32},rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32},tonPriceWithSafetyMargin:coins}`
+TLB: `withdraw_stablecoin_message#5038b327 user:address amount:uint64 settings:PoolSettings{liquidationRatio:int257,stabilityFeeRate:int257,liquidatorIncentiveBps:int257} rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257} tonPriceWithSafetyMargin:coins = WithdrawStablecoinMessage`
+Signature: `WithdrawStablecoinMessage{user:address,amount:uint64,settings:PoolSettings{liquidationRatio:int257,stabilityFeeRate:int257,liquidatorIncentiveBps:int257},rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257},tonPriceWithSafetyMargin:coins}`
 
 ## RepayStablecoinMessage
-TLB: `repay_stablecoin_message#9c39f2b5 user:address amount:uint64 settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,liquidatorIncentiveBps:uint32} rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} tonPriceWithSafetyMargin:coins = RepayStablecoinMessage`
-Signature: `RepayStablecoinMessage{user:address,amount:uint64,settings:PoolSettings{liquidationRatio:uint32,stabilityFeeRate:uint32,liquidatorIncentiveBps:uint32},rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32},tonPriceWithSafetyMargin:coins}`
+TLB: `repay_stablecoin_message#b646d1e8 user:address amount:uint64 settings:PoolSettings{liquidationRatio:int257,stabilityFeeRate:int257,liquidatorIncentiveBps:int257} rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257} tonPriceWithSafetyMargin:coins = RepayStablecoinMessage`
+Signature: `RepayStablecoinMessage{user:address,amount:uint64,settings:PoolSettings{liquidationRatio:int257,stabilityFeeRate:int257,liquidatorIncentiveBps:int257},rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257},tonPriceWithSafetyMargin:coins}`
 
 ## DoWithdrawCollateralMessage
 TLB: `do_withdraw_collateral_message#c3cd33bf user:address amount:uint64 = DoWithdrawCollateralMessage`
@@ -94,16 +102,16 @@ TLB: `mint_message#903559b2 user:address amount:coins = MintMessage`
 Signature: `MintMessage{user:address,amount:coins}`
 
 ## RepayBurnMessage
-TLB: `repay_burn_message#792ac7fe user:address amount:coins rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} = RepayBurnMessage`
-Signature: `RepayBurnMessage{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}}`
+TLB: `repay_burn_message#eca0fcdc user:address amount:coins rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257} userPosition:address = RepayBurnMessage`
+Signature: `RepayBurnMessage{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257},userPosition:address}`
 
 ## RepayBurnNotification
-TLB: `repay_burn_notification#c41ef934 user:address amount:coins rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} = RepayBurnNotification`
-Signature: `RepayBurnNotification{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}}`
+TLB: `repay_burn_notification#a6096d65 user:address amount:coins rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257} userPosition:address = RepayBurnNotification`
+Signature: `RepayBurnNotification{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257},userPosition:address}`
 
 ## StablecoinBurnedMessage
-TLB: `stablecoin_burned_message#bef1241b user:address amount:coins rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32} = StablecoinBurnedMessage`
-Signature: `StablecoinBurnedMessage{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:uint32,lastAccumulationTime:uint32}}`
+TLB: `stablecoin_burned_message#895bc796 user:address amount:coins rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257} = StablecoinBurnedMessage`
+Signature: `StablecoinBurnedMessage{user:address,amount:coins,rate:DebtRate{debtAccumulatedRate:int257,lastAccumulationTime:int257}}`
 
 ## TokenTransfer
 TLB: `token_transfer#0f8a7ea5 queryId:uint64 amount:coins destination:address responseDestination:Maybe address customPayload:Maybe ^cell forwardTonAmount:coins forwardPayload:remainder<slice> = TokenTransfer`
@@ -137,22 +145,18 @@ Signature: `TokenUpdateContent{content:Maybe ^cell}`
 TLB: `withdraw_fees_message#c78aa748 to:address amount:coins = WithdrawFeesMessage`
 Signature: `WithdrawFeesMessage{to:address,amount:coins}`
 
-## PositionState
-TLB: `_ collateral:coins debt:uint64 = PositionState`
-Signature: `PositionState{collateral:coins,debt:uint64}`
-
-## Message
-TLB: `_ timestamp:uint64 message:^string = Message`
-Signature: `Message{timestamp:uint64,message:^string}`
-
 ## SetDeps
-TLB: `set_deps#23071186 stablecoinMasterAddress:address gateKeeperAddress:address = SetDeps`
-Signature: `SetDeps{stablecoinMasterAddress:address,gateKeeperAddress:address}`
+TLB: `set_deps#be15db7c positionsManagerAddress:address gateKeeperAddress:address stablecoinMasterAddress:address = SetDeps`
+Signature: `SetDeps{positionsManagerAddress:address,gateKeeperAddress:address,stablecoinMasterAddress:address}`
+
+## Deps
+TLB: `_ positionsManagerAddress:address gateKeeperAddress:address stablecoinMasterAddress:address = Deps`
+Signature: `Deps{positionsManagerAddress:address,gateKeeperAddress:address,stablecoinMasterAddress:address}`
 
 # Get Methods
 Total Get Methods: 1
 
-## getPositionAddress
+## positionAddress
 
 # Error Codes
 2: Stack undeflow

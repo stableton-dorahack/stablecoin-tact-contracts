@@ -1,13 +1,13 @@
 
 struct PoolSettings {
-    liquidationRatio: Int as uint32;
-    stabilityFeeRate: Int as uint32;
-    liquidatorIncentiveBps: Int as uint32;
+    liquidationRatio: Int;
+    stabilityFeeRate: Int;
+    liquidatorIncentiveBps: Int;
 }
 
 struct DebtRate {
-    debtAccumulatedRate: Int as uint32;
-    lastAccumulationTime: Int as uint32;
+    debtAccumulatedRate: Int;
+    lastAccumulationTime: Int;
 }
 
 message DepositCollateralMessage {
@@ -106,12 +106,14 @@ message RepayBurnMessage {
     user: Address;
     amount: Int as coins;
     rate: DebtRate;
+    userPosition: Address;
 }
 
 message RepayBurnNotification {
     user: Address;
     amount: Int as coins;
     rate: DebtRate;
+    userPosition: Address;
 }
 
 message StablecoinBurnedMessage {
@@ -174,4 +176,16 @@ message TokenUpdateContent {
 message WithdrawFeesMessage {
     to: Address;
     amount: Int as coins;
+}
+
+message SetDeps {
+    positionsManagerAddress: Address;
+    gateKeeperAddress: Address;
+    stablecoinMasterAddress: Address;
+}
+
+struct Deps {
+    positionsManagerAddress: Address;
+    gateKeeperAddress: Address;
+    stablecoinMasterAddress: Address;
 }

@@ -43,6 +43,7 @@ PROGRAM{
   DECLPROC $contractAddress
   DECLPROC $send
   DECLPROC $__gen_Context_readForwardFee
+  DECLPROC __gen_constructor_SendParameters$to_value_mode_bounce_body
   DECLPROC $__gen_UserStablecoinWallet_init_child
   DECLPROC __gen_constructor_JettonWalletData$balance_owner_master_walletCode
   DECLPROC $__gen_UserStablecoinWallet_get_wallet_data
@@ -56,11 +57,10 @@ PROGRAM{
   DECLPROC __gen_constructor_TokenNotification$queryId_amount_from_forwardPayload
   DECLPROC __gen_constructor_TokenExcesses$queryId
   DECLPROC $__gen_UserStablecoinWallet_receive_TokenTransferInternal
-  DECLPROC __gen_constructor_SendParameters$to_value_mode_bounce_body
   DECLPROC __gen_constructor_TokenBurnNotification$queryId_amount_owner_responseAddress
   DECLPROC $__gen_UserStablecoinWallet_receive_TokenBurn
   DECLPROC $__gen_UserStablecoinWallet_receive_bounced
-  DECLPROC __gen_constructor_RepayBurnNotification$amount_user_rate
+  DECLPROC __gen_constructor_RepayBurnNotification$amount_user_rate_userPosition
   DECLPROC $__gen_UserStablecoinWallet_receive_RepayBurnMessage
   DECLPROC __gen_router_UserStablecoinWallet
   DECLPROC recv_internal
@@ -198,41 +198,58 @@ PROGRAM{
   }>
   __gen_write_DebtRate PROCINLINE:<{
     s0 s2 XCHG
-    32 STU
-    32 STU
+    257 PUSHINT
+    STIX
+    257 PUSHINT
+    STIX
   }>
   __gen_read_DebtRate PROCINLINE:<{
-    32 LDU
-    32 LDU
+    257 PUSHINT
+    LDIX
+    257 PUSHINT
+    LDIX
     -ROT
   }>
   __gen_read_RepayBurnMessage PROCINLINE:<{
     32 LDU
     SWAP
-    2032846846 PUSHINT
+    3969973468 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
     LDGRAMS
     __gen_read_DebtRate INLINECALLDICT
-    s2 s4 XCHG
-    s2 s3 XCHG
+    s0 s2 XCHG
+    LDREF
+    SWAP
+    CTOS
+    __tact_load_address INLINECALLDICT
+    NIP
+    s1 s5 XCHG
+    s1 s4 XCHG
+    s1 s3 XCHG
   }>
   __gen_write_RepayBurnNotification PROCINLINE:<{
-    3290364212 PUSHINT
-    s0 s5 XCHG2
+    2785635685 PUSHINT
+    s0 s6 XCHG2
     32 STU
-    s0 s3 XCHG2
+    s0 s4 XCHG2
     __tact_store_address INLINECALLDICT
-    SWAP
+    ROT
     STGRAMS
     s0 s2 XCHG
     __gen_write_DebtRate INLINECALLDICT
+    NEWC
+    ROT
+    __tact_store_address INLINECALLDICT
+    ENDC
+    SWAP
+    STREF
   }>
   __gen_writecell_RepayBurnNotification PROCINLINE:<{
     NEWC
-    4 -ROLL
+    5 -ROLL
     __gen_write_RepayBurnNotification INLINECALLDICT
     ENDC
   }>
@@ -560,6 +577,12 @@ PROGRAM{
     3 MULCONST
     1 RSHIFT#
   }>
+  __gen_constructor_SendParameters$to_value_mode_bounce_body PROCINLINE:<{
+    s1 s4 XCHG
+    s3 s3 s0 XCHG3
+    PUSHNULL
+    PUSHNULL
+  }>
   $__gen_UserStablecoinWallet_init_child PROC:<{
     s0 s2 XCHG
     CTOS
@@ -760,12 +783,6 @@ PROGRAM{
       2DROP
     }>
   }>
-  __gen_constructor_SendParameters$to_value_mode_bounce_body PROCINLINE:<{
-    s1 s4 XCHG
-    s3 s3 s0 XCHG3
-    PUSHNULL
-    PUSHNULL
-  }>
   __gen_constructor_TokenBurnNotification$queryId_amount_owner_responseAddress PROCINLINE:<{
   }>
   $__gen_UserStablecoinWallet_receive_TokenBurn PROCINLINE:<{
@@ -829,33 +846,32 @@ PROGRAM{
     ADD
     s0 s2 XCHG
   }>
-  __gen_constructor_RepayBurnNotification$amount_user_rate PROCINLINE:<{
-    s2 s3 XCHG
+  __gen_constructor_RepayBurnNotification$amount_user_rate_userPosition PROCINLINE:<{
+    s3 s4 XCHG
   }>
   $__gen_UserStablecoinWallet_receive_RepayBurnMessage PROCINLINE:<{
     4429 PUSHINT
     __tact_context_get_sender INLINECALLDICT
-    s6 PUSH
+    s7 PUSH
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
     62972 PUSHINT
-    s7 s3 PUSH2
+    s8 s4 PUSH2
     SUB
     -1 GTINT
     THROWANYIFNOT
-    s6 s2 XCPU
+    s7 s3 XCPU
     SUB
-    s0 s2 XCHG
+    s3 s4 XCHG2
     0 PUSHINT
     66 PUSHINT
-    s5 s3 XCHG2
+    s4 s5 XCHG2
     TRUE
-    s0 s9 XCHG
-    __gen_constructor_RepayBurnNotification$amount_user_rate INLINECALLDICT
+    s0 s10 XCHG
+    __gen_constructor_RepayBurnNotification$amount_user_rate_userPosition INLINECALLDICT
     __gen_writecell_RepayBurnNotification INLINECALLDICT
     s4 PUSH
-    s0 s4 XCHG
-    s0 s3 XCHG
+    s3 s1 s4 XCHG3
     s7 s7 XCHG2
     __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
     $send INLINECALLDICT
@@ -907,11 +923,11 @@ PROGRAM{
       TRUE
     }>
     SWAP
-    2032846846 PUSHINT
+    3969973468 PUSHINT
     EQUAL
     IFJMP:<{
       __gen_read_RepayBurnMessage INLINECALLDICT
-      1 4 BLKDROP2
+      1 5 BLKDROP2
       $__gen_UserStablecoinWallet_receive_RepayBurnMessage INLINECALLDICT
       TRUE
     }>
@@ -956,7 +972,7 @@ PROGRAM{
     209778528950190195973528115415557644819 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d5635454676534561485a42703346657451517465586f36736b4a5333364534366577724a324c65484c53624d} PUSHSLICE
+    x{697066733a2f2f516d557635554d55394e5338454331446161574d6d485144693154315439547576457070566d6f706679514e6974} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

@@ -1,4 +1,3 @@
-import { StablecoinMaster, storeMint } from "./output/jetton_StablecoinMaster";
 import {
     Address,
     beginCell,
@@ -11,13 +10,17 @@ import {
     WalletContractV4,
 } from "ton";
 import { mnemonicToPrivateKey } from "ton-crypto";
-
-import { buildOnchainMetadata } from "./utils/jetton-helpers";
 import { getHttpEndpoint } from "@orbs-network/ton-access";
+import { buildOnchainMetadata } from "../utils/jetton-helpers";
+
+import { GateKeeperContract } from "../output/stableton_GateKeeperContract";
+import { PositionsManagerContract } from "../output/stableton_PositionsManagerContract";
+import { StablecoinMaster } from "../output/stableton_StablecoinMaster";
 
 const workchain = 0;
 
 import dotenv from "dotenv";
+import { storeDeploy, storeMint } from "../output/stableton_UserStablecoinWallet";
 dotenv.config();
 
 (async () => {
@@ -43,36 +46,19 @@ dotenv.config();
     let balance: bigint = await contract.getBalance();
     console.log({ balance });
 
-    // StabletonMaster
-    const jettonParams = {
-        name: "STABLE",
-        symbol: "STB3",
-        description: "Dorahack stableton",
-        image: "https://ipfs.io/ipfs/QmbPZjC1tuP6ickCCBtoTCQ9gc3RpkbKx7C1LMYQdcLwti", // Image url
-    };
-
-    let content = buildOnchainMetadata(jettonParams);
-    let init = await StablecoinMaster.init(owner, content);
-
-    let destination_address = contractAddress(workchain, init);
-    console.log("master contract", destination_address);
+    let init = await GateKeeperContract.init();
+    let address = contractAddress(workchain, init);
+    console.log("GateKeeperContract contract", address);
 
     let deployAmount = toNano("0.5");
-    let supply = toNano(500);
     let seqno: number = await contract.getSeqno();
 
-    //TL-B mint#01fb345b amount:int257 = Mint
-    // let msg = beginCell()
-    //     .store(storeDeploy({ $$type: "Deploy", queryId: 1n }))
-    //     .endCell();
-
     let msg = beginCell()
-        .store(storeMint({ $$type: "Mint", amount: toNano("430") }))
+        .store(storeDeploy({ $$type: "Deploy", queryId: 1n }))
         .endCell();
 
     console.log("🛠️Preparing new outgoing massage from deployment wallet. Seqno = ", seqno);
     console.log("Current deployment wallet balance = ", fromNano(balance).toString(), "💎TON");
-    console.log("Total supply for the deployed jetton = ", fromNano(supply));
 
     await contract.sendTransfer({
         seqno,
@@ -81,7 +67,7 @@ dotenv.config();
         messages: [
             internal({
                 value: deployAmount,
-                to: destination_address,
+                to: address,
                 init: {
                     code: init.code,
                     data: init.data,
@@ -90,5 +76,5 @@ dotenv.config();
             }),
         ],
     });
-    console.log("======deployment message sent to ", destination_address, " ======");
+    console.log("======deployment message sent to ", address, " ======");
 })();

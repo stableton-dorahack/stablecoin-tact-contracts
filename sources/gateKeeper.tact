@@ -4,20 +4,14 @@ import "./messages";
 import "./UserPosition";
 import "./math/math.tact";
 
-
 message PoolSettingsMsg {
-    liquidationRatio: Int as uint32;
-    stabilityFeeRate: Int as uint64; // 100000000062 = X**1.000000000627 every second = 2%/yr., look at ./math/math.tact
-    liquidatorIncentiveBps: Int as uint32;
-}
-
-struct Deps {
-    stablecoinMasterAddress: Address;
-    positionsManagerAddress: Address;
+    liquidationRatio: Int;
+    stabilityFeeRate: Int; // 1000000000625 = X**1.000000000627 every second = 2%/yr., look at ./math/math.tact
+    liquidatorIncentiveBps: Int;
 }
 
 message UpdateTonPriceMsg {
-    price: Int as uint32;
+    price: Int as coins;
 }
 
 message DepositCollateralUserMessage {
@@ -40,25 +34,18 @@ message WithdrawCollateralUserMessage {
     amount: Int as coins;
 }
 
-message SetDeps {
-    stablecoinMasterAddress: Address;
-    positionsManagerAddress: Address;
-}
-
 
 contract GateKeeperContract with Deployable, Ownable {
 
     const MinTonForStorage: Int = ton("0.01");
     const GasConsumption: Int = ton("0.01");
-    const RAY: Int = pow(10, 27);
 
     // deps
     deps: Deps;
-
     owner: Address;
     poolSettings: PoolSettings;
     tonPrice: Int as uint32;
-    tonPriceWithSafetyMargin: Int as uint32;
+    tonPriceWithSafetyMargin: Int;
     debtRate: DebtRate;
     totalCollateralAmount: Int as coins = 0;
     stablecoinsIssued: Int as coins = 0;
@@ -75,12 +62,13 @@ contract GateKeeperContract with Deployable, Ownable {
         self.tonPriceWithSafetyMargin = 0;
         self.debtRate = DebtRate{
             debtAccumulatedRate: 1000000000, 
-            lastAccumulationTime: now()
+            lastAccumulationTime: now() - 1000
         };
        
         self.deps = Deps{
-            stablecoinMasterAddress: newAddress(0, 0),
-            positionsManagerAddress: newAddress(0, 0)
+            positionsManagerAddress: newAddress(0, 0), 
+            gateKeeperAddress: newAddress(0, 0), 
+            stablecoinMasterAddress: newAddress(0, 0) 
         };
     }
 
@@ -89,8 +77,11 @@ contract GateKeeperContract with Deployable, Ownable {
 
     receive(msg: SetDeps) {
         self.requireOwner();
-        self.deps.stablecoinMasterAddress = msg.stablecoinMasterAddress;
-        self.deps.positionsManagerAddress = msg.positionsManagerAddress;
+        self.deps = Deps{
+            stablecoinMasterAddress: msg.stablecoinMasterAddress,
+            gateKeeperAddress: msg.gateKeeperAddress,
+            positionsManagerAddress: msg.positionsManagerAddress
+        };
         reply("deps set".asComment());
     }
 
@@ -133,12 +124,16 @@ contract GateKeeperContract with Deployable, Ownable {
       _previousDebtAccumulatedRate
     );
     */
-    receive("collectFees"){
+    receive("CollectFees"){
         require(now() > self.debtRate.lastAccumulationTime, "updateDebtAccumulatedRate: Invalid timestamp");
-        let precision = pow(10, 12);
-        self.debtRate.debtAccumulatedRate = self.debtRate.debtAccumulatedRate * rpow(self.poolSettings.stabilityFeeRate, now() - self.debtRate.lastAccumulationTime, precision);
-        self.debtRate.lastAccumulationTime = now();
-        reply("debt rate updated".asComment());
+        let precision: Int = pow(10, 12);
+        let updatedDebtAccumulatedRate: Int = self.debtRate.debtAccumulatedRate * rpow(self.poolSettings.stabilityFeeRate, now() - self.debtRate.lastAccumulationTime, precision);
+        let updatedLastAccumulationTime: Int = now();
+        self.debtRate = DebtRate{
+            debtAccumulatedRate: updatedDebtAccumulatedRate,
+            lastAccumulationTime: updatedLastAccumulationTime
+        };
+       reply("debt rate updated".asComment());
     }
 
     /*
@@ -230,7 +225,7 @@ contract GateKeeperContract with Deployable, Ownable {
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
-            body: WithdrawStablecoinMessage{
+            body: RepayStablecoinMessage{
                 user: msg.user,
                 amount: msg.amount,
                 settings: self.poolSettings,
@@ -375,7 +370,7 @@ contract GateKeeperContract with Deployable, Ownable {
         return myBalance();
     }
 
-    get fun getDeps(): Deps {
+    get fun deps(): Deps {
         return self.deps;
     }
  }

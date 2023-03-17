@@ -128,40 +128,44 @@ cell __gen_writecell_DeployOk((int) v) inline {
 
 builder __gen_write_PoolSettings(builder build_0, (int, int, int) v) inline {
     var (v'liquidationRatio, v'stabilityFeeRate, v'liquidatorIncentiveBps) = v;
-    build_0 = build_0.store_uint(v'liquidationRatio, 32);
-    build_0 = build_0.store_uint(v'stabilityFeeRate, 32);
-    build_0 = build_0.store_uint(v'liquidatorIncentiveBps, 32);
+    build_0 = build_0.store_int(v'liquidationRatio, 257);
+    build_0 = build_0.store_int(v'stabilityFeeRate, 257);
+    build_0 = build_0.store_int(v'liquidatorIncentiveBps, 257);
     return build_0;
 }
 
 (slice, ((int, int, int))) __gen_read_PoolSettings(slice sc_0) inline {
-    var v'liquidationRatio = sc_0~load_uint(32);
-    var v'stabilityFeeRate = sc_0~load_uint(32);
-    var v'liquidatorIncentiveBps = sc_0~load_uint(32);
+    var v'liquidationRatio = sc_0~load_int(257);
+    var v'stabilityFeeRate = sc_0~load_int(257);
+    var v'liquidatorIncentiveBps = sc_0~load_int(257);
     return (sc_0, (v'liquidationRatio, v'stabilityFeeRate, v'liquidatorIncentiveBps));
 }
 
 builder __gen_write_DebtRate(builder build_0, (int, int) v) inline {
     var (v'debtAccumulatedRate, v'lastAccumulationTime) = v;
-    build_0 = build_0.store_uint(v'debtAccumulatedRate, 32);
-    build_0 = build_0.store_uint(v'lastAccumulationTime, 32);
+    build_0 = build_0.store_int(v'debtAccumulatedRate, 257);
+    build_0 = build_0.store_int(v'lastAccumulationTime, 257);
     return build_0;
 }
 
 (slice, ((int, int))) __gen_read_DebtRate(slice sc_0) inline {
-    var v'debtAccumulatedRate = sc_0~load_uint(32);
-    var v'lastAccumulationTime = sc_0~load_uint(32);
+    var v'debtAccumulatedRate = sc_0~load_int(257);
+    var v'lastAccumulationTime = sc_0~load_int(257);
     return (sc_0, (v'debtAccumulatedRate, v'lastAccumulationTime));
 }
 
 builder __gen_write_DepositCollateralMessage(builder build_0, (slice, int, (int, int, int), (int, int), int) v) inline {
     var (v'user, v'amount, (v'settings'liquidationRatio, v'settings'stabilityFeeRate, v'settings'liquidatorIncentiveBps), (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime), v'tonPriceWithSafetyMargin) = v;
-    build_0 = store_uint(build_0, 3932134519, 32);
+    build_0 = store_uint(build_0, 2462180005, 32);
     build_0 = __tact_store_address(build_0, v'user);
     build_0 = build_0.store_coins(v'amount);
-    build_0 = __gen_write_PoolSettings(build_0, (v'settings'liquidationRatio, v'settings'stabilityFeeRate, v'settings'liquidatorIncentiveBps));
-    build_0 = __gen_write_DebtRate(build_0, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime));
-    build_0 = build_0.store_coins(v'tonPriceWithSafetyMargin);
+    var build_1 = begin_cell();
+    build_1 = __gen_write_PoolSettings(build_1, (v'settings'liquidationRatio, v'settings'stabilityFeeRate, v'settings'liquidatorIncentiveBps));
+    var build_2 = begin_cell();
+    build_2 = __gen_write_DebtRate(build_2, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime));
+    build_2 = build_2.store_coins(v'tonPriceWithSafetyMargin);
+    build_1 = store_ref(build_1, build_2.end_cell());
+    build_0 = store_ref(build_0, build_1.end_cell());
     return build_0;
 }
 
@@ -171,12 +175,16 @@ cell __gen_writecell_DepositCollateralMessage((slice, int, (int, int, int), (int
 
 builder __gen_write_WithdrawCollateralMessage(builder build_0, (slice, int, (int, int, int), (int, int), int) v) inline {
     var (v'user, v'amount, (v'settings'liquidationRatio, v'settings'stabilityFeeRate, v'settings'liquidatorIncentiveBps), (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime), v'tonPriceWithSafetyMargin) = v;
-    build_0 = store_uint(build_0, 433324996, 32);
+    build_0 = store_uint(build_0, 2015316053, 32);
     build_0 = __tact_store_address(build_0, v'user);
     build_0 = build_0.store_coins(v'amount);
-    build_0 = __gen_write_PoolSettings(build_0, (v'settings'liquidationRatio, v'settings'stabilityFeeRate, v'settings'liquidatorIncentiveBps));
-    build_0 = __gen_write_DebtRate(build_0, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime));
-    build_0 = build_0.store_coins(v'tonPriceWithSafetyMargin);
+    var build_1 = begin_cell();
+    build_1 = __gen_write_PoolSettings(build_1, (v'settings'liquidationRatio, v'settings'stabilityFeeRate, v'settings'liquidatorIncentiveBps));
+    var build_2 = begin_cell();
+    build_2 = __gen_write_DebtRate(build_2, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime));
+    build_2 = build_2.store_coins(v'tonPriceWithSafetyMargin);
+    build_1 = store_ref(build_1, build_2.end_cell());
+    build_0 = store_ref(build_0, build_1.end_cell());
     return build_0;
 }
 
@@ -186,17 +194,40 @@ cell __gen_writecell_WithdrawCollateralMessage((slice, int, (int, int, int), (in
 
 builder __gen_write_WithdrawStablecoinMessage(builder build_0, (slice, int, (int, int, int), (int, int), int) v) inline {
     var (v'user, v'amount, (v'settings'liquidationRatio, v'settings'stabilityFeeRate, v'settings'liquidatorIncentiveBps), (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime), v'tonPriceWithSafetyMargin) = v;
-    build_0 = store_uint(build_0, 73036137, 32);
+    build_0 = store_uint(build_0, 1345893159, 32);
     build_0 = __tact_store_address(build_0, v'user);
     build_0 = build_0.store_uint(v'amount, 64);
-    build_0 = __gen_write_PoolSettings(build_0, (v'settings'liquidationRatio, v'settings'stabilityFeeRate, v'settings'liquidatorIncentiveBps));
-    build_0 = __gen_write_DebtRate(build_0, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime));
-    build_0 = build_0.store_coins(v'tonPriceWithSafetyMargin);
+    var build_1 = begin_cell();
+    build_1 = __gen_write_PoolSettings(build_1, (v'settings'liquidationRatio, v'settings'stabilityFeeRate, v'settings'liquidatorIncentiveBps));
+    var build_2 = begin_cell();
+    build_2 = __gen_write_DebtRate(build_2, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime));
+    build_2 = build_2.store_coins(v'tonPriceWithSafetyMargin);
+    build_1 = store_ref(build_1, build_2.end_cell());
+    build_0 = store_ref(build_0, build_1.end_cell());
     return build_0;
 }
 
 cell __gen_writecell_WithdrawStablecoinMessage((slice, int, (int, int, int), (int, int), int) v) inline {
     return __gen_write_WithdrawStablecoinMessage(begin_cell(), v).end_cell();
+}
+
+builder __gen_write_RepayStablecoinMessage(builder build_0, (slice, int, (int, int, int), (int, int), int) v) inline {
+    var (v'user, v'amount, (v'settings'liquidationRatio, v'settings'stabilityFeeRate, v'settings'liquidatorIncentiveBps), (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime), v'tonPriceWithSafetyMargin) = v;
+    build_0 = store_uint(build_0, 3058094568, 32);
+    build_0 = __tact_store_address(build_0, v'user);
+    build_0 = build_0.store_uint(v'amount, 64);
+    var build_1 = begin_cell();
+    build_1 = __gen_write_PoolSettings(build_1, (v'settings'liquidationRatio, v'settings'stabilityFeeRate, v'settings'liquidatorIncentiveBps));
+    var build_2 = begin_cell();
+    build_2 = __gen_write_DebtRate(build_2, (v'rate'debtAccumulatedRate, v'rate'lastAccumulationTime));
+    build_2 = build_2.store_coins(v'tonPriceWithSafetyMargin);
+    build_1 = store_ref(build_1, build_2.end_cell());
+    build_0 = store_ref(build_0, build_1.end_cell());
+    return build_0;
+}
+
+cell __gen_writecell_RepayStablecoinMessage((slice, int, (int, int, int), (int, int), int) v) inline {
+    return __gen_write_RepayStablecoinMessage(begin_cell(), v).end_cell();
 }
 
 (slice, ((slice, int))) __gen_read_DoWithdrawCollateralMessage(slice sc_0) inline {
@@ -232,30 +263,40 @@ cell __gen_writecell_WithdrawFeesMessage((slice, int) v) inline {
     return __gen_write_WithdrawFeesMessage(begin_cell(), v).end_cell();
 }
 
-(slice, ((int, int, int))) __gen_read_PoolSettingsMsg(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 164171234);
-    var v'liquidationRatio = sc_0~load_uint(32);
-    var v'stabilityFeeRate = sc_0~load_uint(64);
-    var v'liquidatorIncentiveBps = sc_0~load_uint(32);
-    return (sc_0, (v'liquidationRatio, v'stabilityFeeRate, v'liquidatorIncentiveBps));
+(slice, ((slice, slice, slice))) __gen_read_SetDeps(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3189103484);
+    var v'positionsManagerAddress = sc_0~__tact_load_address();
+    var v'gateKeeperAddress = sc_0~__tact_load_address();
+    var v'stablecoinMasterAddress = sc_0~__tact_load_address();
+    return (sc_0, (v'positionsManagerAddress, v'gateKeeperAddress, v'stablecoinMasterAddress));
 }
 
-builder __gen_write_Deps(builder build_0, (slice, slice) v) inline {
-    var (v'stablecoinMasterAddress, v'positionsManagerAddress) = v;
-    build_0 = __tact_store_address(build_0, v'stablecoinMasterAddress);
+builder __gen_write_Deps(builder build_0, (slice, slice, slice) v) inline {
+    var (v'positionsManagerAddress, v'gateKeeperAddress, v'stablecoinMasterAddress) = v;
     build_0 = __tact_store_address(build_0, v'positionsManagerAddress);
+    build_0 = __tact_store_address(build_0, v'gateKeeperAddress);
+    build_0 = __tact_store_address(build_0, v'stablecoinMasterAddress);
     return build_0;
 }
 
-(slice, ((slice, slice))) __gen_read_Deps(slice sc_0) inline {
-    var v'stablecoinMasterAddress = sc_0~__tact_load_address();
+(slice, ((slice, slice, slice))) __gen_read_Deps(slice sc_0) inline {
     var v'positionsManagerAddress = sc_0~__tact_load_address();
-    return (sc_0, (v'stablecoinMasterAddress, v'positionsManagerAddress));
+    var v'gateKeeperAddress = sc_0~__tact_load_address();
+    var v'stablecoinMasterAddress = sc_0~__tact_load_address();
+    return (sc_0, (v'positionsManagerAddress, v'gateKeeperAddress, v'stablecoinMasterAddress));
+}
+
+(slice, ((int, int, int))) __gen_read_PoolSettingsMsg(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1552702987);
+    var v'liquidationRatio = sc_0~load_int(257);
+    var v'stabilityFeeRate = sc_0~load_int(257);
+    var v'liquidatorIncentiveBps = sc_0~load_int(257);
+    return (sc_0, (v'liquidationRatio, v'stabilityFeeRate, v'liquidatorIncentiveBps));
 }
 
 (slice, ((int))) __gen_read_UpdateTonPriceMsg(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 219265725);
-    var v'price = sc_0~load_uint(32);
+    throw_unless(129, sc_0~load_uint(32) == 1857177663);
+    var v'price = sc_0~load_coins();
     return (sc_0, (v'price));
 }
 
@@ -287,40 +328,42 @@ builder __gen_write_Deps(builder build_0, (slice, slice) v) inline {
     return (sc_0, (v'user, v'amount));
 }
 
-(slice, ((slice, slice))) __gen_read_SetDeps(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1512759282);
-    var v'stablecoinMasterAddress = sc_0~__tact_load_address();
-    var v'positionsManagerAddress = sc_0~__tact_load_address();
-    return (sc_0, (v'stablecoinMasterAddress, v'positionsManagerAddress));
-}
-
-builder __gen_write_GateKeeperContract(builder build_0, ((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) v) inline {
-    var ((v'deps'stablecoinMasterAddress, v'deps'positionsManagerAddress), v'owner, (v'poolSettings'liquidationRatio, v'poolSettings'stabilityFeeRate, v'poolSettings'liquidatorIncentiveBps), v'tonPrice, v'tonPriceWithSafetyMargin, (v'debtRate'debtAccumulatedRate, v'debtRate'lastAccumulationTime), v'totalCollateralAmount, v'stablecoinsIssued, v'totalFeesCollected) = v;
-    build_0 = __gen_write_Deps(build_0, (v'deps'stablecoinMasterAddress, v'deps'positionsManagerAddress));
-    build_0 = __tact_store_address(build_0, v'owner);
-    build_0 = __gen_write_PoolSettings(build_0, (v'poolSettings'liquidationRatio, v'poolSettings'stabilityFeeRate, v'poolSettings'liquidatorIncentiveBps));
-    build_0 = build_0.store_uint(v'tonPrice, 32);
-    build_0 = build_0.store_uint(v'tonPriceWithSafetyMargin, 32);
+builder __gen_write_GateKeeperContract(builder build_0, ((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) v) inline {
+    var ((v'deps'positionsManagerAddress, v'deps'gateKeeperAddress, v'deps'stablecoinMasterAddress), v'owner, (v'poolSettings'liquidationRatio, v'poolSettings'stabilityFeeRate, v'poolSettings'liquidatorIncentiveBps), v'tonPrice, v'tonPriceWithSafetyMargin, (v'debtRate'debtAccumulatedRate, v'debtRate'lastAccumulationTime), v'totalCollateralAmount, v'stablecoinsIssued, v'totalFeesCollected) = v;
+    build_0 = __gen_write_Deps(build_0, (v'deps'positionsManagerAddress, v'deps'gateKeeperAddress, v'deps'stablecoinMasterAddress));
     var build_1 = begin_cell();
-    build_1 = __gen_write_DebtRate(build_1, (v'debtRate'debtAccumulatedRate, v'debtRate'lastAccumulationTime));
-    build_1 = build_1.store_coins(v'totalCollateralAmount);
-    build_1 = build_1.store_coins(v'stablecoinsIssued);
-    build_1 = build_1.store_coins(v'totalFeesCollected);
+    build_1 = __tact_store_address(build_1, v'owner);
+    var build_2 = begin_cell();
+    build_2 = __gen_write_PoolSettings(build_2, (v'poolSettings'liquidationRatio, v'poolSettings'stabilityFeeRate, v'poolSettings'liquidatorIncentiveBps));
+    build_2 = build_2.store_uint(v'tonPrice, 32);
+    var build_3 = begin_cell();
+    build_3 = build_3.store_int(v'tonPriceWithSafetyMargin, 257);
+    build_3 = __gen_write_DebtRate(build_3, (v'debtRate'debtAccumulatedRate, v'debtRate'lastAccumulationTime));
+    build_3 = build_3.store_coins(v'totalCollateralAmount);
+    build_3 = build_3.store_coins(v'stablecoinsIssued);
+    var build_4 = begin_cell();
+    build_4 = build_4.store_coins(v'totalFeesCollected);
+    build_3 = store_ref(build_3, build_4.end_cell());
+    build_2 = store_ref(build_2, build_3.end_cell());
+    build_1 = store_ref(build_1, build_2.end_cell());
     build_0 = store_ref(build_0, build_1.end_cell());
     return build_0;
 }
 
-(slice, (((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int))) __gen_read_GateKeeperContract(slice sc_0) inline {
+(slice, (((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int))) __gen_read_GateKeeperContract(slice sc_0) inline {
     var v'deps = sc_0~__gen_read_Deps();
-    var v'owner = sc_0~__tact_load_address();
-    var v'poolSettings = sc_0~__gen_read_PoolSettings();
-    var v'tonPrice = sc_0~load_uint(32);
-    var v'tonPriceWithSafetyMargin = sc_0~load_uint(32);
     slice sc_1 = sc_0~load_ref().begin_parse();
-    var v'debtRate = sc_1~__gen_read_DebtRate();
-    var v'totalCollateralAmount = sc_1~load_coins();
-    var v'stablecoinsIssued = sc_1~load_coins();
-    var v'totalFeesCollected = sc_1~load_coins();
+    var v'owner = sc_1~__tact_load_address();
+    slice sc_2 = sc_1~load_ref().begin_parse();
+    var v'poolSettings = sc_2~__gen_read_PoolSettings();
+    var v'tonPrice = sc_2~load_uint(32);
+    slice sc_3 = sc_2~load_ref().begin_parse();
+    var v'tonPriceWithSafetyMargin = sc_3~load_int(257);
+    var v'debtRate = sc_3~__gen_read_DebtRate();
+    var v'totalCollateralAmount = sc_3~load_coins();
+    var v'stablecoinsIssued = sc_3~load_coins();
+    slice sc_4 = sc_3~load_ref().begin_parse();
+    var v'totalFeesCollected = sc_4~load_coins();
     return (sc_0, (v'deps, v'owner, v'poolSettings, v'tonPrice, v'tonPriceWithSafetyMargin, v'debtRate, v'totalCollateralAmount, v'stablecoinsIssued, v'totalFeesCollected));
 }
 
@@ -339,9 +382,9 @@ _ __gen_Context_get_value((int, slice, int, slice) v) inline {
     return (v'debtAccumulatedRate, v'lastAccumulationTime);
 }
 
-(slice, slice) __gen_Deps_to_external(((slice, slice)) v) inline {
-    var (v'stablecoinMasterAddress, v'positionsManagerAddress) = v; 
-    return (v'stablecoinMasterAddress, v'positionsManagerAddress);
+(slice, slice, slice) __gen_Deps_to_external(((slice, slice, slice)) v) inline {
+    var (v'positionsManagerAddress, v'gateKeeperAddress, v'stablecoinMasterAddress) = v; 
+    return (v'positionsManagerAddress, v'gateKeeperAddress, v'stablecoinMasterAddress);
 }
 
 ((int, int, int)) __gen_constructor_PoolSettings$liquidationRatio_stabilityFeeRate_liquidatorIncentiveBps(int liquidationRatio, int stabilityFeeRate, int liquidatorIncentiveBps) inline {
@@ -352,22 +395,22 @@ _ __gen_Context_get_value((int, slice, int, slice) v) inline {
     return (debtAccumulatedRate, lastAccumulationTime);
 }
 
-((slice, slice)) __gen_constructor_Deps$stablecoinMasterAddress_positionsManagerAddress(slice stablecoinMasterAddress, slice positionsManagerAddress) inline {
-    return (stablecoinMasterAddress, positionsManagerAddress);
+((slice, slice, slice)) __gen_constructor_Deps$positionsManagerAddress_gateKeeperAddress_stablecoinMasterAddress(slice positionsManagerAddress, slice gateKeeperAddress, slice stablecoinMasterAddress) inline {
+    return (positionsManagerAddress, gateKeeperAddress, stablecoinMasterAddress);
 }
 
-((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $__gen_GateKeeperContract_init() impure inline_ref {
-    var ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = (null(), null(), null(), null(), null(), null(), 0, 0, 0);
+((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $__gen_GateKeeperContract_init() impure inline_ref {
+    var ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = (null(), null(), null(), null(), null(), null(), 0, 0, 0);
     $self'owner = __tact_context_get_sender();
     ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps) = __gen_constructor_PoolSettings$liquidationRatio_stabilityFeeRate_liquidatorIncentiveBps(0, 0, 0);
     $self'tonPrice = 0;
     $self'tonPriceWithSafetyMargin = 0;
-    ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime) = __gen_constructor_DebtRate$debtAccumulatedRate_lastAccumulationTime(1000000000, now());
-    ($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress) = __gen_constructor_Deps$stablecoinMasterAddress_positionsManagerAddress(__tact_create_address(0, 0), __tact_create_address(0, 0));
-    return (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected);
+    ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime) = __gen_constructor_DebtRate$debtAccumulatedRate_lastAccumulationTime(1000000000, (now() - 1000));
+    ($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress) = __gen_constructor_Deps$positionsManagerAddress_gateKeeperAddress_stablecoinMasterAddress(__tact_create_address(0, 0), __tact_create_address(0, 0), __tact_create_address(0, 0));
+    return (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected);
 }
 
-((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) __gen_load_GateKeeperContract() impure inline {
+((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) __gen_load_GateKeeperContract() impure inline {
     slice $sc = get_data().begin_parse();
     __tact_context_sys = $sc~load_ref();
     int $loaded = $sc~load_int(1);
@@ -380,7 +423,7 @@ _ __gen_Context_get_value((int, slice, int, slice) v) inline {
     }
 }
 
-() __gen_store_GateKeeperContract(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) v) impure inline {
+() __gen_store_GateKeeperContract(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) v) impure inline {
     builder b = begin_cell();
     b = b.store_ref(__tact_context_sys);
     b = b.store_int(true, 1);
@@ -451,8 +494,24 @@ slice __gen_str_824082692() asm "B{b5ee9c724101010100130000226465627420726174652
     $send(__gen_constructor_SendParameters$bounce_to_value_mode_body(true, __tact_context_get_sender(), 0, (64 + 2), $body));
 }
 
-int $rpow(int $x, int $n) impure inline_ref {
-    int $z = 1000000000000000000000000000;
+int $rpow(int $x, int $n, int $precision) impure inline_ref {
+    int $z = 0;
+    if ((($n % 2) == 0)) {
+        $z = $precision;
+    } else {
+        $z = $x;
+    }
+    int $half = ($precision / 2);
+    while ((($n / 2) > 0)) {
+        int $xx = ($x * $x);
+        int $xxRound = ($xx + $half);
+        $x = ($xxRound / $precision);
+        if ((($x % 2) == 0)) {
+            int $zx = ($z * $x);
+            int $zxRound = ($zx + $half);
+            $z = ($zxRound / $precision);
+        }
+    }
     return $z;
 }
 
@@ -471,12 +530,8 @@ cell $__gen_String_asComment(slice $self) impure inline_ref {
     return (bounce, to, value, mode, body, null(), null());
 }
 
-((int)) __gen_constructor_DeployOk$queryId(int queryId) inline {
-    return (queryId);
-}
-
-(int, int, int) $__gen_GateKeeperContract_poolSettings(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
-    var ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
+(int, int, int) $__gen_GateKeeperContract_poolSettings(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
+    var ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
     return ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps);
 }
 
@@ -486,8 +541,8 @@ _ $__gen_get_poolSettings() method_id(88360) {
     return __gen_PoolSettings_to_external(res);
 }
 
-int $__gen_GateKeeperContract_tonPrice(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
-    var ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
+int $__gen_GateKeeperContract_tonPrice(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
+    var ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
     return $self'tonPrice;
 }
 
@@ -497,8 +552,8 @@ _ $__gen_get_tonPrice() method_id(99462) {
     return res;
 }
 
-int $__gen_GateKeeperContract_tonPriceWithSafetyMargin(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
-    var ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
+int $__gen_GateKeeperContract_tonPriceWithSafetyMargin(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
+    var ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
     return $self'tonPriceWithSafetyMargin;
 }
 
@@ -508,8 +563,8 @@ _ $__gen_get_tonPriceWithSafetyMargin() method_id(91653) {
     return res;
 }
 
-(int, int) $__gen_GateKeeperContract_debtRate(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
-    var ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
+(int, int) $__gen_GateKeeperContract_debtRate(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
+    var ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
     return ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime);
 }
 
@@ -519,8 +574,8 @@ _ $__gen_get_debtRate() method_id(115750) {
     return __gen_DebtRate_to_external(res);
 }
 
-int $__gen_GateKeeperContract_stablecoinsIssued(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
-    var ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
+int $__gen_GateKeeperContract_stablecoinsIssued(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
+    var ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
     return $self'stablecoinsIssued;
 }
 
@@ -530,8 +585,8 @@ _ $__gen_get_stablecoinsIssued() method_id(99026) {
     return res;
 }
 
-int $__gen_GateKeeperContract_totalCollateralAmount(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
-    var ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
+int $__gen_GateKeeperContract_totalCollateralAmount(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
+    var ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
     return $self'totalCollateralAmount;
 }
 
@@ -541,8 +596,8 @@ _ $__gen_get_totalCollateralAmount() method_id(96653) {
     return res;
 }
 
-int $__gen_GateKeeperContract_getBalance(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
-    var ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
+int $__gen_GateKeeperContract_getBalance(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
+    var ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
     return __tact_my_balance();
 }
 
@@ -552,25 +607,25 @@ _ $__gen_get_getBalance() method_id(106323) {
     return res;
 }
 
-(slice, slice) $__gen_GateKeeperContract_getDeps(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
-    var ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
-    return ($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress);
+(slice, slice, slice) $__gen_GateKeeperContract_deps(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
+    var ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
+    return ($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress);
 }
 
-_ $__gen_get_getDeps() method_id(110748) {
+_ $__gen_get_deps() method_id(107797) {
     var self = __gen_load_GateKeeperContract();
-    var res = $__gen_GateKeeperContract_getDeps(self);
+    var res = $__gen_GateKeeperContract_deps(self);
     return __gen_Deps_to_external(res);
 }
 
-(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int), ()) $__gen_GateKeeperContract_requireOwner(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
-    var ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
+(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int), ()) $__gen_GateKeeperContract_requireOwner(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
+    var ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
     throw_unless(132, __tact_address_eq(__tact_context_get_sender(), $self'owner));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
-slice $__gen_GateKeeperContract_owner(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
-    var ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
+slice $__gen_GateKeeperContract_owner(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline_ref {
+    var ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)) = $self;
     return $self'owner;
 }
 
@@ -580,43 +635,47 @@ _ $__gen_get_owner() method_id(83229) {
     return res;
 }
 
-((((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_SetDeps(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, slice) $msg) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
-    var ($msg'stablecoinMasterAddress, $msg'positionsManagerAddress) = $msg;
-    (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)~$__gen_GateKeeperContract_requireOwner();
-    $self'deps'stablecoinMasterAddress = $msg'stablecoinMasterAddress;
-    $self'deps'positionsManagerAddress = $msg'positionsManagerAddress;
-    $reply($__gen_String_asComment(__gen_str_176689727()));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+((slice, slice, slice)) __gen_constructor_Deps$stablecoinMasterAddress_gateKeeperAddress_positionsManagerAddress(slice stablecoinMasterAddress, slice gateKeeperAddress, slice positionsManagerAddress) inline {
+    return (positionsManagerAddress, gateKeeperAddress, stablecoinMasterAddress);
 }
 
-((((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_PoolSettingsMsg(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (int, int, int) $msg) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+((((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_SetDeps(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, slice, slice) $msg) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+    var ($msg'positionsManagerAddress, $msg'gateKeeperAddress, $msg'stablecoinMasterAddress) = $msg;
+    (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)~$__gen_GateKeeperContract_requireOwner();
+    ($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress) = __gen_constructor_Deps$stablecoinMasterAddress_gateKeeperAddress_positionsManagerAddress($msg'stablecoinMasterAddress, $msg'gateKeeperAddress, $msg'positionsManagerAddress);
+    $reply($__gen_String_asComment(__gen_str_176689727()));
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+}
+
+((((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_PoolSettingsMsg(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (int, int, int) $msg) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
     var ($msg'liquidationRatio, $msg'stabilityFeeRate, $msg'liquidatorIncentiveBps) = $msg;
-    (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)~$__gen_GateKeeperContract_requireOwner();
+    (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)~$__gen_GateKeeperContract_requireOwner();
     ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps) = __gen_constructor_PoolSettings$liquidationRatio_stabilityFeeRate_liquidatorIncentiveBps($msg'liquidationRatio, $msg'stabilityFeeRate, $msg'liquidatorIncentiveBps);
     $reply($__gen_String_asComment(__gen_str_3084908337()));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
-((((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_UpdateTonPriceMsg(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (int) $msg) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+((((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_UpdateTonPriceMsg(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (int) $msg) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
     var ($msg'price) = $msg;
-    (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)~$__gen_GateKeeperContract_requireOwner();
+    (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)~$__gen_GateKeeperContract_requireOwner();
     $self'tonPriceWithSafetyMargin = (($msg'price * 1000000000) / $self'poolSettings'liquidationRatio);
     $self'tonPrice = $msg'price;
     $reply($__gen_String_asComment(__gen_str_2494513317()));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
-(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int), ()) $__gen_GateKeeperContract_receive_comment_098326c3bf83cbcd5017033fa0bf3d9c6d461897bba0345c5c7278c6313ad94b(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
-    (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)~$__gen_GateKeeperContract_requireOwner();
-    throw_unless(32589, ((now() + 1000) > $self'debtRate'lastAccumulationTime));
-    $self'debtRate'debtAccumulatedRate = (($self'debtRate'debtAccumulatedRate * $rpow($self'poolSettings'stabilityFeeRate, (now() - $self'debtRate'lastAccumulationTime))) * 1000000000000000000000000000);
-    $self'debtRate'lastAccumulationTime = now();
+(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int), ()) $__gen_GateKeeperContract_receive_comment_b57e041f0e10002898fbbae8af662b5bc66cf6e68fc6c430fc30a4cb3b422b96(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+    throw_unless(61017, (now() > $self'debtRate'lastAccumulationTime));
+    int $precision = 1000000000000;
+    int $updatedDebtAccumulatedRate = ($self'debtRate'debtAccumulatedRate * $rpow($self'poolSettings'stabilityFeeRate, (now() - $self'debtRate'lastAccumulationTime), $precision));
+    int $updatedLastAccumulationTime = now();
+    ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime) = __gen_constructor_DebtRate$debtAccumulatedRate_lastAccumulationTime($updatedDebtAccumulatedRate, $updatedLastAccumulationTime);
     $reply($__gen_String_asComment(__gen_str_824082692()));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
 ((int, slice, int, int, cell, cell, cell)) __gen_constructor_SendParameters$to_bounce_value_mode_body(slice to, int bounce, int value, int mode, cell body) inline {
@@ -627,102 +686,110 @@ _ $__gen_get_owner() method_id(83229) {
     return (to, amount);
 }
 
-(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int), ()) $__gen_GateKeeperContract_receive_comment_3a1232dd99a1f3b4e586ff8276e7c53a35e5fd6718f77c5fc5ed815847addd3f(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
-    (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)~$__gen_GateKeeperContract_requireOwner();
+(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int), ()) $__gen_GateKeeperContract_receive_comment_3a1232dd99a1f3b4e586ff8276e7c53a35e5fd6718f77c5fc5ed815847addd3f(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+    (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected)~$__gen_GateKeeperContract_requireOwner();
     throw_unless(60380, ($self'totalFeesCollected > 0));
     $send(__gen_constructor_SendParameters$to_bounce_value_mode_body(__tact_context_get_sender(), false, 0, (64 + 2), __gen_writecell_WithdrawFeesMessage(__gen_constructor_WithdrawFeesMessage$to_amount(__tact_context_get_sender(), $self'totalFeesCollected))));
     $self'totalFeesCollected = 0;
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
 ((slice, int, (int, int, int), (int, int), int)) __gen_constructor_DepositCollateralMessage$user_amount_settings_rate_tonPriceWithSafetyMargin(slice user, int amount, (int, int, int) settings, (int, int) rate, int tonPriceWithSafetyMargin) inline {
     return (user, amount, settings, rate, tonPriceWithSafetyMargin);
 }
 
-((((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_DepositCollateralUserMessage(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+((((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_DepositCollateralUserMessage(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
     var ($msg'user, $msg'amount) = $msg;
     throw_unless(4429, __tact_address_eq(__tact_context_get_sender(), $msg'user));
     throw_unless(23932, (__gen_Context_get_value(__tact_context_get()) >= (($msg'amount + 10000000) + 10000000)));
     int $valueToSendForward = (((__gen_Context_get_value(__tact_context_get()) - 10000000) - 10000000) - $msg'amount);
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'deps'positionsManagerAddress, $valueToSendForward, 2, true, __gen_writecell_DepositCollateralMessage(__gen_constructor_DepositCollateralMessage$user_amount_settings_rate_tonPriceWithSafetyMargin($msg'user, $msg'amount, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'tonPriceWithSafetyMargin))));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
 ((slice, int, (int, int, int), (int, int), int)) __gen_constructor_WithdrawStablecoinMessage$user_amount_settings_rate_tonPriceWithSafetyMargin(slice user, int amount, (int, int, int) settings, (int, int) rate, int tonPriceWithSafetyMargin) inline {
     return (user, amount, settings, rate, tonPriceWithSafetyMargin);
 }
 
-((((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_WithdrawStablecoinUserMessage(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+((((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_WithdrawStablecoinUserMessage(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
     var ($msg'user, $msg'amount) = $msg;
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'deps'positionsManagerAddress, 0, (64 + 2), true, __gen_writecell_WithdrawStablecoinMessage(__gen_constructor_WithdrawStablecoinMessage$user_amount_settings_rate_tonPriceWithSafetyMargin($msg'user, $msg'amount, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'tonPriceWithSafetyMargin))));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
-((((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_RepayStablecoinUserMessage(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+((slice, int, (int, int, int), (int, int), int)) __gen_constructor_RepayStablecoinMessage$user_amount_settings_rate_tonPriceWithSafetyMargin(slice user, int amount, (int, int, int) settings, (int, int) rate, int tonPriceWithSafetyMargin) inline {
+    return (user, amount, settings, rate, tonPriceWithSafetyMargin);
+}
+
+((((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_RepayStablecoinUserMessage(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
     var ($msg'user, $msg'amount) = $msg;
-    $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'deps'positionsManagerAddress, 0, (64 + 2), true, __gen_writecell_WithdrawStablecoinMessage(__gen_constructor_WithdrawStablecoinMessage$user_amount_settings_rate_tonPriceWithSafetyMargin($msg'user, $msg'amount, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'tonPriceWithSafetyMargin))));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'deps'positionsManagerAddress, 0, (64 + 2), true, __gen_writecell_RepayStablecoinMessage(__gen_constructor_RepayStablecoinMessage$user_amount_settings_rate_tonPriceWithSafetyMargin($msg'user, $msg'amount, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'tonPriceWithSafetyMargin))));
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
 ((slice, int, (int, int, int), (int, int), int)) __gen_constructor_WithdrawCollateralMessage$user_amount_settings_rate_tonPriceWithSafetyMargin(slice user, int amount, (int, int, int) settings, (int, int) rate, int tonPriceWithSafetyMargin) inline {
     return (user, amount, settings, rate, tonPriceWithSafetyMargin);
 }
 
-((((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_WithdrawCollateralUserMessage(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+((((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_WithdrawCollateralUserMessage(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
     var ($msg'user, $msg'amount) = $msg;
     throw_unless(41207, __tact_address_eq(__tact_context_get_sender(), $msg'user));
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'deps'positionsManagerAddress, 0, (64 + 2), true, __gen_writecell_WithdrawCollateralMessage(__gen_constructor_WithdrawCollateralMessage$user_amount_settings_rate_tonPriceWithSafetyMargin($msg'user, $msg'amount, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'tonPriceWithSafetyMargin))));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
-((((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_DoWithdrawCollateralMessage(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+((((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_DoWithdrawCollateralMessage(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
     var ($msg'user, $msg'amount) = $msg;
     throw_unless(41207, __tact_address_eq(__tact_context_get_sender(), $self'deps'positionsManagerAddress));
     throw_unless(47204, (($self'totalCollateralAmount - $msg'amount) >= 0));
     $self'totalCollateralAmount = ($self'totalCollateralAmount - $msg'amount);
     $send(__gen_constructor_SendParameters$to_bounce_value_mode($msg'user, false, $msg'amount, (64 + 2)));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
-((((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_DecreaseTotalStableMessage(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+((((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_DecreaseTotalStableMessage(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
     var ($msg'user, $msg'amount) = $msg;
     throw_unless(41207, __tact_address_eq(__tact_context_get_sender(), $self'deps'positionsManagerAddress));
     $self'stablecoinsIssued = ($self'stablecoinsIssued - $msg'amount);
     $send(__gen_constructor_SendParameters$to_bounce_value_mode($msg'user, false, 0, (64 + 2)));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
-((((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_IncreaseTotalStableMessage(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+((((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_IncreaseTotalStableMessage(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (slice, int) $msg) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
     var ($msg'user, $msg'amount) = $msg;
     throw_unless(41207, __tact_address_eq(__tact_context_get_sender(), $self'deps'positionsManagerAddress));
     $self'stablecoinsIssued = ($self'stablecoinsIssued + $msg'amount);
     $send(__gen_constructor_SendParameters$to_bounce_value_mode($msg'user, false, 0, (64 + 2)));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
-(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int), ()) $__gen_GateKeeperContract_receive_comment_8186637db46dfb34bf098cf6ab5da36b3794b4a6f20b2c3688214b2fb575249e(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int), ()) $__gen_GateKeeperContract_receive_comment_8186637db46dfb34bf098cf6ab5da36b3794b4a6f20b2c3688214b2fb575249e(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
     throw_unless(41207, __tact_address_eq(__tact_context_get_sender(), $self'owner));
     $send(__gen_constructor_SendParameters$to_bounce_value_mode(__tact_context_get_sender(), false, ((__tact_my_balance() - __gen_Context_get_value(__tact_context_get())) - 10000000), (64 + 2)));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
-((((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_Deploy(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (int) $deploy) impure inline {
-    var (($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
+((int)) __gen_constructor_DeployOk$queryId(int queryId) inline {
+    return (queryId);
+}
+
+((((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int)), ()) $__gen_GateKeeperContract_receive_Deploy(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) $self, (int) $deploy) impure inline {
+    var (($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected) = $self;
     var ($deploy'queryId) = $deploy;
     $reply(__gen_writecell_DeployOk(__gen_constructor_DeployOk$queryId($deploy'queryId)));
-    return ((($self'deps'stablecoinMasterAddress, $self'deps'positionsManagerAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
+    return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }
 
-(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int), int) __gen_router_GateKeeperContract(((slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) self, int msg_bounced, slice in_msg) impure inline_ref {
+(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int), int) __gen_router_GateKeeperContract(((slice, slice, slice), slice, (int, int, int), int, int, (int, int), int, int, int) self, int msg_bounced, slice in_msg) impure inline_ref {
     
     ;; Parse incoming message
     int op = 0;
@@ -736,21 +803,21 @@ _ $__gen_get_owner() method_id(83229) {
     }
     
     ;; Receive SetDeps message
-    if (op == 1512759282) {
+    if (op == 3189103484) {
         var msg = in_msg~__gen_read_SetDeps();
         self~$__gen_GateKeeperContract_receive_SetDeps(msg);
         return (self, true);
     }
     
     ;; Receive PoolSettingsMsg message
-    if (op == 164171234) {
+    if (op == 1552702987) {
         var msg = in_msg~__gen_read_PoolSettingsMsg();
         self~$__gen_GateKeeperContract_receive_PoolSettingsMsg(msg);
         return (self, true);
     }
     
     ;; Receive UpdateTonPriceMsg message
-    if (op == 219265725) {
+    if (op == 1857177663) {
         var msg = in_msg~__gen_read_UpdateTonPriceMsg();
         self~$__gen_GateKeeperContract_receive_UpdateTonPriceMsg(msg);
         return (self, true);
@@ -816,9 +883,9 @@ _ $__gen_get_owner() method_id(83229) {
     if (op == 0) {
         var text_op = slice_hash(in_msg);
         
-        ;; Receive "updateDebtRate" message
-        if (text_op == 0x098326c3bf83cbcd5017033fa0bf3d9c6d461897bba0345c5c7278c6313ad94b) {
-            self~$__gen_GateKeeperContract_receive_comment_098326c3bf83cbcd5017033fa0bf3d9c6d461897bba0345c5c7278c6313ad94b();
+        ;; Receive "CollectFees" message
+        if (text_op == 0xb57e041f0e10002898fbbae8af662b5bc66cf6e68fc6c430fc30a4cb3b422b96) {
+            self~$__gen_GateKeeperContract_receive_comment_b57e041f0e10002898fbbae8af662b5bc66cf6e68fc6c430fc30a4cb3b422b96();
             return (self, true);
         }
         
@@ -873,7 +940,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmZP984ia3D3bMko5uNTEfToQqGHibpdLcrAvo3r4BrpfK";
+    return "ipfs://Qmcs4WHRrvumqr2k5gH65MuEMpxTLdubJY7nD64FBmwZvu";
 }
 
 _ lazy_deployment_completed() {

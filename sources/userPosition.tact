@@ -1,4 +1,3 @@
-import "@stdlib/deploy";
 import "./messages";
 
 struct PositionState {
@@ -11,7 +10,7 @@ struct Message {
     message: String;
 }
 
-contract UserPositionContract with Deployable {
+contract UserPositionContract  {
 
     const MinTonsForStorage: Int = ton("0.01");
 
@@ -19,7 +18,7 @@ contract UserPositionContract with Deployable {
     stablecoinMasterAddress: Address;
     positionsManagerAddress: Address;
     collateral: Int as coins = 0;
-    debt: Int as uint64 = 0;
+    debt: Int = 0;
     message: Message;
 
     init(user: Address, stablecoinMasterAddress: Address, positionsManagerAddress: Address) {
@@ -27,11 +26,11 @@ contract UserPositionContract with Deployable {
         self.stablecoinMasterAddress = stablecoinMasterAddress;
         self.positionsManagerAddress = positionsManagerAddress;
         self.message = Message{
-            timestamp: now(),
+            timestamp: 0,
             message: "Position Created"
         };
 
-        // register this position, setting new positionId to it
+        // register this position in positionsManager
         send(SendParameters{
             to: self.positionsManagerAddress, 
             // how much we should send to this contract? 
@@ -65,6 +64,7 @@ contract UserPositionContract with Deployable {
         // todo check if position healthy
         // todo if unhealthy - user can not do anything, hence we need to pay collateral back from gatekeeper to sender 
         self.collateral = self.collateral + msg.amount;
+        self.setMessage("Collateral added");
 
         // pay excess to user
         send(SendParameters{
@@ -73,8 +73,6 @@ contract UserPositionContract with Deployable {
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors
         });
-
-        self.setMessage("Collateral added");
     }
 
 
@@ -114,12 +112,10 @@ contract UserPositionContract with Deployable {
     receive(msg: WithdrawStablecoinMessage) {
         require(sender() == self.positionsManagerAddress, "not from positionsManager");
 
-        // todo check if position healthy
-
-        let debtAfterWithdraw: Int = self.debt * msg.rate.debtAccumulatedRate + msg.amount;
+        let normalizedWithdrawDebt: Int = msg.amount * 1000000000 / msg.rate.debtAccumulatedRate;
+        let debtAfterWithdraw: Int = self.debt + normalizedWithdrawDebt;
         // dump("debtAfterWithdraw");
         // dump(debtAfterWithdraw);
-        
 
         if (!self.isPositionHealthy(self.collateral, debtAfterWithdraw, msg.tonPriceWithSafetyMargin, msg.rate.debtAccumulatedRate)){
             self.setMessage("position will not be healthy");
@@ -148,6 +144,9 @@ contract UserPositionContract with Deployable {
             }.toCell()
         });
 
+        self.debt = debtAfterWithdraw;
+        self.setMessage("Stablecoins sent");
+
         // todo move this send after successfull stable mint notification
         send(SendParameters{
             to: self.positionsManagerAddress, 
@@ -160,8 +159,7 @@ contract UserPositionContract with Deployable {
             }.toCell()
         });
 
-        self.debt = self.debt + msg.amount * 1000000000 / msg.rate.debtAccumulatedRate;
-        self.setMessage("Stablecoins sent");
+
     }
 
     /*
@@ -179,13 +177,29 @@ contract UserPositionContract with Deployable {
 
         let amountToBurn: Int = msg.amount;
 
-        let factDebt: Int = self.debt * msg.rate.debtAccumulatedRate / 1000000000;
+        let factDebtInStables: Int = self.debt * msg.rate.debtAccumulatedRate / 1000000000;
+
+        // if position healthy now?
+        if (!self.isPositionHealthy(self.collateral, self.debt, msg.tonPriceWithSafetyMargin, msg.rate.debtAccumulatedRate)){
+            self.setMessage("position is not healthy");
+            // pay excess to user
+            send(SendParameters{
+                to: msg.user,
+                bounce: false,
+                value: 0,
+                mode: SendRemainingValue + SendIgnoreErrors
+            });
+
+            return;
+        } 
 
         // todo add bounced handler in sender to pay ctx.value back to sender
-        if (factDebt < msg.amount) {
+        if (factDebtInStables < msg.amount) {
             self.setMessage("Your debt is less than you want to repay, charge sent back");
-            amountToBurn = factDebt;
+            amountToBurn = factDebtInStables;
         }
+
+        self.setMessage("stables are going to burn...");
 
         send(SendParameters{
             to: self.stablecoinMasterAddress, 
@@ -195,11 +209,10 @@ contract UserPositionContract with Deployable {
             body: RepayBurnMessage{
                 user: msg.user,
                 amount: amountToBurn,
-                rate: msg.rate
+                rate: msg.rate,
+                userPosition: myAddress()
             }.toCell()
         });
-
-        self.setMessage("stables are going to WithdrawCollateralMessageburn...");
 
     }
 
@@ -209,9 +222,14 @@ contract UserPositionContract with Deployable {
         decrease position debt
     */
     receive(msg: StablecoinBurnedMessage) {
+       
         require(sender() == self.stablecoinMasterAddress, "not from stablecoin master");
 
         // todo check if debt still more than repayment
+
+        self.debt = self.debt - msg.amount * 1000000000 / msg.rate.debtAccumulatedRate;
+
+        self.setMessage("you've paid stables back");
 
         send(SendParameters{
             to: self.positionsManagerAddress, 
@@ -222,11 +240,7 @@ contract UserPositionContract with Deployable {
                 user: msg.user,
                 amount: msg.amount
             }.toCell()
-        });
-
-        self.debt = self.debt - msg.amount * 1000000000 / msg.rate.debtAccumulatedRate;
-
-        self.setMessage("you've paid stables back");
+        }); 
         
     }
 
@@ -290,18 +304,18 @@ contract UserPositionContract with Deployable {
     }
 
 
-    get fun getPositionUser(): Address {
+    get fun positionUser(): Address {
         return self.user;
     }
 
-    get fun getPositionState(): PositionState  {
+    get fun positionState(): PositionState  {
         return PositionState{
             collateral: self.collateral,
             debt: self.debt
         };
     }
 
-    get fun getMessage(): Message {
+    get fun message(): Message {
         return self.message;
     }
 

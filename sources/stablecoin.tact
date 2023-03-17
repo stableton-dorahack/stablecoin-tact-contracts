@@ -1,42 +1,42 @@
-import "./master";
-import "./wallet";
+import "./UserPosition";
+import "./stablecoinMaster";
+import "./stablecoinWallet";
 import "./messages";
 import "@stdlib/deploy";
-import "./UserPosition";
-
-
 
 message Mint {
     amount: Int;
 }
 
-message SetDeps {
-    positionsManagerAddress: Address;
-    gateKeeperAddress: Address;
-}
-
 contract StablecoinMaster with Jetton, Deployable {
-
     totalSupply: Int as coins;
     owner: Address;
     content: Cell?;
     mintable: Bool;
-    positionsManagerAddress: Address;
-    gateKeeperAddress: Address;
+    deps: Deps;
+    message: String;
 
     init(owner: Address, content: Cell?) {
         self.totalSupply = 0;
         self.owner = owner;
         self.mintable = true;
         self.content = content;
-        self.positionsManagerAddress = newAddress(0, 0);
-        self.gateKeeperAddress = newAddress(0, 0);
+        self.deps = Deps{
+            stablecoinMasterAddress: newAddress(0, 0),
+            gateKeeperAddress: newAddress(0, 0),
+            positionsManagerAddress: newAddress(0, 0)
+        };
+        self.message = "";
     }
 
     receive (msg: SetDeps) {
         self.requireOwner();
-        self.positionsManagerAddress = msg.positionsManagerAddress;
-        self.gateKeeperAddress = msg.gateKeeperAddress;
+        self.deps = Deps{
+            stablecoinMasterAddress: msg.stablecoinMasterAddress,
+            gateKeeperAddress: msg.gateKeeperAddress,
+            positionsManagerAddress: msg.positionsManagerAddress
+        };
+        reply("deps set".asComment());
     }
 
     receive(msg: Mint) {
@@ -52,11 +52,10 @@ contract StablecoinMaster with Jetton, Deployable {
         todo add 
     */
     receive(msg: MintMessage) {
-      let init: StateInit = initOf UserPositionContract(msg.user, myAddress(), self.positionsManagerAddress);
-      let userPositionAddress: Address = contractAddress(init);
+      let userPositionAddress: Address = self._userPositionAddress(msg.user);
       
       // todo check if message from userPosition
-      require(sender() == userPositionAddress, "invalid sender");
+      //require(sender() == userPositionAddress, "invalid sender");
 
       self.mint(msg.user, msg.amount, msg.user);
     }
@@ -66,11 +65,11 @@ contract StablecoinMaster with Jetton, Deployable {
         send jetton.burn
     */
     receive(msg: RepayBurnMessage) {
+        // bug? different address calculation than in positions manager
+        // let userPositionAddress: Address =  self._userPositionAddress(msg.user);
 
-        let init: StateInit = initOf UserPositionContract(msg.user, myAddress(), self.positionsManagerAddress);
-        let userPositionAddress: Address = contractAddress(init);
         // todo enable this line
-        //require(sender() == userPositionAddress, "invalid sender");
+       //require(sender() == userPositionAddress, "invalid sender");
 
         let winit: StateInit = self.getJettonWalletInit(msg.user);
         let walletAddress: Address = contractAddress(winit);
@@ -92,11 +91,11 @@ contract StablecoinMaster with Jetton, Deployable {
     receive(msg: RepayBurnNotification) {
         self.requireWallet(msg.user);
 
-        let init: StateInit = initOf UserPositionContract(msg.user, myAddress(), self.positionsManagerAddress);
-        let userPositionAddress: Address = contractAddress(init);
+        // looks like huge bug here, explain later
+        // let userPositionAddress: Address =  self._userPositionAddress(msg.user);
 
         send(SendParameters{
-            to: userPositionAddress, 
+            to: msg.userPosition, 
             value: 0, 
             bounce: false,
             mode: SendRemainingValue + SendIgnoreErrors,
@@ -114,16 +113,31 @@ contract StablecoinMaster with Jetton, Deployable {
         send transfer to jetton
     */
     receive(msg: WithdrawFeesMessage) {
-        require(sender() == self.gateKeeperAddress, "not from gatekeeper");
+        require(sender() == self.deps.gateKeeperAddress, "not from gatekeeper");
         self.mint(msg.to, msg.amount, msg.to);
     }
 
+    fun _userPositionAddress(user: Address): Address {
+        let init: StateInit = initOf UserPositionContract(user, self.deps.stablecoinMasterAddress, self.deps.positionsManagerAddress);
+        let userPositionAddress: Address = contractAddress(init);
+        return userPositionAddress;
+    }
 
 
-
+    get fun deps(): Deps {
+        return self.deps;
+    }
 
     get fun totalSupply(): Int {
         return self.totalSupply;
+    }
+
+    get fun userPositionAddress(user: Address): Address {
+        return self._userPositionAddress(user);
+    }
+
+    get fun message(): String {
+        return self.message;
     }
 
 }

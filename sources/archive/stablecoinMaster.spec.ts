@@ -42,7 +42,7 @@ describe("StablecoinMasterContract", () => {
         logger = system.log(stablecoinMasterContract.address);
     });
 
-    it.only("should deploy correctly, set init state and premint amount to owner wallet", async () => {
+    it("should deploy correctly, set init state and premint amount to owner wallet", async () => {
         const premintValue = toNano("1000");
 
         await stablecoinMasterContract.send(owner, { value: toNano(1) }, { $$type: "Mint", amount: premintValue });

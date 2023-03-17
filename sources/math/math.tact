@@ -14,11 +14,11 @@ fun rpow(x: Int, n: Int, precision: Int): Int {
         z = x;
     }
 
-    let half = precision / 2;
+    let half: Int = precision / 2;
 
     while (n / 2 > 0) {
-        let xx = x*x;
-        if xxRound = xx + half;
+        let xx: Int = x*x;
+        let xxRound: Int = xx + half;
     
         x = xxRound / precision;
 

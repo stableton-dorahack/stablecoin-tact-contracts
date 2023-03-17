@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`GateKeeperContract collectFees increases debtRate 1`] = `[]`;
+
 exports[`GateKeeperContract on deposit collateral should forward message to positionsManager and have msg.amount left on gatekeeper balance 1`] = `
 [
   {
@@ -14,28 +16,30 @@ exports[`GateKeeperContract on deposit collateral should forward message to posi
           },
           "bounce": true,
           "from": "kQA8J7zdze7xzxWC0UEFLI_ebJedZgQbQuay8b9oAkTSWQkO",
-          "to": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+          "to": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
           "type": "internal",
           "value": 101000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 14809n,
+        "gasUsed": 18002n,
       },
       {
         "$type": "sent",
         "messages": [
           {
             "body": {
-              "cell": "x{DDED1FE8800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2A2E90EDD0008F0D180000000004000013880000520877359400C822BBBC93DE43555_}",
+              "cell": "x{92C1E2A5800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B2A2E90EDD001_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001904FF09927BC86AAA_}",
               "type": "cell",
             },
             "bounce": true,
-            "from": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+            "from": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
             "to": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
             "type": "internal",
-            "value": 978329000n,
+            "value": 977036000n,
           },
         ],
       },
@@ -52,14 +56,14 @@ exports[`GateKeeperContract on deposit collateral should forward message to posi
           },
           "bounce": false,
           "from": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
-          "to": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+          "to": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
           "type": "internal",
-          "value": 977329000n,
+          "value": 976036000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 8135n,
+        "gasUsed": 9951n,
       },
     ],
   },
@@ -80,14 +84,14 @@ exports[`GateKeeperContract on increase total stable should add total stables co
           },
           "bounce": true,
           "from": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
-          "to": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+          "to": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 13164n,
+        "gasUsed": 15043n,
       },
       {
         "$type": "sent",
@@ -97,10 +101,10 @@ exports[`GateKeeperContract on increase total stable should add total stables co
               "type": "empty",
             },
             "bounce": false,
-            "from": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+            "from": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
             "to": "kQA8J7zdze7xzxWC0UEFLI_ebJedZgQbQuay8b9oAkTSWQkO",
             "type": "internal",
-            "value": 985836000n,
+            "value": 983957000n,
           },
         ],
       },
@@ -118,19 +122,19 @@ exports[`GateKeeperContract on pool settings msg should store new settings  1`] 
         "$type": "received",
         "message": {
           "body": {
-            "cell": "x{A10722D947868C0000000002000009C400002904}",
+            "cell": "x{5C8C5E0B0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}",
             "type": "cell",
           },
           "bounce": true,
           "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-          "to": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+          "to": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 15276n,
+        "gasUsed": 16814n,
       },
       {
         "$type": "sent",
@@ -141,10 +145,10 @@ exports[`GateKeeperContract on pool settings msg should store new settings  1`] 
               "type": "text",
             },
             "bounce": true,
-            "from": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+            "from": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
             "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
             "type": "internal",
-            "value": 983424000n,
+            "value": 981886000n,
           },
         ],
       },
@@ -167,28 +171,30 @@ exports[`GateKeeperContract on repayStablecoinUserMessage should send enhanced m
           },
           "bounce": true,
           "from": "kQA8J7zdze7xzxWC0UEFLI_ebJedZgQbQuay8b9oAkTSWQkO",
-          "to": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+          "to": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 14286n,
+        "gasUsed": 17533n,
       },
       {
         "$type": "sent",
         "messages": [
           {
             "body": {
-              "cell": "x{6C3989BB800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000002E90EDD0008F0D180000000004000013880000520877359400C822BBBC93DE43555_}",
+              "cell": "x{5038B327800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000002E90EDD001_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001904FF09927BC86AAA_}",
               "type": "cell",
             },
             "bounce": true,
-            "from": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+            "from": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
             "to": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
             "type": "internal",
-            "value": 984023000n,
+            "value": 979483000n,
           },
         ],
       },
@@ -211,28 +217,30 @@ exports[`GateKeeperContract on withdrawstablecoins should forward message to pos
           },
           "bounce": true,
           "from": "kQA8J7zdze7xzxWC0UEFLI_ebJedZgQbQuay8b9oAkTSWQkO",
-          "to": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+          "to": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 14183n,
+        "gasUsed": 17448n,
       },
       {
         "$type": "sent",
         "messages": [
           {
             "body": {
-              "cell": "x{6C3989BB800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000002E90EDD0008F0D180000000004000013880000520877359400C822BBBC93DE43555_}",
+              "cell": "x{5038B327800784F79BB9BDDE39E2B05A2820A591FBCD92F3ACC083685CD65E37ED00489A4B20000002E90EDD001_}
+ x{0000000000000000000000000000000000000000000000000000000023C346000000000000000000000000000000000000000000000000000000003A3529449C40000000000000000000000000000000000000000000000000000000000005209_}
+  x{000000000000000000000000000000000000000000000000000000001DCD6500000000000000000000000000000000000000000000000000000000001904FF09927BC86AAA_}",
               "type": "cell",
             },
             "bounce": true,
-            "from": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+            "from": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
             "to": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
             "type": "internal",
-            "value": 984126000n,
+            "value": 979568000n,
           },
         ],
       },
@@ -249,14 +257,14 @@ exports[`GateKeeperContract on withdrawstablecoins should forward message to pos
           },
           "bounce": false,
           "from": "kQCmw0-Nvnap6F8s-77yXEYbduFtd_bSsmDZu6eYT4Oy-Aqh",
-          "to": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+          "to": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
           "type": "internal",
-          "value": 983126000n,
+          "value": 978568000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 8135n,
+        "gasUsed": 9951n,
       },
     ],
   },
@@ -280,14 +288,14 @@ exports[`GateKeeperContract should deploy correctly 1`] = `
           },
           "bounce": true,
           "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-          "to": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+          "to": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 15943n,
+        "gasUsed": 17621n,
       },
       {
         "$type": "sent",
@@ -298,10 +306,10 @@ exports[`GateKeeperContract should deploy correctly 1`] = `
               "type": "text",
             },
             "bounce": true,
-            "from": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+            "from": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
             "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
             "type": "internal",
-            "value": 982861000n,
+            "value": 981183000n,
           },
         ],
       },
@@ -319,19 +327,19 @@ exports[`GateKeeperContract should set ton price 1`] = `
         "$type": "received",
         "message": {
           "body": {
-            "cell": "x{0D11BABDBEBC2000}",
+            "cell": "x{6EB2483F4BEBC2000}",
             "type": "cell",
           },
           "bounce": true,
           "from": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
-          "to": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+          "to": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
           "type": "internal",
           "value": 1000000000n,
         },
       },
       {
         "$type": "processed",
-        "gasUsed": 14736n,
+        "gasUsed": 16700n,
       },
       {
         "$type": "sent",
@@ -342,10 +350,10 @@ exports[`GateKeeperContract should set ton price 1`] = `
               "type": "text",
             },
             "bounce": true,
-            "from": "kQBrMIVDTwvNGs9An7Y_GB-oXpPiM39ZoObutITWBvuOu2Dl",
+            "from": "kQAr7kgNKsWHlPEo2YsY1G2ikFMOl5tJrhQ5LS3DXz9CLEJL",
             "to": "kQAI-3FJVc_ywSuY4vq0bYrzR7S4Och4y7bTU_i5yLOB3A6P",
             "type": "internal",
-            "value": 983996000n,
+            "value": 982032000n,
           },
         ],
       },

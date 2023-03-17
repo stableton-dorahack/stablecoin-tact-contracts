@@ -37,6 +37,8 @@ global (int, slice, int, slice) __tact_context;
 global slice __tact_context_sender;
 global cell __tact_context_sys;
 
+(int, slice, int, slice) __tact_context_get() inline { return __tact_context; }
+
 slice __tact_context_get_sender() inline { return __tact_context_sender; }
 
 builder __tact_store_bool(builder b, int v) inline {
@@ -94,9 +96,10 @@ builder __gen_write_PositionAddressContract(builder build_0, (int, slice, slice)
 
 (int, slice, slice) $__gen_PositionAddressContract_init(int $id) impure inline_ref {
     var (($self'id, $self'positionAddress, $self'positionsManagerAddress)) = (null(), null(), null());
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
     $self'id = $id;
     $self'positionAddress = __tact_create_address(0, 0);
-    $self'positionsManagerAddress = __tact_context_get_sender();
+    $self'positionsManagerAddress = $ctx'sender;
     return ($self'id, $self'positionAddress, $self'positionsManagerAddress);
 }
 
@@ -182,14 +185,14 @@ builder __gen_write_PositionAddressContract(builder build_0, (int, slice, slice)
     return (queryId);
 }
 
-slice $__gen_PositionAddressContract_getPositionAddress((int, slice, slice) $self) impure inline_ref {
+slice $__gen_PositionAddressContract_positionAddress((int, slice, slice) $self) impure inline_ref {
     var (($self'id, $self'positionAddress, $self'positionsManagerAddress)) = $self;
     return $self'positionAddress;
 }
 
-_ $__gen_get_getPositionAddress() method_id(88981) {
+_ $__gen_get_positionAddress() method_id(83612) {
     var self = __gen_load_PositionAddressContract();
-    var res = $__gen_PositionAddressContract_getPositionAddress(self);
+    var res = $__gen_PositionAddressContract_positionAddress(self);
     return res;
 }
 
@@ -274,7 +277,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://QmNMssU9pticXB1PQUqyCSm5DT7qFEdxnSnmzFGsJdbVhy";
+    return "ipfs://QmXBpPmw8wvr7u3T6bSafu6spNMjXGo2yMyEv8BdihCshW";
 }
 
 _ lazy_deployment_completed() {

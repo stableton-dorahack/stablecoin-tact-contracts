@@ -176,7 +176,8 @@ contract UserStablecoinWallet {
             body: RepayBurnNotification{
                 amount: msg.amount,
                 user: msg.user, 
-                rate: msg.rate
+                rate: msg.rate,
+                userPosition: msg.userPosition
             }.toCell()
         });
 
@@ -194,4 +195,5 @@ contract UserStablecoinWallet {
     get fun getBalance(): Int {
         return self.balance;
     }
+
 }

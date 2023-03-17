@@ -4,6 +4,7 @@ PROGRAM{
   DECLPROC __tact_store_address
   DECLPROC __tact_create_address
   DECLPROC __tact_not_null
+  DECLPROC __tact_context_get
   DECLPROC __tact_context_get_sender
   DECLPROC __tact_store_bool
   DECLPROC __tact_address_eq
@@ -22,8 +23,8 @@ PROGRAM{
   DECLPROC $reply
   DECLPROC __gen_constructor_SendParameters$to_bounce_value_mode
   DECLPROC __gen_constructor_DeployOk$queryId
-  DECLPROC $__gen_PositionAddressContract_getPositionAddress
-  88981 DECLMETHOD $__gen_get_getPositionAddress
+  DECLPROC $__gen_PositionAddressContract_positionAddress
+  83612 DECLMETHOD $__gen_get_positionAddress
   DECLPROC $__gen_PositionAddressContract_receive_SetPositionAddressMessage
   DECLPROC $__gen_PositionAddressContract_receive_Deploy
   DECLPROC __gen_router_PositionAddressContract
@@ -82,6 +83,10 @@ PROGRAM{
     DUP
     ISNULL
     128 THROWIF
+  }>
+  __tact_context_get PROCINLINE:<{
+    __tact_context GETGLOB
+    4 UNTUPLE
   }>
   __tact_context_get_sender PROCINLINE:<{
     __tact_context_sender GETGLOB
@@ -146,10 +151,13 @@ PROGRAM{
     SWAP
   }>
   $__gen_PositionAddressContract_init PROCREF:<{
+    __tact_context_get INLINECALLDICT
+    s2 s3 XCHG
+    3 BLKDROP
     0 PUSHINT
     DUP
     __tact_create_address INLINECALLDICT
-    __tact_context_get_sender INLINECALLDICT
+    SWAP
   }>
   __gen_load_PositionAddressContract PROCINLINE:<{
     c4 PUSH
@@ -309,13 +317,13 @@ PROGRAM{
   }>
   __gen_constructor_DeployOk$queryId PROCINLINE:<{
   }>
-  $__gen_PositionAddressContract_getPositionAddress PROCREF:<{
+  $__gen_PositionAddressContract_positionAddress PROCREF:<{
     DROP
     NIP
   }>
-  $__gen_get_getPositionAddress PROC:<{
+  $__gen_get_positionAddress PROC:<{
     __gen_load_PositionAddressContract INLINECALLDICT
-    $__gen_PositionAddressContract_getPositionAddress INLINECALLDICT
+    $__gen_PositionAddressContract_positionAddress INLINECALLDICT
   }>
   $__gen_PositionAddressContract_receive_SetPositionAddressMessage PROCINLINE:<{
     4429 PUSHINT
@@ -415,7 +423,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d4e4d7373553970746963584231505155717943536d3544543771464564786e536e6d7a4647734a6462566879} PUSHSLICE
+    x{697066733a2f2f516d584270506d7738777672377533543662536166753673704e4d6a58476f32794d794576384264696843736857} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

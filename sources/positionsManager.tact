@@ -1,12 +1,8 @@
+import "./UserPosition";
 import "@stdlib/deploy";
 import "@stdlib/ownable";
 import "./messages";
-import "./UserPosition";
 
-message SetDeps {
-    stablecoinMasterAddress: Address;
-    gateKeeperAddress: Address;
-}
 
 contract PositionsManagerContract with Deployable, Ownable {
 
@@ -14,22 +10,28 @@ contract PositionsManagerContract with Deployable, Ownable {
     const GasConsumption: Int = ton("0.01");
 
     // deps
-    stablecoinMasterAddress: Address;
-    gateKeeperAddress: Address;
+    deps: Deps;
 
     owner: Address;
     lastPositionId: Int as uint32 = 0;
 
     init() {
         self.owner = sender();
-        self.gateKeeperAddress = newAddress(0, 0);
-        self.stablecoinMasterAddress = newAddress(0, 0);
+        self.deps = Deps{
+            positionsManagerAddress: newAddress(0, 0),
+            gateKeeperAddress: newAddress(0, 0),
+            stablecoinMasterAddress: newAddress(0, 0)
+        };
     }
 
     receive(msg: SetDeps) {
         self.requireOwner();
-        self.stablecoinMasterAddress = msg.stablecoinMasterAddress;
-        self.gateKeeperAddress = msg.gateKeeperAddress;
+        self.deps = Deps{
+            positionsManagerAddress: msg.positionsManagerAddress,
+            gateKeeperAddress: msg.gateKeeperAddress,
+            stablecoinMasterAddress: msg.stablecoinMasterAddress
+        };
+        reply("deps set".asComment());
     }
 
     /*
@@ -38,19 +40,19 @@ contract PositionsManagerContract with Deployable, Ownable {
         and call userPosition.addCollateral
     */
     receive(msg: DepositCollateralMessage) {
-        require(sender() == self.gateKeeperAddress, "not from gateKeeper");
+        require(sender() == self.deps.gateKeeperAddress, "not from gateKeeper");
 
         let ctx: Context = context();
 
         // require(ctx.value > msg.amount + fwdFee + 2 * self.GasConsumption + self.MinTonsForStorage, "Invalid value");
         
-        let init: StateInit = initOf UserPositionContract(msg.user, self.stablecoinMasterAddress, myAddress());
-        let userPositionAddress: Address = contractAddress(init);
+        let init: StateInit = initOf UserPositionContract(msg.user, self.deps.stablecoinMasterAddress, self.deps.positionsManagerAddress);
+        let userPosition: Address = contractAddress(init);
 
         // later - need maybe send amount to separate contract with payseparategas
 
         send(SendParameters{
-            to: userPositionAddress, 
+            to: userPosition, 
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
@@ -95,7 +97,7 @@ contract PositionsManagerContract with Deployable, Ownable {
     */
     receive(msg: WithdrawStablecoinMessage) {
 
-        require(sender() == self.gateKeeperAddress, "not from gateKeeper");
+        require(sender() == self.deps.gateKeeperAddress, "not from gateKeeper");
 
         send(SendParameters{
             to: self._userPositionAddress(msg.user), 
@@ -116,14 +118,12 @@ contract PositionsManagerContract with Deployable, Ownable {
         self.onlyUserPosition(msg.user);
 
         send(SendParameters{
-            to: self.gateKeeperAddress, 
+            to: self.deps.gateKeeperAddress, 
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
             body: msg.toCell()
         });
-
-
     }
 
     /*  
@@ -131,7 +131,7 @@ contract PositionsManagerContract with Deployable, Ownable {
         call userPosition.repayStable()
     */
     receive(msg: RepayStablecoinMessage) {
-        require(sender() == self.gateKeeperAddress, "not from gateKeeper");
+        require(sender() == self.deps.gateKeeperAddress, "not from gateKeeper");
 
         send(SendParameters{
             to: self._userPositionAddress(msg.user), 
@@ -152,7 +152,7 @@ contract PositionsManagerContract with Deployable, Ownable {
         self.onlyUserPosition(msg.user);
 
         send(SendParameters{
-            to: self.gateKeeperAddress, 
+            to: self.deps.gateKeeperAddress, 
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
@@ -165,7 +165,7 @@ contract PositionsManagerContract with Deployable, Ownable {
         call userPosition.withdrawCollateral
     */
     receive(msg: WithdrawCollateralMessage) {
-        require(sender() == self.gateKeeperAddress, "not from gateKeeper");
+        require(sender() == self.deps.gateKeeperAddress, "not from gateKeeper");
 
         send(SendParameters{
             to: self._userPositionAddress(msg.user), 
@@ -186,7 +186,7 @@ contract PositionsManagerContract with Deployable, Ownable {
         self.onlyUserPosition(msg.user);
 
         send(SendParameters{
-            to: self.gateKeeperAddress, 
+            to: self.deps.gateKeeperAddress, 
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors, 
             bounce: true,
@@ -200,7 +200,7 @@ contract PositionsManagerContract with Deployable, Ownable {
     }
 
     fun _userPositionAddress(user: Address): Address {
-        let init: StateInit = initOf UserPositionContract(user, self.stablecoinMasterAddress, myAddress());
+        let init: StateInit = initOf UserPositionContract(user, self.deps.stablecoinMasterAddress, self.deps.positionsManagerAddress);
         return contractAddress(init);
     }
 
@@ -218,6 +218,11 @@ contract PositionsManagerContract with Deployable, Ownable {
         return contractAddress(init);
     }
 
+
+    get fun deps(): Deps {
+        return self.deps;
+    }
+
 }
 
 // this contract stores positionaddress by position id
@@ -230,9 +235,10 @@ contract PositionAddressContract with Deployable {
     positionsManagerAddress: Address;
 
     init(id: Int) {
+        let ctx: Context = context();
         self.id = id; 
         self.positionAddress = newAddress(0, 0);
-        self.positionsManagerAddress = sender();
+        self.positionsManagerAddress = ctx.sender;
     }
 
     /*
@@ -259,9 +265,9 @@ contract PositionAddressContract with Deployable {
         });
     }
 
-    get fun getPositionAddress(): Address {
+    get fun positionAddress(): Address {
         return self.positionAddress;
     }
 
-    
+
 }

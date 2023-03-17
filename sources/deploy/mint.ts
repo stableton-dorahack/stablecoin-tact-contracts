@@ -1,4 +1,3 @@
-import { StablecoinMaster, storeMint } from "../output/jetton_StablecoinMaster";
 import {
     Address,
     beginCell,
@@ -11,21 +10,17 @@ import {
     WalletContractV4,
 } from "ton";
 import { mnemonicToPrivateKey } from "ton-crypto";
-import { testAddress } from "ton-emulator";
-import { GateKeeperContract } from "../output/stableton_GateKeeperContract";
-import { PositionAddressContract } from "../output/stableton_PositionAddressContract";
-import { PositionsManagerContract } from "../output/stableton_PositionsManagerContract";
-import { StablecoinJettonContract } from "../output/stableton_StablecoinJettonContract";
-import { StablecoinMasterContract } from "../output/stableton_StablecoinMasterContract";
-
-import { deploy } from "../utils/deploy";
-import { buildOnchainMetadata } from "../utils/jetton-helpers";
-import { printAddress, printDeploy, printHeader } from "../utils/print";
 import { getHttpEndpoint } from "@orbs-network/ton-access";
+import { buildOnchainMetadata } from "../utils/jetton-helpers";
 
-const workchain = 0; //we are working in basechain.
+import { GateKeeperContract } from "../output/stableton_GateKeeperContract";
+import { PositionsManagerContract } from "../output/stableton_PositionsManagerContract";
+import { StablecoinMaster } from "../output/stableton_StablecoinMaster";
+
+const workchain = 0;
 
 import dotenv from "dotenv";
+import { storeDeploy, storeMint } from "../output/stableton_UserStablecoinWallet";
 dotenv.config();
 
 (async () => {
@@ -33,8 +28,6 @@ dotenv.config();
     const client = new TonClient({
         endpoint: endpoint,
     });
-
-    let owner = Address.parse("EQC6RMuMRAvN3X-sBiNOzV8a2h25vvQrUv8T-04nWPX2ddIs");
 
     let mnemonics = process.env.mnemonic;
     let keyPair = await mnemonicToPrivateKey(mnemonics!.split(" "));
@@ -52,25 +45,16 @@ dotenv.config();
     let balance: bigint = await contract.getBalance();
     console.log({ balance });
 
-    // StabletonMaster
-    const jettonParams = {
-        name: "STABLE",
-        symbol: "STB1",
-        description: "Dorahack stableton",
-        image: "https://ipfs.io/ipfs/QmbPZjC1tuP6ickCCBtoTCQ9gc3RpkbKx7C1LMYQdcLwti", // Image url
-    };
+    // ------ mint dev tokens
 
-    let content = buildOnchainMetadata(jettonParams);
-    let init = await SampleJetton.init(owner, content);
-    let destination_address = contractAddress(workchain, init);
-    console.log("master contract", destination_address);
+    const stableMasterAddress = Address.parse("EQBB1pLrZ7joVC8OYGF4_b2O-33MVa2uemI0LFarD2MRrfN8");
 
-    let deployAmount = toNano("0.35");
+    let deployAmount = toNano("0.5");
     let supply = toNano(500);
     let seqno: number = await contract.getSeqno();
 
     let msg = beginCell()
-        .store(storeMint({ $$type: "Mint", amount: toNano("430") }))
+        .store(storeMint({ $$type: "Mint", amount: supply }))
         .endCell();
 
     console.log("🛠️Preparing new outgoing massage from deployment wallet. Seqno = ", seqno);
@@ -84,10 +68,10 @@ dotenv.config();
         messages: [
             internal({
                 value: deployAmount,
-                to: destination_address,
+                to: stableMasterAddress,
                 body: msg,
             }),
         ],
     });
-    console.log("======deployment message sent to ", destination_address, " ======");
+    console.log("======mint message sent to ", stableMasterAddress, " ======");
 })();

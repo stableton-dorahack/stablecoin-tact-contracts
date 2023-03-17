@@ -20,7 +20,7 @@ import { StablecoinMaster } from "../output/stableton_StablecoinMaster";
 const workchain = 0;
 
 import dotenv from "dotenv";
-import { storeDeploy, storeMint } from "../output/stableton_UserStablecoinWallet";
+import { storeDeploy, storeMint, storeSetDeps } from "../output/stableton_UserStablecoinWallet";
 dotenv.config();
 
 (async () => {
@@ -29,7 +29,6 @@ dotenv.config();
         endpoint: endpoint,
     });
 
-    let owner = Address.parse("EQC6RMuMRAvN3X-sBiNOzV8a2h25vvQrUv8T-04nWPX2ddIs");
     let mnemonics = process.env.mnemonic;
     let keyPair = await mnemonicToPrivateKey(mnemonics!.split(" "));
     let secretKey = keyPair.secretKey;
@@ -46,15 +45,17 @@ dotenv.config();
     let balance: bigint = await contract.getBalance();
     console.log({ balance });
 
-    let init = await PositionsManagerContract.init();
-    let positionsManagerAddress = contractAddress(workchain, init);
-    console.log("positionsManagerAddress contract", positionsManagerAddress);
+    // ------ mint dev tokens
 
-    let deployAmount = toNano("0.5");
+    const stablecoinMasterAddress = Address.parse("EQBB1pLrZ7joVC8OYGF4_b2O-33MVa2uemI0LFarD2MRrfN8");
+    const gateKeeperAddress = Address.parse("EQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgSwz4");
+    const positionsManagerAddress = Address.parse("EQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn--k");
+
+    let deployAmount = toNano("0.3");
     let seqno: number = await contract.getSeqno();
 
     let msg = beginCell()
-        .store(storeDeploy({ $$type: "Deploy", queryId: 1n }))
+        .store(storeSetDeps({ $$type: "SetDeps", positionsManagerAddress, stablecoinMasterAddress, gateKeeperAddress }))
         .endCell();
 
     console.log("🛠️Preparing new outgoing massage from deployment wallet. Seqno = ", seqno);
@@ -67,14 +68,36 @@ dotenv.config();
         messages: [
             internal({
                 value: deployAmount,
-                to: positionsManagerAddress,
-                init: {
-                    code: init.code,
-                    data: init.data,
-                },
+                to: stablecoinMasterAddress,
                 body: msg,
             }),
         ],
     });
-    console.log("======deployment message sent to ", positionsManagerAddress, " ======");
+
+    await contract.sendTransfer({
+        seqno,
+        secretKey,
+        sendMode: SendMode.IGNORE_ERRORS,
+        messages: [
+            internal({
+                value: deployAmount,
+                to: gateKeeperAddress,
+                body: msg,
+            }),
+        ],
+    });
+
+    await contract.sendTransfer({
+        seqno,
+        secretKey,
+        sendMode: SendMode.IGNORE_ERRORS,
+        messages: [
+            internal({
+                value: deployAmount,
+                to: positionsManagerAddress,
+                body: msg,
+            }),
+        ],
+    });
+    console.log("======set deps messages sent");
 })();

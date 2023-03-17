@@ -21,7 +21,7 @@ describe("PositionAddressContract", () => {
         position = system.treasure("position");
 
         positionsManager = system.treasure("positionsManager");
-        positionAddressContract = system.open(await PositionAddressContract.fromInit(1n, positionsManager.address));
+        positionAddressContract = system.open(await PositionAddressContract.fromInit(1n));
         track = system.track(positionAddressContract.address);
     });
 
@@ -30,8 +30,6 @@ describe("PositionAddressContract", () => {
 
         await system.run();
         expect(track.collect()).toMatchSnapshot();
-
-        expect(await positionAddressContract.getGetPositionId()).toEqual(1n);
     });
 
     it("on setPositionAddress from userPosition", async () => {
