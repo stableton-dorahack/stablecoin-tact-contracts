@@ -317,7 +317,6 @@ export type PoolSettings = {
     $$type: 'PoolSettings';
     liquidationRatio: bigint;
     stabilityFeeRate: bigint;
-    closeFactorBps: bigint;
     liquidatorIncentiveBps: bigint;
 }
 
@@ -326,7 +325,6 @@ export function storePoolSettings(src: PoolSettings) {
         let b_0 = builder;
         b_0.storeUint(src.liquidationRatio, 32);
         b_0.storeUint(src.stabilityFeeRate, 32);
-        b_0.storeUint(src.closeFactorBps, 32);
         b_0.storeUint(src.liquidatorIncentiveBps, 32);
     };
 }
@@ -335,24 +333,21 @@ export function loadPoolSettings(slice: Slice) {
     let sc_0 = slice;
     let _liquidationRatio = sc_0.loadUintBig(32);
     let _stabilityFeeRate = sc_0.loadUintBig(32);
-    let _closeFactorBps = sc_0.loadUintBig(32);
     let _liquidatorIncentiveBps = sc_0.loadUintBig(32);
-    return { $$type: 'PoolSettings' as const, liquidationRatio: _liquidationRatio, stabilityFeeRate: _stabilityFeeRate, closeFactorBps: _closeFactorBps, liquidatorIncentiveBps: _liquidatorIncentiveBps };
+    return { $$type: 'PoolSettings' as const, liquidationRatio: _liquidationRatio, stabilityFeeRate: _stabilityFeeRate, liquidatorIncentiveBps: _liquidatorIncentiveBps };
 }
 
 function loadTuplePoolSettings(source: TupleReader) {
     let _liquidationRatio = source.readBigNumber();
     let _stabilityFeeRate = source.readBigNumber();
-    let _closeFactorBps = source.readBigNumber();
     let _liquidatorIncentiveBps = source.readBigNumber();
-    return { $$type: 'PoolSettings' as const, liquidationRatio: _liquidationRatio, stabilityFeeRate: _stabilityFeeRate, closeFactorBps: _closeFactorBps, liquidatorIncentiveBps: _liquidatorIncentiveBps };
+    return { $$type: 'PoolSettings' as const, liquidationRatio: _liquidationRatio, stabilityFeeRate: _stabilityFeeRate, liquidatorIncentiveBps: _liquidatorIncentiveBps };
 }
 
 function storeTuplePoolSettings(source: PoolSettings) {
     let builder = new TupleBuilder();
     builder.writeNumber(source.liquidationRatio);
     builder.writeNumber(source.stabilityFeeRate);
-    builder.writeNumber(source.closeFactorBps);
     builder.writeNumber(source.liquidatorIncentiveBps);
     return builder.build();
 }
@@ -425,7 +420,7 @@ export type DepositCollateralMessage = {
 export function storeDepositCollateralMessage(src: DepositCollateralMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(3723304936, 32);
+        b_0.storeUint(3932134519, 32);
         b_0.storeAddress(src.user);
         b_0.storeCoins(src.amount);
         b_0.store(storePoolSettings(src.settings));
@@ -436,7 +431,7 @@ export function storeDepositCollateralMessage(src: DepositCollateralMessage) {
 
 export function loadDepositCollateralMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 3723304936) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 3932134519) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadCoins();
     let _settings = loadPoolSettings(sc_0);
@@ -487,7 +482,7 @@ export type WithdrawCollateralMessage = {
 export function storeWithdrawCollateralMessage(src: WithdrawCollateralMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(3410368520, 32);
+        b_0.storeUint(433324996, 32);
         b_0.storeAddress(src.user);
         b_0.storeCoins(src.amount);
         b_0.store(storePoolSettings(src.settings));
@@ -498,7 +493,7 @@ export function storeWithdrawCollateralMessage(src: WithdrawCollateralMessage) {
 
 export function loadWithdrawCollateralMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 3410368520) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 433324996) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadCoins();
     let _settings = loadPoolSettings(sc_0);
@@ -549,7 +544,7 @@ export type WithdrawStablecoinMessage = {
 export function storeWithdrawStablecoinMessage(src: WithdrawStablecoinMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(1815710139, 32);
+        b_0.storeUint(73036137, 32);
         b_0.storeAddress(src.user);
         b_0.storeUint(src.amount, 64);
         b_0.store(storePoolSettings(src.settings));
@@ -560,7 +555,7 @@ export function storeWithdrawStablecoinMessage(src: WithdrawStablecoinMessage) {
 
 export function loadWithdrawStablecoinMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 1815710139) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 73036137) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadUintBig(64);
     let _settings = loadPoolSettings(sc_0);
@@ -611,7 +606,7 @@ export type RepayStablecoinMessage = {
 export function storeRepayStablecoinMessage(src: RepayStablecoinMessage) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(3203603975, 32);
+        b_0.storeUint(2621043381, 32);
         b_0.storeAddress(src.user);
         b_0.storeUint(src.amount, 64);
         b_0.store(storePoolSettings(src.settings));
@@ -622,7 +617,7 @@ export function storeRepayStablecoinMessage(src: RepayStablecoinMessage) {
 
 export function loadRepayStablecoinMessage(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 3203603975) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 2621043381) { throw Error('Invalid prefix'); }
     let _user = sc_0.loadAddress();
     let _amount = sc_0.loadUintBig(64);
     let _settings = loadPoolSettings(sc_0);

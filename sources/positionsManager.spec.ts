@@ -53,7 +53,6 @@ describe("PositionsManagerContract", () => {
                     $$type: "PoolSettings",
                     liquidationRatio: 1n,
                     stabilityFeeRate: 1n,
-                    closeFactorBps: 1n,
                     liquidatorIncentiveBps: 1n,
                 },
                 rate: {
@@ -81,7 +80,6 @@ describe("PositionsManagerContract", () => {
                     $$type: "PoolSettings",
                     liquidationRatio: 1n,
                     stabilityFeeRate: 1n,
-                    closeFactorBps: 1n,
                     liquidatorIncentiveBps: 1n,
                 },
                 rate: {
@@ -129,7 +127,6 @@ describe("PositionsManagerContract", () => {
                     $$type: "PoolSettings",
                     liquidationRatio: 1n,
                     stabilityFeeRate: 1n,
-                    closeFactorBps: 1n,
                     liquidatorIncentiveBps: 1n,
                 },
                 rate: {
@@ -169,7 +166,6 @@ describe("PositionsManagerContract", () => {
                     $$type: "PoolSettings",
                     liquidationRatio: 1n,
                     stabilityFeeRate: 1n,
-                    closeFactorBps: 1n,
                     liquidatorIncentiveBps: 1n,
                 },
                 rate: {

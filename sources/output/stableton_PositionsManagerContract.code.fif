@@ -204,8 +204,7 @@ PROGRAM{
     ENDC
   }>
   __gen_write_PoolSettings PROCINLINE:<{
-    s3 s4 XCHG2
-    32 STU
+    s2 s3 XCHG2
     32 STU
     32 STU
     32 STU
@@ -214,8 +213,7 @@ PROGRAM{
     32 LDU
     32 LDU
     32 LDU
-    32 LDU
-    4 -ROLL
+    3 -ROLL
   }>
   __gen_write_DebtRate PROCINLINE:<{
     s0 s2 XCHG
@@ -228,14 +226,14 @@ PROGRAM{
     -ROT
   }>
   __gen_write_DepositCollateralMessage PROCINLINE:<{
-    3723304936 PUSHINT
-    s0 s10 XCHG2
+    3932134519 PUSHINT
+    s0 s9 XCHG2
     32 STU
-    s0 s8 XCHG2
+    s0 s7 XCHG2
     __tact_store_address INLINECALLDICT
-    s0 s6 XCHG2
+    s0 s5 XCHG2
     STGRAMS
-    4 -ROLL
+    3 -ROLL
     __gen_write_PoolSettings INLINECALLDICT
     s0 s2 XCHG
     __gen_write_DebtRate INLINECALLDICT
@@ -244,38 +242,38 @@ PROGRAM{
   }>
   __gen_writecell_DepositCollateralMessage PROCINLINE:<{
     NEWC
-    9 -ROLL
+    8 -ROLL
     __gen_write_DepositCollateralMessage INLINECALLDICT
     ENDC
   }>
   __gen_read_DepositCollateralMessage PROCINLINE:<{
     32 LDU
     SWAP
-    3723304936 PUSHINT
+    3932134519 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
     LDGRAMS
     __gen_read_PoolSettings INLINECALLDICT
-    s0 s4 XCHG
+    s0 s3 XCHG
     __gen_read_DebtRate INLINECALLDICT
     s0 s2 XCHG
     LDGRAMS
-    s0 s9 XCHG
     s0 s8 XCHG
     s0 s7 XCHG
+    s0 s6 XCHG
     s3 s3 XCHG2
   }>
   __gen_write_WithdrawCollateralMessage PROCINLINE:<{
-    3410368520 PUSHINT
-    s0 s10 XCHG2
+    433324996 PUSHINT
+    s0 s9 XCHG2
     32 STU
-    s0 s8 XCHG2
+    s0 s7 XCHG2
     __tact_store_address INLINECALLDICT
-    s0 s6 XCHG2
+    s0 s5 XCHG2
     STGRAMS
-    4 -ROLL
+    3 -ROLL
     __gen_write_PoolSettings INLINECALLDICT
     s0 s2 XCHG
     __gen_write_DebtRate INLINECALLDICT
@@ -284,38 +282,38 @@ PROGRAM{
   }>
   __gen_writecell_WithdrawCollateralMessage PROCINLINE:<{
     NEWC
-    9 -ROLL
+    8 -ROLL
     __gen_write_WithdrawCollateralMessage INLINECALLDICT
     ENDC
   }>
   __gen_read_WithdrawCollateralMessage PROCINLINE:<{
     32 LDU
     SWAP
-    3410368520 PUSHINT
+    433324996 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
     LDGRAMS
     __gen_read_PoolSettings INLINECALLDICT
-    s0 s4 XCHG
+    s0 s3 XCHG
     __gen_read_DebtRate INLINECALLDICT
     s0 s2 XCHG
     LDGRAMS
-    s0 s9 XCHG
     s0 s8 XCHG
     s0 s7 XCHG
+    s0 s6 XCHG
     s3 s3 XCHG2
   }>
   __gen_write_WithdrawStablecoinMessage PROCINLINE:<{
-    1815710139 PUSHINT
-    s0 s10 XCHG2
+    73036137 PUSHINT
+    s0 s9 XCHG2
     32 STU
-    s0 s8 XCHG2
+    s0 s7 XCHG2
     __tact_store_address INLINECALLDICT
-    s1 s6 XCHG
+    s1 s5 XCHG
     64 STU
-    4 -ROLL
+    3 -ROLL
     __gen_write_PoolSettings INLINECALLDICT
     s0 s2 XCHG
     __gen_write_DebtRate INLINECALLDICT
@@ -324,38 +322,38 @@ PROGRAM{
   }>
   __gen_writecell_WithdrawStablecoinMessage PROCINLINE:<{
     NEWC
-    9 -ROLL
+    8 -ROLL
     __gen_write_WithdrawStablecoinMessage INLINECALLDICT
     ENDC
   }>
   __gen_read_WithdrawStablecoinMessage PROCINLINE:<{
     32 LDU
     SWAP
-    1815710139 PUSHINT
+    73036137 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
     64 LDU
     __gen_read_PoolSettings INLINECALLDICT
-    s0 s4 XCHG
+    s0 s3 XCHG
     __gen_read_DebtRate INLINECALLDICT
     s0 s2 XCHG
     LDGRAMS
-    s0 s9 XCHG
     s0 s8 XCHG
     s0 s7 XCHG
+    s0 s6 XCHG
     s3 s3 XCHG2
   }>
   __gen_write_RepayStablecoinMessage PROCINLINE:<{
-    3203603975 PUSHINT
-    s0 s10 XCHG2
+    2621043381 PUSHINT
+    s0 s9 XCHG2
     32 STU
-    s0 s8 XCHG2
+    s0 s7 XCHG2
     __tact_store_address INLINECALLDICT
-    s1 s6 XCHG
+    s1 s5 XCHG
     64 STU
-    4 -ROLL
+    3 -ROLL
     __gen_write_PoolSettings INLINECALLDICT
     s0 s2 XCHG
     __gen_write_DebtRate INLINECALLDICT
@@ -364,27 +362,27 @@ PROGRAM{
   }>
   __gen_writecell_RepayStablecoinMessage PROCINLINE:<{
     NEWC
-    9 -ROLL
+    8 -ROLL
     __gen_write_RepayStablecoinMessage INLINECALLDICT
     ENDC
   }>
   __gen_read_RepayStablecoinMessage PROCINLINE:<{
     32 LDU
     SWAP
-    3203603975 PUSHINT
+    2621043381 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
     64 LDU
     __gen_read_PoolSettings INLINECALLDICT
-    s0 s4 XCHG
+    s0 s3 XCHG
     __gen_read_DebtRate INLINECALLDICT
     s0 s2 XCHG
     LDGRAMS
-    s0 s9 XCHG
     s0 s8 XCHG
     s0 s7 XCHG
+    s0 s6 XCHG
     s3 s3 XCHG2
   }>
   __gen_write_DoWithdrawCollateralMessage PROCINLINE:<{
@@ -819,26 +817,28 @@ PROGRAM{
   $__gen_PositionsManagerContract_receive_DepositCollateralMessage PROCINLINE:<{
     5576 PUSHINT
     __tact_context_get_sender INLINECALLDICT
-    s13 PUSH
+    s12 PUSH
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
     __tact_context_sys GETGLOB
     MYADDR
-    s10 s14 s(-2) PU2XC
+    s9 s13 s(-2) PU2XC
     $__gen_UserPositionContract_init_child CALLDICT
     2DUP
     $contractAddress INLINECALLDICT
-    6 6 BLKSWAP
+    s4 s10 XCHG
+    s3 s9 XCHG
+    s8 s7 s6 XCHG3
     0 PUSHINT
     66 PUSHINT
-    s13 s12 XCHG2
+    s7 s12 XCHG2
     TRUE
     s0 s12 XCHG
     __gen_writecell_DepositCollateralMessage INLINECALLDICT
-    s6 s2 XCHG2
-    s1 s5 XCHG
-    s1 s4 XCHG
-    s1 s3 XCHG
+    s0 s1 s6 XCHG3
+    s4 s4 XCHG2
+    s0 s5 XCHG
+    s0 s3 XCHG
     __gen_constructor_SendParameters$to_value_mode_bounce_body_code_data INLINECALLDICT
     $send INLINECALLDICT
   }>
@@ -872,29 +872,27 @@ PROGRAM{
   $__gen_PositionsManagerContract_receive_WithdrawStablecoinMessage PROCINLINE:<{
     5576 PUSHINT
     __tact_context_get_sender INLINECALLDICT
-    s13 PUSH
+    s12 PUSH
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
-    s3 s12 XCHG
-    s11 s10 s9 XCHG3
-    s8 PUSH
+    s3 s11 XCHG
+    s10 s9 s8 XCHG3
+    s7 PUSH
     $__gen_PositionsManagerContract__userPositionAddress INLINECALLDICT
-    s5 s9 XCHG
     s4 s8 XCHG
     s3 s7 XCHG
-    s6 s9 s13 XCHG3
+    s6 s5 s12 XCHG3
     0 PUSHINT
     66 PUSHINT
-    s14 s13 XCHG2
+    s13 s12 XCHG2
     TRUE
-    s0 s13 XCHG
+    s0 s12 XCHG
     __gen_writecell_WithdrawStablecoinMessage INLINECALLDICT
     s4 s8 XCHG
     s3 s7 XCHG
     s6 s5 s0 XCHG3
     __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
     $send INLINECALLDICT
-    3 ROLL
   }>
   $__gen_PositionsManagerContract_receive_IncreaseTotalStableMessage PROCINLINE:<{
     4 2 BLKSWAP
@@ -916,29 +914,27 @@ PROGRAM{
   $__gen_PositionsManagerContract_receive_RepayStablecoinMessage PROCINLINE:<{
     5576 PUSHINT
     __tact_context_get_sender INLINECALLDICT
-    s13 PUSH
+    s12 PUSH
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
-    s3 s12 XCHG
-    s11 s10 s9 XCHG3
-    s8 PUSH
+    s3 s11 XCHG
+    s10 s9 s8 XCHG3
+    s7 PUSH
     $__gen_PositionsManagerContract__userPositionAddress INLINECALLDICT
-    s5 s9 XCHG
     s4 s8 XCHG
     s3 s7 XCHG
-    s6 s9 s13 XCHG3
+    s6 s5 s12 XCHG3
     0 PUSHINT
     66 PUSHINT
-    s14 s13 XCHG2
+    s13 s12 XCHG2
     TRUE
-    s0 s13 XCHG
+    s0 s12 XCHG
     __gen_writecell_RepayStablecoinMessage INLINECALLDICT
     s4 s8 XCHG
     s3 s7 XCHG
     s6 s5 s0 XCHG3
     __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
     $send INLINECALLDICT
-    3 ROLL
   }>
   $__gen_PositionsManagerContract_receive_DecreaseTotalStableMessage PROCINLINE:<{
     4 2 BLKSWAP
@@ -960,29 +956,27 @@ PROGRAM{
   $__gen_PositionsManagerContract_receive_WithdrawCollateralMessage PROCINLINE:<{
     5576 PUSHINT
     __tact_context_get_sender INLINECALLDICT
-    s13 PUSH
+    s12 PUSH
     __tact_address_eq INLINECALLDICT
     THROWANYIFNOT
-    s3 s12 XCHG
-    s11 s10 s9 XCHG3
-    s8 PUSH
+    s3 s11 XCHG
+    s10 s9 s8 XCHG3
+    s7 PUSH
     $__gen_PositionsManagerContract__userPositionAddress INLINECALLDICT
-    s5 s9 XCHG
     s4 s8 XCHG
     s3 s7 XCHG
-    s6 s9 s13 XCHG3
+    s6 s5 s12 XCHG3
     0 PUSHINT
     66 PUSHINT
-    s14 s13 XCHG2
+    s13 s12 XCHG2
     TRUE
-    s0 s13 XCHG
+    s0 s12 XCHG
     __gen_writecell_WithdrawCollateralMessage INLINECALLDICT
     s4 s8 XCHG
     s3 s7 XCHG
     s6 s5 s0 XCHG3
     __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
     $send INLINECALLDICT
-    3 ROLL
   }>
   $__gen_PositionsManagerContract_receive_DoWithdrawCollateralMessage PROCINLINE:<{
     4 2 BLKSWAP
@@ -1032,12 +1026,12 @@ PROGRAM{
       TRUE
     }>
     OVER
-    3723304936 PUSHINT
+    3932134519 PUSHINT
     EQUAL
     IFJMP:<{
       NIP
       __gen_read_DepositCollateralMessage INLINECALLDICT
-      1 9 BLKDROP2
+      1 8 BLKDROP2
       $__gen_PositionsManagerContract_receive_DepositCollateralMessage INLINECALLDICT
       TRUE
     }>
@@ -1052,12 +1046,12 @@ PROGRAM{
       TRUE
     }>
     OVER
-    1815710139 PUSHINT
+    73036137 PUSHINT
     EQUAL
     IFJMP:<{
       NIP
       __gen_read_WithdrawStablecoinMessage INLINECALLDICT
-      1 9 BLKDROP2
+      1 8 BLKDROP2
       $__gen_PositionsManagerContract_receive_WithdrawStablecoinMessage INLINECALLDICT
       TRUE
     }>
@@ -1072,12 +1066,12 @@ PROGRAM{
       TRUE
     }>
     OVER
-    3203603975 PUSHINT
+    2621043381 PUSHINT
     EQUAL
     IFJMP:<{
       NIP
       __gen_read_RepayStablecoinMessage INLINECALLDICT
-      1 9 BLKDROP2
+      1 8 BLKDROP2
       $__gen_PositionsManagerContract_receive_RepayStablecoinMessage INLINECALLDICT
       TRUE
     }>
@@ -1092,12 +1086,12 @@ PROGRAM{
       TRUE
     }>
     OVER
-    3410368520 PUSHINT
+    433324996 PUSHINT
     EQUAL
     IFJMP:<{
       NIP
       __gen_read_WithdrawCollateralMessage INLINECALLDICT
-      1 9 BLKDROP2
+      1 8 BLKDROP2
       $__gen_PositionsManagerContract_receive_WithdrawCollateralMessage INLINECALLDICT
       TRUE
     }>
@@ -1160,7 +1154,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d577a363973517658734c4872717a72764d79764164684b51576453765134375837435145696f444632715a48} PUSHSLICE
+    x{697066733a2f2f516d556d754b4643757544793972734376577744364274574a7855657a6e795347517078416364575a7334585353} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

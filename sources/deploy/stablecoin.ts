@@ -15,8 +15,6 @@ import { testAddress } from "ton-emulator";
 import { GateKeeperContract } from "../output/stableton_GateKeeperContract";
 import { PositionAddressContract } from "../output/stableton_PositionAddressContract";
 import { PositionsManagerContract } from "../output/stableton_PositionsManagerContract";
-import { StablecoinJettonContract } from "../output/stableton_StablecoinJettonContract";
-import { StablecoinMasterContract } from "../output/stableton_StablecoinMasterContract";
 
 import { deploy } from "../utils/deploy";
 import { buildOnchainMetadata } from "../utils/jetton-helpers";

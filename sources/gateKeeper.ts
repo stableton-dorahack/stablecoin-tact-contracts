@@ -1,4 +1,4 @@
-import { StablecoinMaster, storeDeploy, storeMint } from "./output/jetton_StablecoinMaster";
+import { StablecoinMaster, storeMint } from "./output/jetton_StablecoinMaster";
 import {
     Address,
     beginCell,
@@ -11,19 +11,14 @@ import {
     WalletContractV4,
 } from "ton";
 import { mnemonicToPrivateKey } from "ton-crypto";
-import { testAddress } from "ton-emulator";
-import { GateKeeperContract } from "./output/stableton_GateKeeperContract";
-import { PositionAddressContract } from "./output/stableton_PositionAddressContract";
-import { PositionsManagerContract } from "./output/stableton_PositionsManagerContract";
-import { StablecoinJettonContract } from "./output/stableton_StablecoinJettonContract";
-import { StablecoinMasterContract } from "./output/stableton_StablecoinMasterContract";
 
-import { deploy } from "./utils/deploy";
 import { buildOnchainMetadata } from "./utils/jetton-helpers";
-import { printAddress, printDeploy, printHeader } from "./utils/print";
 import { getHttpEndpoint } from "@orbs-network/ton-access";
 
-const workchain = 0; //we are working in basechain.
+const workchain = 0;
+
+import dotenv from "dotenv";
+dotenv.config();
 
 (async () => {
     const endpoint = await getHttpEndpoint({ network: "mainnet" });
@@ -32,10 +27,8 @@ const workchain = 0; //we are working in basechain.
     });
 
     let owner = Address.parse("EQC6RMuMRAvN3X-sBiNOzV8a2h25vvQrUv8T-04nWPX2ddIs");
-    let mnemonics =
-        "profit parent fortune gentle panda pony fiber climb ten boost focus magnet pizza topic soup ship lyrics all exotic guilt student answer squirrel spawn";
-
-    let keyPair = await mnemonicToPrivateKey(mnemonics.split(" "));
+    let mnemonics = process.env.mnemonic;
+    let keyPair = await mnemonicToPrivateKey(mnemonics!.split(" "));
     let secretKey = keyPair.secretKey;
 
     let wallet = WalletContractV4.create({

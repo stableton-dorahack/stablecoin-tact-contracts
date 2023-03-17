@@ -412,13 +412,13 @@ SETCP0
       }> PUSHCONT
       IFJMP
       s1 PUSH
-      3723304936 PUSHINT
+      3932134519 PUSHINT
       EQUAL
       <{
         s1 POP
         32 LDU
         s0 s1 XCHG
-        3723304936 PUSHINT
+        3932134519 PUSHINT
         EQUAL
         129 THROWIFNOT
         LDMSGADDR
@@ -446,20 +446,19 @@ SETCP0
         32 LDU
         32 LDU
         32 LDU
-        32 LDU
-        4 1 BLKSWAP
-        s0 s4 XCHG
+        3 1 BLKSWAP
+        s0 s3 XCHG
         32 LDU
         32 LDU
         ROTREV
         s0 s2 XCHG
         LDGRAMS
-        s0 s9 XCHG
         s0 s8 XCHG
         s0 s7 XCHG
+        s0 s6 XCHG
         s3 s3 XCHG2
-        1 9 BLKDROP2
-        7 BLKDROP
+        1 8 BLKDROP2
+        6 BLKDROP
         61910 PUSHINT
         2 GETGLOBVAR
         s8 PUSH
@@ -627,13 +626,13 @@ SETCP0
         -1 PUSHINT
       }> IFJMPREF
       s1 PUSH
-      1815710139 PUSHINT
+      73036137 PUSHINT
       EQUAL
       <{
         s1 POP
         32 LDU
         s0 s1 XCHG
-        1815710139 PUSHINT
+        73036137 PUSHINT
         EQUAL
         129 THROWIFNOT
         LDMSGADDR
@@ -661,27 +660,27 @@ SETCP0
         32 LDU
         32 LDU
         32 LDU
-        32 LDU
-        4 1 BLKSWAP
-        s0 s4 XCHG
+        3 1 BLKSWAP
+        s0 s3 XCHG
         32 LDU
         32 LDU
         ROTREV
         s0 s2 XCHG
         LDGRAMS
-        s0 s9 XCHG
         s0 s8 XCHG
         s0 s7 XCHG
+        s0 s6 XCHG
         s3 s3 XCHG2
-        1 9 BLKDROP2
+        1 8 BLKDROP2
         s1 POP
-        4 2 BLKDROP2
+        2 2 BLKDROP2
+        s2 POP
         61910 PUSHINT
         2 GETGLOBVAR
         s10 PUSH
         SDEQ
         THROWANYIFNOT
-        s6 s1 PUSH2
+        s6 s0 PUSH2
         MUL
         s3 PUSH
         ADD
@@ -692,8 +691,7 @@ SETCP0
         s0 s6 XCHG
         s5 s11 XCHG
         s4 s10 XCHG
-        s0 s3 XCHG
-        s12 s1 s12 XCHG3
+        s12 s1 s3 XCHG3
         s12 PUSH
         <{
           PUSHSLICE
@@ -1802,13 +1800,13 @@ SETCP0
         }> CALLREF
       }> IFJMPREF
       s1 PUSH
-      3203603975 PUSHINT
+      2621043381 PUSHINT
       EQUAL
       <{
         s1 POP
         32 LDU
         s0 s1 XCHG
-        3203603975 PUSHINT
+        2621043381 PUSHINT
         EQUAL
         129 THROWIFNOT
         LDMSGADDR
@@ -1836,28 +1834,28 @@ SETCP0
         32 LDU
         32 LDU
         32 LDU
-        32 LDU
-        4 1 BLKSWAP
-        s0 s4 XCHG
+        3 1 BLKSWAP
+        s0 s3 XCHG
         32 LDU
         32 LDU
         ROTREV
         s0 s2 XCHG
         LDGRAMS
-        s0 s9 XCHG
         s0 s8 XCHG
         s0 s7 XCHG
+        s0 s6 XCHG
         s3 s3 XCHG2
-        1 9 BLKDROP2
+        1 8 BLKDROP2
         <{
           s0 POP
-          4 2 BLKDROP2
+          2 2 BLKDROP2
+          s2 POP
           61910 PUSHINT
           2 GETGLOBVAR
           s10 PUSH
           SDEQ
           THROWANYIFNOT
-          2 6 1 PUSH3
+          2 6 0 PUSH3
           MUL
           1000000000 PUSHINT
           DIV QOUT
@@ -1889,9 +1887,9 @@ SETCP0
           s0 s3 XCHG
           0 PUSHINT
           66 PUSHINT
-          s4 s3 XCHG2
+          s4 s5 XCHG2
           -1 PUSHINT
-          s0 s6 XCHG
+          s0 s4 XCHG
           NEWC
           4 1 BLKSWAP
           2032846846 PUSHINT
@@ -1925,7 +1923,7 @@ SETCP0
           32 STU
           ENDC
           s9 PUSH
-          s4 s4 XCHG2
+          s4 s4 s4 XCHG3
           s1 s4 XCHG
           s3 s3 s0 XCHG3
           PUSHNULL
@@ -2370,13 +2368,13 @@ SETCP0
       }> PUSHCONT
       IFJMP
       s1 PUSH
-      3410368520 PUSHINT
+      433324996 PUSHINT
       EQUAL
       <{
         s1 POP
         32 LDU
         s0 s1 XCHG
-        3410368520 PUSHINT
+        433324996 PUSHINT
         EQUAL
         129 THROWIFNOT
         LDMSGADDR
@@ -2404,21 +2402,21 @@ SETCP0
         32 LDU
         32 LDU
         32 LDU
-        32 LDU
-        4 1 BLKSWAP
-        s0 s4 XCHG
+        3 1 BLKSWAP
+        s0 s3 XCHG
         32 LDU
         32 LDU
         ROTREV
         s0 s2 XCHG
         LDGRAMS
-        s0 s9 XCHG
         s0 s8 XCHG
         s0 s7 XCHG
+        s0 s6 XCHG
         s3 s3 XCHG2
-        1 9 BLKDROP2
+        1 8 BLKDROP2
         s1 POP
-        4 2 BLKDROP2
+        2 2 BLKDROP2
+        s2 POP
         53160 PUSHINT
         2 GETGLOBVAR
         s10 PUSH
@@ -2604,8 +2602,7 @@ SETCP0
           s5 s1 XCPU
           s5 s11 XCHG
           s4 s13 XCHG
-          s12 s3 s3 XCHG3
-          s0 s13 XCHG
+          s12 s13 s3 XCHG3
           <{
             PUSHSLICE
             20 DEBUG

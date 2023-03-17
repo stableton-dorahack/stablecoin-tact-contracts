@@ -77,12 +77,11 @@ slice __tact_int_to_string(int src) inline_ref {
     return b.end_cell().begin_parse();
 }
 
-(slice, ((int, int, int, int))) __gen_read_PoolSettings(slice sc_0) inline {
+(slice, ((int, int, int))) __gen_read_PoolSettings(slice sc_0) inline {
     var v'liquidationRatio = sc_0~load_uint(32);
     var v'stabilityFeeRate = sc_0~load_uint(32);
-    var v'closeFactorBps = sc_0~load_uint(32);
     var v'liquidatorIncentiveBps = sc_0~load_uint(32);
-    return (sc_0, (v'liquidationRatio, v'stabilityFeeRate, v'closeFactorBps, v'liquidatorIncentiveBps));
+    return (sc_0, (v'liquidationRatio, v'stabilityFeeRate, v'liquidatorIncentiveBps));
 }
 
 builder __gen_write_DebtRate(builder build_0, (int, int) v) inline {
@@ -98,8 +97,8 @@ builder __gen_write_DebtRate(builder build_0, (int, int) v) inline {
     return (sc_0, (v'debtAccumulatedRate, v'lastAccumulationTime));
 }
 
-(slice, ((slice, int, (int, int, int, int), (int, int), int))) __gen_read_DepositCollateralMessage(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3723304936);
+(slice, ((slice, int, (int, int, int), (int, int), int))) __gen_read_DepositCollateralMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3932134519);
     var v'user = sc_0~__tact_load_address();
     var v'amount = sc_0~load_coins();
     var v'settings = sc_0~__gen_read_PoolSettings();
@@ -108,8 +107,8 @@ builder __gen_write_DebtRate(builder build_0, (int, int) v) inline {
     return (sc_0, (v'user, v'amount, v'settings, v'rate, v'tonPriceWithSafetyMargin));
 }
 
-(slice, ((slice, int, (int, int, int, int), (int, int), int))) __gen_read_WithdrawCollateralMessage(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3410368520);
+(slice, ((slice, int, (int, int, int), (int, int), int))) __gen_read_WithdrawCollateralMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 433324996);
     var v'user = sc_0~__tact_load_address();
     var v'amount = sc_0~load_coins();
     var v'settings = sc_0~__gen_read_PoolSettings();
@@ -118,8 +117,8 @@ builder __gen_write_DebtRate(builder build_0, (int, int) v) inline {
     return (sc_0, (v'user, v'amount, v'settings, v'rate, v'tonPriceWithSafetyMargin));
 }
 
-(slice, ((slice, int, (int, int, int, int), (int, int), int))) __gen_read_WithdrawStablecoinMessage(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1815710139);
+(slice, ((slice, int, (int, int, int), (int, int), int))) __gen_read_WithdrawStablecoinMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 73036137);
     var v'user = sc_0~__tact_load_address();
     var v'amount = sc_0~load_uint(64);
     var v'settings = sc_0~__gen_read_PoolSettings();
@@ -128,8 +127,8 @@ builder __gen_write_DebtRate(builder build_0, (int, int) v) inline {
     return (sc_0, (v'user, v'amount, v'settings, v'rate, v'tonPriceWithSafetyMargin));
 }
 
-(slice, ((slice, int, (int, int, int, int), (int, int), int))) __gen_read_RepayStablecoinMessage(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3203603975);
+(slice, ((slice, int, (int, int, int), (int, int), int))) __gen_read_RepayStablecoinMessage(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2621043381);
     var v'user = sc_0~__tact_load_address();
     var v'amount = sc_0~load_uint(64);
     var v'settings = sc_0~__gen_read_PoolSettings();
@@ -501,9 +500,9 @@ _ $__gen_get_getMessage() method_id(91266) {
     return (bounce, to, value, mode, null(), null(), null());
 }
 
-(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_DepositCollateralMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int, int, int), (int, int), int) $msg) impure inline {
+(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_DepositCollateralMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int, int), (int, int), int) $msg) impure inline {
     var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)) = $self;
-    var ($msg'user, $msg'amount, ($msg'settings'liquidationRatio, $msg'settings'stabilityFeeRate, $msg'settings'closeFactorBps, $msg'settings'liquidatorIncentiveBps), ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime), $msg'tonPriceWithSafetyMargin) = $msg;
+    var ($msg'user, $msg'amount, ($msg'settings'liquidationRatio, $msg'settings'stabilityFeeRate, $msg'settings'liquidatorIncentiveBps), ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime), $msg'tonPriceWithSafetyMargin) = $msg;
     throw_unless(61910, __tact_address_eq(__tact_context_get_sender(), $self'positionsManagerAddress));
     $self'collateral = ($self'collateral + $msg'amount);
     $send(__gen_constructor_SendParameters$to_bounce_value_mode($msg'user, false, 0, (64 + 2)));
@@ -519,9 +518,9 @@ _ $__gen_get_getMessage() method_id(91266) {
     return (user, amount);
 }
 
-(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_WithdrawStablecoinMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int, int, int), (int, int), int) $msg) impure inline {
+(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_WithdrawStablecoinMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int, int), (int, int), int) $msg) impure inline {
     var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)) = $self;
-    var ($msg'user, $msg'amount, ($msg'settings'liquidationRatio, $msg'settings'stabilityFeeRate, $msg'settings'closeFactorBps, $msg'settings'liquidatorIncentiveBps), ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime), $msg'tonPriceWithSafetyMargin) = $msg;
+    var ($msg'user, $msg'amount, ($msg'settings'liquidationRatio, $msg'settings'stabilityFeeRate, $msg'settings'liquidatorIncentiveBps), ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime), $msg'tonPriceWithSafetyMargin) = $msg;
     throw_unless(61910, __tact_address_eq(__tact_context_get_sender(), $self'positionsManagerAddress));
     int $debtAfterWithdraw = (($self'debt * $msg'rate'debtAccumulatedRate) + $msg'amount);
     if ((~ ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_isPositionHealthy($self'collateral, $debtAfterWithdraw, $msg'tonPriceWithSafetyMargin, $msg'rate'debtAccumulatedRate))) {
@@ -540,9 +539,9 @@ _ $__gen_get_getMessage() method_id(91266) {
     return (user, amount, rate);
 }
 
-(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_RepayStablecoinMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int, int, int), (int, int), int) $msg) impure inline {
+(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_RepayStablecoinMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int, int), (int, int), int) $msg) impure inline {
     var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)) = $self;
-    var ($msg'user, $msg'amount, ($msg'settings'liquidationRatio, $msg'settings'stabilityFeeRate, $msg'settings'closeFactorBps, $msg'settings'liquidatorIncentiveBps), ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime), $msg'tonPriceWithSafetyMargin) = $msg;
+    var ($msg'user, $msg'amount, ($msg'settings'liquidationRatio, $msg'settings'stabilityFeeRate, $msg'settings'liquidatorIncentiveBps), ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime), $msg'tonPriceWithSafetyMargin) = $msg;
     throw_unless(61910, __tact_address_eq(__tact_context_get_sender(), $self'positionsManagerAddress));
     int $amountToBurn = $msg'amount;
     int $factDebt = (($self'debt * $msg'rate'debtAccumulatedRate) / 1000000000);
@@ -573,9 +572,9 @@ _ $__gen_get_getMessage() method_id(91266) {
     return (user, amount);
 }
 
-(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_WithdrawCollateralMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int, int, int), (int, int), int) $msg) impure inline {
+(((slice, slice, slice, int, int, (int, slice))), ()) $__gen_UserPositionContract_receive_WithdrawCollateralMessage((slice, slice, slice, int, int, (int, slice)) $self, (slice, int, (int, int, int), (int, int), int) $msg) impure inline {
     var ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message)) = $self;
-    var ($msg'user, $msg'amount, ($msg'settings'liquidationRatio, $msg'settings'stabilityFeeRate, $msg'settings'closeFactorBps, $msg'settings'liquidatorIncentiveBps), ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime), $msg'tonPriceWithSafetyMargin) = $msg;
+    var ($msg'user, $msg'amount, ($msg'settings'liquidationRatio, $msg'settings'stabilityFeeRate, $msg'settings'liquidatorIncentiveBps), ($msg'rate'debtAccumulatedRate, $msg'rate'lastAccumulationTime), $msg'tonPriceWithSafetyMargin) = $msg;
     throw_unless(53160, __tact_address_eq(__tact_context_get_sender(), $self'positionsManagerAddress));
     if (($msg'amount > $self'collateral)) {
         ($self'user, $self'stablecoinMasterAddress, $self'positionsManagerAddress, $self'collateral, $self'debt, ($self'message'timestamp, $self'message'message))~$__gen_UserPositionContract_setMessage(__gen_str_1734956577());
@@ -619,21 +618,21 @@ _ $__gen_get_getMessage() method_id(91266) {
     }
     
     ;; Receive DepositCollateralMessage message
-    if (op == 3723304936) {
+    if (op == 3932134519) {
         var msg = in_msg~__gen_read_DepositCollateralMessage();
         self~$__gen_UserPositionContract_receive_DepositCollateralMessage(msg);
         return (self, true);
     }
     
     ;; Receive WithdrawStablecoinMessage message
-    if (op == 1815710139) {
+    if (op == 73036137) {
         var msg = in_msg~__gen_read_WithdrawStablecoinMessage();
         self~$__gen_UserPositionContract_receive_WithdrawStablecoinMessage(msg);
         return (self, true);
     }
     
     ;; Receive RepayStablecoinMessage message
-    if (op == 3203603975) {
+    if (op == 2621043381) {
         var msg = in_msg~__gen_read_RepayStablecoinMessage();
         self~$__gen_UserPositionContract_receive_RepayStablecoinMessage(msg);
         return (self, true);
@@ -647,7 +646,7 @@ _ $__gen_get_getMessage() method_id(91266) {
     }
     
     ;; Receive WithdrawCollateralMessage message
-    if (op == 3410368520) {
+    if (op == 433324996) {
         var msg = in_msg~__gen_read_WithdrawCollateralMessage();
         self~$__gen_UserPositionContract_receive_WithdrawCollateralMessage(msg);
         return (self, true);
@@ -697,7 +696,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() {
-    return "ipfs://Qma1JRskubrvmQNWjEifRYs7rMxeEtNG4LP6VJQjNSUVTL";
+    return "ipfs://Qmc6DDTBM1pwbvLvx3i7vQ3jwKnJBHVDm4aUqig4gQCZHU";
 }
 
 _ lazy_deployment_completed() {

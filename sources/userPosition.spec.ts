@@ -1,6 +1,5 @@
 import { Address, OpenedContract, Sender, toNano } from "ton";
 import { ContractSystem, Logger, Tracker, Treasure } from "ton-emulator";
-import { PositionsManagerContract } from "./output/stableton_PositionsManagerContract";
 import { UserPositionContract } from "./output/stableton_UserPositionContract";
 
 describe("PositionsManagerContract", () => {
@@ -53,7 +52,6 @@ describe("PositionsManagerContract", () => {
                     $$type: "PoolSettings",
                     liquidationRatio: 1n,
                     stabilityFeeRate: 1n,
-                    closeFactorBps: 1n,
                     liquidatorIncentiveBps: 1n,
                 },
                 rate: {
@@ -87,7 +85,6 @@ describe("PositionsManagerContract", () => {
                     $$type: "PoolSettings",
                     liquidationRatio: 1n,
                     stabilityFeeRate: 1n,
-                    closeFactorBps: 1n,
                     liquidatorIncentiveBps: 1n,
                 },
                 rate: {
@@ -121,7 +118,6 @@ describe("PositionsManagerContract", () => {
                     $$type: "PoolSettings",
                     liquidationRatio: 1n,
                     stabilityFeeRate: 1n,
-                    closeFactorBps: 1n,
                     liquidatorIncentiveBps: 1n,
                 },
                 rate: {
@@ -158,7 +154,6 @@ describe("PositionsManagerContract", () => {
                     $$type: "PoolSettings",
                     liquidationRatio: 1n,
                     stabilityFeeRate: 1n,
-                    closeFactorBps: 1n,
                     liquidatorIncentiveBps: 1n,
                 },
                 rate: {
@@ -205,7 +200,6 @@ describe("PositionsManagerContract", () => {
                     $$type: "PoolSettings",
                     liquidationRatio: 1n,
                     stabilityFeeRate: 1n,
-                    closeFactorBps: 1n,
                     liquidatorIncentiveBps: 1n,
                 },
                 rate: {
@@ -238,7 +232,6 @@ describe("PositionsManagerContract", () => {
                     $$type: "PoolSettings",
                     liquidationRatio: 1n,
                     stabilityFeeRate: 1n,
-                    closeFactorBps: 1n,
                     liquidatorIncentiveBps: 1n,
                 },
                 rate: {

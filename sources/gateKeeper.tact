@@ -7,8 +7,7 @@ import "./math/math.tact";
 
 message PoolSettingsMsg {
     liquidationRatio: Int as uint32;
-    stabilityFeeRate: Int as uint32; // 100 = 1%
-    closeFactorBps: Int as uint32;
+    stabilityFeeRate: Int as uint64; // 100000000062 = X**1.000000000627 every second = 2%/yr., look at ./math/math.tact
     liquidatorIncentiveBps: Int as uint32;
 }
 
@@ -70,7 +69,6 @@ contract GateKeeperContract with Deployable, Ownable {
         self.poolSettings = PoolSettings{
             liquidationRatio: 0,
             stabilityFeeRate: 0,
-            closeFactorBps: 0,
             liquidatorIncentiveBps: 0
         };
         self.tonPrice = 0;  
@@ -101,12 +99,13 @@ contract GateKeeperContract with Deployable, Ownable {
         self.poolSettings = PoolSettings{
             liquidationRatio: msg.liquidationRatio,
             stabilityFeeRate: msg.stabilityFeeRate,
-            closeFactorBps: msg.closeFactorBps,
             liquidatorIncentiveBps: msg.liquidatorIncentiveBps
         };
         reply("pool settings updated".asComment());
     }
 
+    // due to we have no true decentralized oracles,
+    // at the moment we update Ton price centralized way
     receive(msg: UpdateTonPriceMsg) {
         self.requireOwner();
         // todo calculate price with safety margin
@@ -122,11 +121,22 @@ contract GateKeeperContract with Deployable, Ownable {
         reply("ton price updated".asComment());
     }
 
-    receive("updateDebtRate"){
-        self.requireOwner();
+    // can be called by anyone, who is ready to pay for tx
+    // can be incentivized by some small premium for call
+    // calculates fees from total issued stablecoins, 
+    // accrued from last collect period on per seconds basis
+    // increases debt rate
 
-        require(now() + 1000 > self.debtRate.lastAccumulationTime, "updateDebtAccumulatedRate:Invalid timestamp");
-        self.debtRate.debtAccumulatedRate = (self.debtRate.debtAccumulatedRate * rpow(self.poolSettings.stabilityFeeRate, now() - self.debtRate.lastAccumulationTime)) * self.RAY;
+    /* original formula from makerDao
+    _debtAccumulatedRate = rmul(
+      rpow(add(globalStabilityFeeRate, _stabilityFeeRate), now - _lastAccumulationTime, RAY),
+      _previousDebtAccumulatedRate
+    );
+    */
+    receive("collectFees"){
+        require(now() > self.debtRate.lastAccumulationTime, "updateDebtAccumulatedRate: Invalid timestamp");
+        let precision = pow(10, 12);
+        self.debtRate.debtAccumulatedRate = self.debtRate.debtAccumulatedRate * rpow(self.poolSettings.stabilityFeeRate, now() - self.debtRate.lastAccumulationTime, precision);
         self.debtRate.lastAccumulationTime = now();
         reply("debt rate updated".asComment());
     }

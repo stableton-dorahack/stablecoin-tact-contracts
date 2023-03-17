@@ -2,7 +2,6 @@
 struct PoolSettings {
     liquidationRatio: Int as uint32;
     stabilityFeeRate: Int as uint32;
-    closeFactorBps: Int as uint32;
     liquidatorIncentiveBps: Int as uint32;
 }
 

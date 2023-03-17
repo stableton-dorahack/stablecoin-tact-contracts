@@ -41,7 +41,6 @@ describe("GateKeeperContract", () => {
 
         expect(await gateKeeperContract.getPoolSettings()).toEqual({
             $$type: "PoolSettings",
-            closeFactorBps: 0n,
             liquidationRatio: 0n,
             liquidatorIncentiveBps: 0n,
             stabilityFeeRate: 0n,
@@ -64,7 +63,6 @@ describe("GateKeeperContract", () => {
                 $$type: "PoolSettingsMsg",
                 liquidationRatio: 1200000000n,
                 stabilityFeeRate: 2n,
-                closeFactorBps: 2500n,
                 liquidatorIncentiveBps: 10500n,
             }
         );
@@ -76,7 +74,6 @@ describe("GateKeeperContract", () => {
             $$type: "PoolSettings",
             liquidationRatio: 1200000000n,
             stabilityFeeRate: 2n,
-            closeFactorBps: 2500n,
             liquidatorIncentiveBps: 10500n,
         });
     });
