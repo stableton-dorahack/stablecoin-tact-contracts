@@ -7,6 +7,8 @@ PROGRAM{
   DECLPROC __tact_store_bool
   DECLPROC __tact_address_eq
   DECLPROC __tact_int_to_string
+  DECLPROC __gen_write_Message
+  DECLPROC __gen_read_Message
   DECLPROC __gen_read_PoolSettings
   DECLPROC __gen_write_DebtRate
   DECLPROC __gen_read_DebtRate
@@ -27,8 +29,6 @@ PROGRAM{
   DECLPROC __gen_write_RepayBurnMessage
   DECLPROC __gen_writecell_RepayBurnMessage
   DECLPROC __gen_read_StablecoinBurnedMessage
-  DECLPROC __gen_write_Message
-  DECLPROC __gen_read_Message
   DECLPROC __gen_write_UserPositionContract
   DECLPROC __gen_read_UserPositionContract
   DECLPROC __gen_PositionState_to_external
@@ -191,6 +191,23 @@ PROGRAM{
     }>
     ENDC
     CTOS
+  }>
+  __gen_write_Message PROCINLINE:<{
+    s0 s2 XCHG
+    64 STU
+    NEWC
+    ROT
+    STSLICER
+    ENDC
+    SWAP
+    STREF
+  }>
+  __gen_read_Message PROCINLINE:<{
+    64 LDU
+    LDREF
+    SWAP
+    CTOS
+    s1 s2 XCHG
   }>
   __gen_read_PoolSettings PROCINLINE:<{
     257 PUSHINT
@@ -428,23 +445,6 @@ PROGRAM{
     __gen_read_DebtRate INLINECALLDICT
     s2 s4 XCHG
     s2 s3 XCHG
-  }>
-  __gen_write_Message PROCINLINE:<{
-    s0 s2 XCHG
-    64 STU
-    NEWC
-    ROT
-    STSLICER
-    ENDC
-    SWAP
-    STREF
-  }>
-  __gen_read_Message PROCINLINE:<{
-    64 LDU
-    LDREF
-    SWAP
-    CTOS
-    s1 s2 XCHG
   }>
   __gen_write_UserPositionContract PROCINLINE:<{
     s7 s6 XCHG2
@@ -1056,24 +1056,27 @@ PROGRAM{
         6 ROLL
       }>
       s3 POP
+      B{b5ee9c72410101010024000044636f6c6c61746572616c2073656e74206261636b20746f20796f722077616c6c6574cf7a0dbb} B>boc <s PUSHSLICE
+      s6 s7 XCHG
+      s5 s6 XCHG
+      s4 s5 XCHG
+      s4 s8 XCHG
+      s1 s3 s0 XCHG3
+      $__gen_UserPositionContract_setMessage INLINECALLDICT
       0 PUSHINT
       66 PUSHINT
       s0 s10 XCHG
       TRUE
-      s0 s9 XCHG
+      s0 s10 XCHG
       __gen_constructor_DoWithdrawCollateralMessage$user_amount INLINECALLDICT
       __gen_writecell_DoWithdrawCollateralMessage INLINECALLDICT
-      s5 PUSH
+      s6 PUSH
       s3 s1 s4 XCHG3
-      s11 s9 s9 XCHG3
+      s11 s10 s10 XCHG3
       __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
       $send INLINECALLDICT
-      B{b5ee9c72410101010024000044636f6c6c61746572616c2073656e74206261636b20746f20796f722077616c6c6574cf7a0dbb} B>boc <s PUSHSLICE
-      s4 s7 XCHG
-      s3 s6 XCHG
-      4 2 REVERSE
-      s2 s3 XCHG
-      $__gen_UserPositionContract_setMessage INLINECALLDICT
+      s4 s6 XCHG
+      2 4 BLKSWAP
     }>
   }>
   __gen_router_UserPositionContract PROCREF:<{
@@ -1180,7 +1183,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d50766e79644464694178485351413148446f71414672516f3947634d593452336b59436744386675736e6d34} PUSHSLICE
+    x{697066733a2f2f516d59456473515973345234646246487941654e6e676959546232464e5265504b415179586b6964514b5a383263} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

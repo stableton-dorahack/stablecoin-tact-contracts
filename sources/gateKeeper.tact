@@ -177,6 +177,8 @@ contract GateKeeperContract with Deployable, Ownable {
         // dump("valueToSendForward");
         // dump(valueToSendForward);
 
+        self.totalCollateralAmount = self.totalCollateralAmount + msg.amount;
+
         send(SendParameters{
             to: self.deps.positionsManagerAddress, 
             value: valueToSendForward,

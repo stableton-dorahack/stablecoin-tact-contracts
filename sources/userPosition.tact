@@ -288,6 +288,7 @@ contract UserPositionContract  {
         
 
         self.collateral = collateralAfterWithdraw;
+        self.setMessage("collateral sent back to yor wallet");
 
         send(SendParameters{
             to: self.positionsManagerAddress, 
@@ -300,7 +301,7 @@ contract UserPositionContract  {
             }.toCell()
         });
 
-        self.setMessage("collateral sent back to yor wallet");
+        
     }
 
 

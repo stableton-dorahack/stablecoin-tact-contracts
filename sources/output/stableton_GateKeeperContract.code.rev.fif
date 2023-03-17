@@ -1365,6 +1365,8 @@ SETCP0
           SUB
           s1 PUSH
           SUB
+          s5 s1 XCPU
+          ADD
           2 PUSHINT
           s0 s3 XCHG
           -1 PUSHINT
@@ -1424,8 +1426,9 @@ SETCP0
           STREF
           ENDC
           s17 PUSH
-          s4 s1 s4 XCHG3
-          s3 s3 XCHG2
+          s0 s4 XCHG
+          s3 s7 XCHG
+          s0 s7 s7 XCHG3
           s1 s4 XCHG
           s3 s3 s0 XCHG3
           PUSHNULL

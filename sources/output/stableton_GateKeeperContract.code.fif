@@ -1145,6 +1145,8 @@ PROGRAM{
     SUB
     OVER
     SUB
+    s5 s1 XCPU
+    ADD
     2 PUSHINT
     s0 s3 XCHG
     TRUE
@@ -1154,8 +1156,9 @@ PROGRAM{
     __gen_constructor_DepositCollateralMessage$user_amount_settings_rate_tonPriceWithSafetyMargin INLINECALLDICT
     __gen_writecell_DepositCollateralMessage INLINECALLDICT
     17 s() PUSH
-    s4 s1 s4 XCHG3
-    s3 s3 XCHG2
+    s0 s4 XCHG
+    s3 s7 XCHG
+    s0 s7 s7 XCHG3
     __gen_constructor_SendParameters$to_value_mode_bounce_body INLINECALLDICT
     $send INLINECALLDICT
   }>

@@ -4123,11 +4123,22 @@ SETCP0
           }> PUSHCONT
           IFJMP
           s3 POP
+          PUSHSLICE
+          s6 s7 XCHG
+          s5 s6 XCHG
+          s4 s5 XCHG
+          s4 s8 XCHG
+          s1 s3 s0 XCHG3
+          <{
+            s1 POP
+            NOW
+            s2 POP
+          }> CALLREF
           0 PUSHINT
           66 PUSHINT
           s0 s10 XCHG
           -1 PUSHINT
-          s0 s9 XCHG
+          s0 s10 XCHG
           NEWC
           ROTREV
           3285005247 PUSHINT
@@ -4155,9 +4166,9 @@ SETCP0
           STSLICER
           64 STU
           ENDC
-          s5 PUSH
+          s6 PUSH
           s3 s1 s4 XCHG3
-          s11 s9 s9 XCHG3
+          s11 s10 s10 XCHG3
           s1 s4 XCHG
           s3 s3 s0 XCHG3
           PUSHNULL
@@ -4305,16 +4316,8 @@ SETCP0
             s0 s1 XCHG
             SENDRAWMSG
           }> CALLREF
-          PUSHSLICE
-          s4 s7 XCHG
-          s3 s6 XCHG
-          4 2 REVERSE
-          s2 s3 XCHG
-          <{
-            s1 POP
-            NOW
-            s2 POP
-          }> CALLREF
+          s4 s6 XCHG
+          2 4 BLKSWAP
         }> IFELSEREF
         -1 PUSHINT
       }> IFJMPREF

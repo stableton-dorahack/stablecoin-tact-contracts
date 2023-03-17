@@ -705,6 +705,7 @@ _ $__gen_get_owner() method_id(83229) {
     throw_unless(4429, __tact_address_eq(__tact_context_get_sender(), $msg'user));
     throw_unless(23932, (__gen_Context_get_value(__tact_context_get()) >= (($msg'amount + 10000000) + 10000000)));
     int $valueToSendForward = (((__gen_Context_get_value(__tact_context_get()) - 10000000) - 10000000) - $msg'amount);
+    $self'totalCollateralAmount = ($self'totalCollateralAmount + $msg'amount);
     $send(__gen_constructor_SendParameters$to_value_mode_bounce_body($self'deps'positionsManagerAddress, $valueToSendForward, 2, true, __gen_writecell_DepositCollateralMessage(__gen_constructor_DepositCollateralMessage$user_amount_settings_rate_tonPriceWithSafetyMargin($msg'user, $msg'amount, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'tonPriceWithSafetyMargin))));
     return ((($self'deps'positionsManagerAddress, $self'deps'gateKeeperAddress, $self'deps'stablecoinMasterAddress), $self'owner, ($self'poolSettings'liquidationRatio, $self'poolSettings'stabilityFeeRate, $self'poolSettings'liquidatorIncentiveBps), $self'tonPrice, $self'tonPriceWithSafetyMargin, ($self'debtRate'debtAccumulatedRate, $self'debtRate'lastAccumulationTime), $self'totalCollateralAmount, $self'stablecoinsIssued, $self'totalFeesCollected), ());
 }

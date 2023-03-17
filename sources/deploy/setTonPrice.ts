@@ -43,7 +43,7 @@ dotenv.config();
 
     // ------ set initial pool settings
 
-    const gateKeeperAddress = Address.parse("EQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgSwz4");
+    const gateKeeperAddress = Address.parse("EQArRm3cFDU5K4XiU067vMKEleHF6mHhfEI8uk8dHlCiR1GY");
 
     let deployAmount = toNano("0.3");
     let seqno: number = await contract.getSeqno();

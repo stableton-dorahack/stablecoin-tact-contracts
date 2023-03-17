@@ -268,6 +268,7 @@ describe("Integration test", () => {
         expect(positionState.debt).toEqual(0n);
 
         // withdraw collateral
+
         const collateralToWithdraw = toNano("0.5");
 
         await gateKeeperContract.send(
@@ -288,5 +289,8 @@ describe("Integration test", () => {
         positionState = await userPositionContract.getPositionState();
         console.log({ positionState });
         expect(positionState.collateral).toEqual(500000000n);
+
+        const message = await userPositionContract.getMessage();
+        console.log({ message });
     });
 });

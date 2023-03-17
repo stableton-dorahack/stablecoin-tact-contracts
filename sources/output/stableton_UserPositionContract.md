@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: UserPositionContract
-BOC Size: 3172 bytes
+BOC Size: 3178 bytes
 
 # Types
 Total Types: 38

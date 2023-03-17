@@ -1,10 +1,14 @@
+import { Message } from "./../output/stableton_StablecoinMasterContract";
 import {
     Address,
     beginCell,
     contractAddress,
     fromNano,
     internal,
+    Message,
     SendMode,
+    Slice,
+    storeMessage,
     toNano,
     TonClient,
     WalletContractV4,
@@ -20,7 +24,7 @@ import { StablecoinMaster } from "../output/stableton_StablecoinMaster";
 const workchain = 0;
 
 import dotenv from "dotenv";
-import { storeDeploy, storeMint, storeSetDeps } from "../output/stableton_UserStablecoinWallet";
+import {} from "../output/stableton_GateKeeperContract";
 dotenv.config();
 
 (async () => {
@@ -47,45 +51,15 @@ dotenv.config();
 
     // ------ mint dev tokens
 
-    const stablecoinMasterAddress = Address.parse("EQBB1pLrZ7joVC8OYGF4_b2O-33MVa2uemI0LFarD2MRrfN8");
-    const gateKeeperAddress = Address.parse("EQArRm3cFDU5K4XiU067vMKEleHF6mHhfEI8uk8dHlCiR1GY");
-    const positionsManagerAddress = Address.parse("EQDGTxG-VaiAq5YGHuf8nASYU8_AiOm4k6Wvv23YxzrGn--k");
+    const gateKeeperAddress = Address.parse("EQDN_w1fov1Xd5pwYF_ihE4mIoqRihcvY-YSgTE_o5EgSwz4");
 
-    let deployAmount = toNano("0.3");
+    let deployAmount = toNano("0.5");
+    let supply = toNano(500);
     let seqno: number = await contract.getSeqno();
-
-    let msg = beginCell()
-        .store(storeSetDeps({ $$type: "SetDeps", positionsManagerAddress, stablecoinMasterAddress, gateKeeperAddress }))
-        .endCell();
 
     console.log("🛠️Preparing new outgoing massage from deployment wallet. Seqno = ", seqno);
     console.log("Current deployment wallet balance = ", fromNano(balance).toString(), "💎TON");
-
-    // await contract.sendTransfer({
-    //     seqno,
-    //     secretKey,
-    //     sendMode: SendMode.IGNORE_ERRORS,
-    //     messages: [
-    //         internal({
-    //             value: deployAmount,
-    //             to: stablecoinMasterAddress,
-    //             body: msg,
-    //         }),
-    //     ],
-    // });
-
-    // await contract.sendTransfer({
-    //     seqno,
-    //     secretKey,
-    //     sendMode: SendMode.IGNORE_ERRORS,
-    //     messages: [
-    //         internal({
-    //             value: deployAmount,
-    //             to: gateKeeperAddress,
-    //             body: msg,
-    //         }),
-    //     ],
-    // });
+    console.log("Total supply for the deployed jetton = ", fromNano(supply));
 
     await contract.sendTransfer({
         seqno,
@@ -94,10 +68,10 @@ dotenv.config();
         messages: [
             internal({
                 value: deployAmount,
-                to: positionsManagerAddress,
+                to: gateKeeperAddress,
                 body: msg,
             }),
         ],
     });
-    console.log("======set deps messages sent");
+    console.log("===== emergency message sent to ", gateKeeperAddress, " ======");
 })();
